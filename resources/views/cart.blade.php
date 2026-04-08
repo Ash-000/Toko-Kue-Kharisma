@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Keranjang Belanja - Toko Kue Kharisma</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5deb3;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            color: #2c2c2c;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateX(-3px);
+        }
+
+        .btn-back svg {
+            width: 20px;
+            height: 20px;
+            stroke: #2c2c2c;
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .store-name {
+            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+            font-size: 28px;
+            color: #2c2c2c;
+            font-style: italic;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: #4a4a4a;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        nav a {
+            color: #4a4a4a;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #2c2c2c;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            position: relative;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #2c2c2c;
+            transition: transform 0.2s;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn svg {
+            width: 26px;
+            height: 26px;
+            stroke: #2c2c2c;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .icon-label {
+            font-size: 10px;
+            color: #4a4a4a;
+            font-weight: 600;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #d32f2f;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cart Container */
+        .cart-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 50px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        .cart-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 30px;
+        }
+
+        /* Cart Items */
+        .cart-items {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart svg {
+            width: 100px;
+            height: 100px;
+            stroke: #d4b896;
+            fill: none;
+            stroke-width: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart-text {
+            font-size: 18px;
+            color: #8b7355;
+            margin-bottom: 20px;
+        }
+
+        .btn-shop-now {
+            background: #8b7355;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-shop-now:hover {
+            background: #6b5845;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #f5f5f0;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            font-size: 16px;
+            color: #8b7355;
+            margin-bottom: 15px;
+        }
+
+        .item-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f5f5f0;
+            border-radius: 25px;
+            padding: 5px 15px;
+        }
+
+        .qty-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: #8b7355;
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s;
+        }
+
+        .qty-btn:hover {
+            color: #2c2c2c;
+        }
+
+        .qty-display {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c2c2c;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .btn-remove {
+            background: none;
+            border: none;
+            color: #d32f2f;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .btn-remove:hover {
+            color: #b71c1c;
+        }
+
+        .item-subtotal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c2c2c;
+        }
+
+        /* Cart Summary */
+        .cart-summary {
+            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: #4a4a4a;
+        }
+
+        .summary-row.total {
+            padding-top: 15px;
+            border-top: 2px solid rgba(44, 44, 44, 0.2);
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c2c2c;
+        }
+
+        .promo-code {
+            margin: 20px 0;
+        }
+
+        .promo-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .promo-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .btn-apply {
+            background: #2c2c2c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-apply:hover {
+            background: #000;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            background: #2c2c2c;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-checkout:hover {
+            background: #000;
+            transform: translateY(-2px);
+        }
+
+        .btn-continue {
+            width: 100%;
+            background: white;
+            color: #2c2c2c;
+            border: 2px solid #2c2c2c;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-continue:hover {
+            background: #f5f5f0;
+        }
+
+        /* Mobile Menu */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .menu-overlay.active {
+            display: block;
+        }
+
+        /* Checkout Modal */
+        .checkout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .checkout-modal.active {
+            display: flex;
+        }
+
+        .checkout-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .checkout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .checkout-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c2c2c;
+        }
+
+        .btn-close-modal {
+            background: transparent;
+            border: 2px solid #d1b47c;
+            color: #4a4a4a;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-close-modal:hover {
+            background: #d1b47c;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .checkout-section {
+            margin-bottom: 25px;
+        }
+
+        .section-title-small {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a4a4a;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #2c2c2c;
+            transition: border-color 0.3s;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #8b7355;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .payment-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .payment-option:hover {
+            border-color: #8b7355;
+            background: #f5f5f0;
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .payment-option input[type="radio"]:checked + .payment-info {
+            color: #8b7355;
+            font-weight: 600;
+        }
+
+        .payment-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .payment-logo {
+            width: 35px;
+            height: 25px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .checkout-summary {
+            background: #f5f5f0;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .checkout-alert {
+            background: #fff4e5;
+            border: 1px solid #f0c27b;
+            color: #6b4f1d;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .checkout-summary .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #4a4a4a;
+        }
+
+        .checkout-summary .summary-row.total {
+            padding-top: 10px;
+            border-top: 2px solid #e0e0e0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 0;
+        }
+
+        .btn-submit-checkout {
+            width: 100%;
+            background: #8b7355;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-submit-checkout:hover {
+            background: #6b5845;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Delete Confirmation Modal */
+        .delete-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-modal.active {
+            display: flex;
+        }
+
+        .delete-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .delete-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #ffebee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-icon svg {
+            width: 45px;
+            height: 45px;
+            stroke: #d32f2f;
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        .delete-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 10px;
+        }
+
+        .delete-message {
+            font-size: 15px;
+            color: #6b6b6b;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .delete-product-name {
+            color: #d32f2f;
+            font-weight: 600;
+        }
+
+        .delete-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: #f5f5f0;
+            color: #4a4a4a;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-confirm-delete {
+            flex: 1;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-confirm-delete:hover {
+            background: #b71c1c;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 968px) {
+            .hamburger {
+                display: flex;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                height: 100vh;
+                background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 80px 30px 30px;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+            }
+
+            nav.active {
+                right: 0;
+            }
+
+            nav a {
+                font-size: 18px;
+                padding: 15px 0;
+                width: 100%;
+                border-bottom: 1px solid rgba(74, 74, 74, 0.2);
+            }
+
+            .cart-container {
+                grid-template-columns: 1fr;
+                padding: 0 20px;
+            }
+
+            .cart-summary {
+                position: static;
+            }
+
+            .item-subtotal {
+                position: static;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <a href="/" class="btn-back">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Kembali
+            </a>
+            <div class="logo-section">
+                <span class="store-name">Toko kue kharisma</span>
+            </div>
+        </div>
+        
+        <nav id="navMenu">
+            <a href="/">home</a>
+            <a href="/menu">menu</a>
+            <a href="/kontak">kontak</a>
+            <a href="/promo">promo</a>
+        </nav>
+
+        <div class="header-icons">
+            <div class="icon-wrapper">
+                <button class="icon-btn" title="Pesan">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+                <span class="icon-label">Pesan</span>
+            </div>
+            <div class="icon-wrapper">
+                <button class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge" id="cartBadge">{{ $totalItems }}</span>
+                </button>
+                <span class="icon-label">Keranjang</span>
+            </div>
+            <div class="icon-wrapper">
+                <button class="icon-btn" title="Profil" onclick="window.location.href='/profile'">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="10" r="3"></circle>
+                        <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
+                    </svg>
+                </button>
+                <span class="icon-label">Profil</span>
+            </div>
+            
+            <!-- Hamburger Menu -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Container -->
+    <div class="cart-container">
+        <!-- Cart Items -->
+        <div class="cart-items">
+            <h1 class="cart-title">Keranjang Belanja</h1>
+
+            <div id="cartItemsContainer">
+                @forelse($cartItems as $item)
+                <div class="cart-item" data-id="{{ $item->product_id }}" data-price="{{ $item->product->price }}">
+                    <img src="{{ $item->product->image_url ?? 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=200' }}" alt="{{ $item->product->name }}" class="item-image">
+                    <div class="item-details">
+                        <h3 class="item-name">{{ $item->product->name }}</h3>
+                        <p class="item-price">Rp {{ number_format($item->product->price, 0, ',', '.') }}</p>
+                        <div class="item-controls">
+                            <div class="quantity-control">
+                                <button class="qty-btn" onclick="decreaseQty({{ $item->product_id }})">−</button>
+                                <span class="qty-display" id="qty-{{ $item->product_id }}" onclick="editQty({{ $item->product_id }})">{{ $item->quantity }}</span>
+                                <button class="qty-btn" onclick="increaseQty({{ $item->product_id }})">+</button>
+                            </div>
+                            <button class="btn-remove" onclick="removeItem({{ $item->product_id }})">Hapus</button>
+                        </div>
+                    </div>
+                    <div class="item-subtotal" id="subtotal-{{ $item->product_id }}">Rp {{ number_format($item->subtotal, 0, ',', '.') }}</div>
+                </div>
+                @empty
+                <div class="empty-cart">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <p class="empty-cart-text">Keranjang belanja Anda masih kosong</p>
+                    <button class="btn-shop-now" onclick="window.location.href='/menu'">Belanja Sekarang</button>
+                </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary">
+            <h2 class="summary-title">Ringkasan Belanja</h2>
+            
+            <div class="summary-row">
+                <span>Subtotal (<span id="totalItems">{{ $totalItems }}</span> item)</span>
+                <span id="subtotalAmount">Rp {{ number_format($totalPrice, 0, ',', '.') }}</span>
+            </div>
+            
+            <div class="summary-row">
+                <span>Ongkos Kirim</span>
+                <span id="shippingCost">Rp 5.000</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Diskon</span>
+                <span id="discount" style="color: #d32f2f;">- Rp 0</span>
+            </div>
+
+            <div class="promo-code">
+                <div class="promo-input">
+                    <input type="text" id="promoInput" placeholder="Kode promo">
+                    <button class="btn-apply" onclick="applyPromo()">Pakai</button>
+                </div>
+            </div>
+
+            <div class="summary-row total">
+                <span>Total</span>
+                <span id="totalAmount">Rp {{ number_format($totalPrice + 5000, 0, ',', '.') }}</span>
+            </div>
+
+            <button class="btn-checkout" onclick="showCheckoutModal()">Checkout</button>
+            <button class="btn-continue" onclick="window.location.href='/menu'">Lanjut Belanja</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-modal-content">
+            <div class="checkout-header">
+                <h2 class="checkout-title">Checkout</h2>
+                <button class="btn-close-modal" onclick="closeCheckoutModal()">×</button>
+            </div>
+
+            <form id="checkoutForm" onsubmit="processCheckout(event)">
+                <!-- Payment Method -->
+                <div class="checkout-section">
+                    <h3 class="section-title-small">Metode Pembayaran</h3>
+                    <div class="payment-methods">
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="qris" required>
+                            <div class="payment-info">
+                                <div class="payment-logo" style="background: #8b7355;">QR</div>
+                                <span>QRIS</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="cod" required>
+                            <div class="payment-info">
+                                <div class="payment-logo" style="background: #4caf50;">COD</div>
+                                <span>Bayar di Tempat</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="checkout-section">
+                    <h3 class="section-title-small">Total Pembelian</h3>
+                    <div class="checkout-summary">
+                        <div class="summary-row total">
+                            <span>Total Pembelian</span>
+                            <span id="checkoutTotal">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-section">
+                    <h3 class="section-title-small">Catatan untuk Penjual</h3>
+                    <textarea name="notes" class="form-input" rows="3" placeholder="Catatan untuk penjual"></textarea>
+                </div>
+
+                <div class="checkout-alert">
+                    <strong>Pesanan akan siap dalam 1-2 hari, silakan menunggu pemberitahuan dari penjual.</strong>
+                </div>
+
+                <button type="submit" class="btn-submit-checkout">Bayar Sekarang</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="delete-modal" id="deleteModal">
+        <div class="delete-modal-content">
+            <div class="delete-icon">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+            </div>
+            <h3 class="delete-title">Konfirmasi Hapus Barang</h3>
+            <div class="delete-preview" style="display: flex; align-items: center; gap: 12px; margin: 12px 0;">
+                <img id="deleteProductImage" src="" alt="Produk" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; display: none;" />
+                <div style="color: #4a4a4a; font-size: 14px;">
+                    <div>Nama: <strong id="deleteProductName">-</strong></div>
+                    <div>Jumlah: <strong id="deleteProductQty">-</strong></div>
+                </div>
+            </div>
+            <p class="delete-message">
+                Apakah Anda yakin ingin menghapus produk berikut dari keranjang?
+            </p>
+            <div class="delete-actions">
+                <button class="btn-cancel" onclick="closeDeleteModal()">Batal</button>
+                <button class="btn-confirm-delete" onclick="confirmDelete()">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let itemToDelete = null;
+
+        // CSRF Token untuk AJAX
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+        // Hamburger Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+        });
+
+        menuOverlay.addEventListener('click', function() {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+        });
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                menuOverlay.classList.remove('active');
+            });
+        });
+
+        // AJAX Helper Function
+        function makeAjaxRequest(url, method = 'POST', data = {}) {
+            return fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: method !== 'GET' ? JSON.stringify(data) : undefined
+            })
+            .then(response => response.json())
+            .catch(error => {
+                console.error('AJAX Error:', error);
+                showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
+                return { success: false };
+            });
+        }
+
+        // Increase Quantity
+        function increaseQty(productId) {
+            const currentQty = parseInt(document.getElementById(`qty-${productId}`).textContent);
+            updateCartItem(productId, currentQty + 1);
+        }
+
+        // Decrease Quantity
+        function decreaseQty(productId) {
+            const currentQty = parseInt(document.getElementById(`qty-${productId}`).textContent);
+            if (currentQty > 1) {
+                updateCartItem(productId, currentQty - 1);
+            }
+        }
+
+        // Update Cart Item via AJAX
+        function updateCartItem(productId, quantity) {
+            makeAjaxRequest('/cart/update', 'POST', {
+                product_id: productId,
+                quantity: quantity
+            })
+            .then(response => {
+                if (response.success) {
+                    // Update UI
+                    document.getElementById(`qty-${productId}`).textContent = quantity;
+
+                    // Update subtotal
+                    const itemElement = document.querySelector(`[data-id="${productId}"]`);
+                    const price = parseInt(itemElement.getAttribute('data-price'));
+                    const subtotal = quantity * price;
+                    document.getElementById(`subtotal-${productId}`).textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+
+                    // jika response data tersedia, update summary dari server
+                    if (response.data) {
+                        updateCartSummary(response.data);
+                    } else {
+                        recalcCartTotals();
+                    }
+
+                    showNotification('Keranjang berhasil diperbarui', 'success');
+                } else {
+                    showNotification(response.message || 'Gagal memperbarui keranjang', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Update error:', error);
+                showNotification('Terjadi kesalahan saat memperbarui keranjang', 'error');
+            });
+        }
+
+        function updateCartSummary(data) {
+            if (!data) {
+                recalcCartTotals();
+                return;
+            }
+
+            const totalItems = data.total_items || 0;
+            const totalPrice = data.total_price || 0;
+            const shipping = 5000;
+            const discountText = document.getElementById('discount')?.textContent || '0';
+            const discountAmount = parseInt(discountText.replace(/[^0-9]/g, '')) || 0;
+            const total = totalPrice + shipping - discountAmount;
+
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('cartBadge').textContent = totalItems;
+            document.getElementById('subtotalAmount').textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+            document.getElementById('totalAmount').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        function recalcCartTotals() {
+            const cartItems = document.querySelectorAll('.cart-item');
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            cartItems.forEach(item => {
+                const qty = parseInt(item.querySelector('.qty-display').textContent) || 0;
+                const price = parseInt(item.getAttribute('data-price')) || 0;
+                totalItems += qty;
+                totalPrice += qty * price;
+            });
+
+            const shipping = 5000;
+            const discountText = document.getElementById('discount')?.textContent || '0';
+            const discountAmount = parseInt(discountText.replace(/[^0-9]/g, '')) || 0;
+            const total = totalPrice + shipping - discountAmount;
+
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('cartBadge').textContent = totalItems;
+            document.getElementById('subtotalAmount').textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+            document.getElementById('totalAmount').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        function editQty(productId) {
+            const qtyDisplay = document.getElementById(`qty-${productId}`);
+            const currentQty = parseInt(qtyDisplay.textContent);
+            const input = document.createElement('input');
+
+            input.type = 'number';
+            input.min = '1';
+            input.value = currentQty;
+            input.style.width = '50px';
+            input.style.textAlign = 'center';
+            input.style.border = '1px solid #ccc';
+            input.style.borderRadius = '6px';
+            input.style.padding = '2px 4px';
+
+            function commitQty() {
+                const newQty = parseInt(input.value);
+                if (!newQty || newQty < 1) {
+                    showNotification('Jumlah tidak boleh kurang dari 1', 'error');
+                    qtyDisplay.textContent = currentQty;
+                } else if (newQty !== currentQty) {
+                    updateCartItem(productId, newQty);
+                } else {
+                    qtyDisplay.textContent = currentQty;
+                }
+
+                input.remove();
+            }
+
+            input.addEventListener('blur', commitQty);
+            input.addEventListener('keydown', event => {
+                if (event.key === 'Enter') {
+                    commitQty();
+                } else if (event.key === 'Escape') {
+                    qtyDisplay.textContent = currentQty;
+                    input.remove();
+                }
+            });
+
+            qtyDisplay.textContent = '';
+            qtyDisplay.appendChild(input);
+            input.focus();
+            input.select();
+        }
+
+        // Remove Item
+        function removeItem(productId) {
+            const itemElement = document.querySelector(`[data-id="${productId}"]`);
+            if (!itemElement) return;
+
+            const productName = itemElement.querySelector('.item-name')?.textContent || '';
+            const quantity = itemElement.querySelector('.qty-display')?.textContent || '1';
+            const imageUrl = itemElement.querySelector('.item-image')?.src || '';
+
+            itemToDelete = productId;
+
+            document.getElementById('deleteProductName').textContent = productName;
+            document.getElementById('deleteProductQty').textContent = quantity;
+
+            const img = document.getElementById('deleteProductImage');
+            if (imageUrl) {
+                img.src = imageUrl;
+                img.style.display = 'block';
+            } else {
+                img.style.display = 'none';
+            }
+
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            itemToDelete = null;
+        }
+
+        function confirmDelete() {
+            if (itemToDelete) {
+                makeAjaxRequest('/cart/remove', 'POST', {
+                    product_id: itemToDelete
+                })
+                .then(response => {
+                    if (response.success) {
+                        // Remove item from UI immediately with animation
+                        const itemElement = document.querySelector(`[data-id="${itemToDelete}"]`);
+                        if (itemElement) {
+                            itemElement.style.transition = 'all 0.3s ease-out';
+                            itemElement.style.opacity = '0';
+                            itemElement.style.transform = 'translateX(-100%)';
+
+                            setTimeout(() => {
+                                itemElement.remove();
+                            }, 300);
+                        }
+
+                        // Update cart summary
+                        updateCartSummary(response.data);
+
+                        // Tutup modal setelah berhasil dihapus
+                        closeDeleteModal();
+
+                        // Check if cart is now empty after animation
+                        setTimeout(() => {
+                            const remainingItems = document.querySelectorAll('.cart-item');
+                            if (remainingItems.length === 0) {
+                                showEmptyCart();
+                            }
+                        }, 350);
+
+                        showNotification('Produk berhasil dihapus dari keranjang', 'success');
+                    } else {
+                        showNotification(response.message || 'Gagal menghapus produk', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Remove error:', error);
+                    showNotification('Terjadi kesalahan saat menghapus produk', 'error');
+                });
+            }
+        }
+
+        // Show Empty Cart
+        function showEmptyCart() {
+            document.getElementById('cartItemsContainer').innerHTML = `
+                <div class="empty-cart">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <p class="empty-cart-text">Keranjang belanja Anda masih kosong</p>
+                    <button class="btn-shop-now" onclick="window.location.href='/menu'">Belanja Sekarang</button>
+                </div>
+            `;
+        }
+
+        // Notification System
+        function showNotification(message, type = 'success') {
+            const colors = {
+                success: '#4caf50',
+                error: '#f44336',
+                warning: '#ff9800',
+                info: '#2196f3'
+            };
+
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 30px;
+                background: ${colors[type]};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                font-weight: 600;
+                max-width: 400px;
+            `;
+
+            const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 18px;">${icon}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(400px); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(400px); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+
+        // Apply Promo Code
+        function applyPromo() {
+            const promoCode = document.getElementById('promoInput').value.toUpperCase();
+            
+            if (promoCode === 'DISKON20') {
+                const subtotal = parseInt(document.getElementById('subtotalAmount').textContent.replace(/[^0-9]/g, ''));
+                const discount = subtotal * 0.2;
+                document.getElementById('discount').textContent = `- Rp ${discount.toLocaleString('id-ID')}`;
+                
+                const shipping = 5000;
+                const total = subtotal + shipping - discount;
+                document.getElementById('totalAmount').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+                
+                alert('Kode promo berhasil digunakan! Diskon 20%');
+            } else if (promoCode === '') {
+                alert('Masukkan kode promo terlebih dahulu');
+            } else {
+                alert('Kode promo tidak valid');
+            }
+        }
+
+        // Checkout
+        function checkout() {
+            // Check if user is logged in (simulate with localStorage)
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            
+            if (!isLoggedIn) {
+                // Show login required modal
+                showLoginRequiredModal();
+            } else {
+                // Show checkout modal
+                showCheckoutModal();
+            }
+        }
+
+        function showCheckoutModal() {
+            // Update summary in modal with total purchase only
+            const subtotal = parseInt(document.getElementById('subtotalAmount').textContent.replace(/[^0-9]/g, ''));
+            document.getElementById('checkoutTotal').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+            document.getElementById('checkoutModal').classList.add('active');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('checkoutModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCheckoutModal();
+            }
+        });
+
+        function processCheckout(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const paymentMethod = formData.get('payment');
+            
+            // Close checkout modal
+            closeCheckoutModal();
+            
+            // Show payment instruction modal
+            showPaymentInstructionModal(paymentMethod, formData);
+        }
+
+        function showPaymentInstructionModal(paymentMethod, formData) {
+            const modal = document.createElement('div');
+            modal.id = 'paymentInstructionModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow-y: auto;
+                padding: 20px;
+            `;
+
+            const paymentInfo = getPaymentInfo(paymentMethod);
+            const total = parseInt(document.getElementById('totalAmount').textContent.replace(/[^0-9]/g, ''));
+
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 20px;
+                    padding: 30px;
+                    max-width: 500px;
+                    width: 100%;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                    animation: slideUp 0.3s ease-out;
+                ">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <div style="
+                            width: 80px;
+                            height: 80px;
+                            margin: 0 auto 15px;
+                            background: ${paymentInfo.color};
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-size: 32px;
+                            font-weight: bold;
+                        ">${paymentInfo.icon}</div>
+                        <h3 style="font-size: 22px; font-weight: 600; color: #2c2c2c; margin-bottom: 5px;">
+                            ${paymentInfo.name}
+                        </h3>
+                        <p style="font-size: 14px; color: #6b6b6b;">
+                            Total Pembayaran: <strong style="color: #8b7355;">Rp ${total.toLocaleString('id-ID')}</strong>
+                        </p>
+                    </div>
+
+                    ${paymentInfo.instruction}
+
+                    ${paymentMethod !== 'cod' ? `
+                        <div style="background: #f5f5f0; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                            <h4 style="font-size: 14px; font-weight: 600; color: #2c2c2c; margin-bottom: 15px;">
+                                Upload Bukti Pembayaran
+                            </h4>
+                            <input type="file" id="proofFile" accept="image/*" style="
+                                width: 100%;
+                                padding: 10px;
+                                border: 2px dashed #8b7355;
+                                border-radius: 10px;
+                                cursor: pointer;
+                                font-size: 14px;
+                            " required>
+                            <p style="font-size: 12px; color: #6b6b6b; margin-top: 8px;">
+                                Format: JPG, PNG (Max 5MB)
+                            </p>
+                        </div>
+
+                        <button onclick="submitPaymentProof('${paymentMethod}', ${total})" style="
+                            width: 100%;
+                            background: #8b7355;
+                            color: white;
+                            border: none;
+                            padding: 15px;
+                            border-radius: 10px;
+                            font-size: 16px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            margin-bottom: 10px;
+                        ">Kirim Bukti Pembayaran</button>
+                    ` : `
+                        <button onclick="submitPaymentProof('${paymentMethod}', ${total})" style="
+                            width: 100%;
+                            background: #8b7355;
+                            color: white;
+                            border: none;
+                            padding: 15px;
+                            border-radius: 10px;
+                            font-size: 16px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            margin-bottom: 10px;
+                        ">Konfirmasi Pesanan</button>
+                    `}
+                    
+                    <button onclick="document.getElementById('paymentInstructionModal').remove()" style="
+                        width: 100%;
+                        background: white;
+                        color: #4a4a4a;
+                        border: 2px solid #e0e0e0;
+                        padding: 12px;
+                        border-radius: 10px;
+                        font-size: 15px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">Batal</button>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+        }
+
+        function getPaymentInfo(method) {
+            const info = {
+                'qris': {
+                    name: 'QRIS',
+                    icon: 'QR',
+                    color: '#8b7355',
+                    instruction: `
+                        <div style="background: #f5f5f0; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h4 style="font-size: 14px; font-weight: 600; color: #2c2c2c; margin-bottom: 15px;">
+                                Cara Pembayaran:
+                            </h4>
+                            <ol style="padding-left: 20px; font-size: 14px; color: #4a4a4a; line-height: 1.8;">
+                                <li>Buka aplikasi pembayaran Anda</li>
+                                <li>Pilih menu "Scan" atau "Bayar"</li>
+                                <li>Scan kode QRIS di bawah ini</li>
+                            </ol>
+                            <div style="text-align: center; margin: 20px 0;">
+                                <div style="width: 170px; height: 170px; background: #fff; display: inline-flex; align-items: center; justify-content: center; border-radius: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+                                    <span style="font-size: 60px; color: #8b7355;">QR</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                'cod': {
+                    name: 'Bayar di Tempat (COD)',
+                    icon: 'COD',
+                    color: '#4caf50',
+                    instruction: `
+                        <div style="background: #e8f5e9; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #4caf50;">
+                            <h4 style="font-size: 14px; font-weight: 600; color: #2c2c2c; margin-bottom: 15px;">
+                                Bayar di Tempat (COD)
+                            </h4>
+                            <p style="font-size: 14px; color: #4a4a4a; line-height: 1.8; margin-bottom: 15px;">
+                                Anda memilih pembayaran tunai saat pesanan diterima. Pastikan uang pas sesuai total pembayaran.
+                            </p>
+                            <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; border-left: 4px solid #4caf50;">
+                                <p style="font-size: 13px; color: #2c2c2c; line-height: 1.6;">
+                                    <strong>Catatan:</strong> Untuk COD, tidak perlu upload bukti pembayaran. Pesanan akan langsung diproses.
+                                </p>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+
+            return info[method] || info['qris'];
+        }
+
+        function submitPaymentProof(paymentMethod, total) {
+            const fileInput = document.getElementById('proofFile');
+            
+            // For COD, skip file validation
+            if (paymentMethod !== 'cod' && !fileInput.files[0]) {
+                showWarningModal();
+                return;
+            }
+
+            const btn = event.target;
+            btn.textContent = 'Mengirim...';
+            btn.disabled = true;
+
+            // Simulate upload
+            setTimeout(() => {
+                // Close payment modal
+                document.getElementById('paymentInstructionModal').remove();
+                
+                // Clear cart
+                cartData = {};
+                localStorage.removeItem('cart');
+                
+                // Show success
+                showSuccessOrderModal(paymentMethod, total);
+            }, 2000);
+        }
+
+        function showWarningModal() {
+            const modal = document.createElement('div');
+            modal.id = 'warningModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 10001;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s ease-out;
+            `;
+
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 20px;
+                    padding: 40px;
+                    max-width: 400px;
+                    width: 90%;
+                    text-align: center;
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                    animation: shakeAndScale 0.5s ease-out;
+                ">
+                    <div style="
+                        width: 80px;
+                        height: 80px;
+                        margin: 0 auto 20px;
+                        background: #fff3e0;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        animation: pulse 1.5s infinite;
+                    ">
+                        <svg viewBox="0 0 24 24" style="width: 50px; height: 50px; stroke: #ff9800; fill: none; stroke-width: 2.5;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 22px; font-weight: 600; color: #2c2c2c; margin-bottom: 10px;">
+                        Bukti Pembayaran Diperlukan
+                    </h3>
+                    <p style="font-size: 15px; color: #6b6b6b; margin-bottom: 25px; line-height: 1.6;">
+                        Silakan upload bukti pembayaran terlebih dahulu agar pesanan Anda dapat diproses.
+                    </p>
+                    <div style="background: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 25px; border-left: 4px solid #ff9800;">
+                        <p style="font-size: 13px; color: #2c2c2c; line-height: 1.6; text-align: left;">
+                            <strong>Tips:</strong><br>
+                            • Pastikan foto bukti transfer jelas<br>
+                            • Format: JPG atau PNG<br>
+                            • Ukuran maksimal 5MB
+                        </p>
+                    </div>
+                    <button onclick="document.getElementById('warningModal').remove(); document.getElementById('proofFile').click();" style="
+                        width: 100%;
+                        background: #ff9800;
+                        color: white;
+                        border: none;
+                        padding: 14px;
+                        border-radius: 25px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        margin-bottom: 10px;
+                    " onmouseover="this.style.background='#f57c00'; this.style.transform='translateY(-2px)'" 
+                       onmouseout="this.style.background='#ff9800'; this.style.transform='translateY(0)'">
+                        Upload Bukti Sekarang
+                    </button>
+                    <button onclick="document.getElementById('warningModal').remove()" style="
+                        width: 100%;
+                        background: white;
+                        color: #4a4a4a;
+                        border: 2px solid #e0e0e0;
+                        padding: 12px;
+                        border-radius: 25px;
+                        font-size: 15px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                    " onmouseover="this.style.background='#f5f5f0'" 
+                       onmouseout="this.style.background='white'">
+                        Tutup
+                    </button>
+                </div>
+            `;
+
+            // Add animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes shakeAndScale {
+                    0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+                    50% { transform: scale(1.05) translateY(0); }
+                    60% { transform: scale(0.95) rotate(-2deg); }
+                    70% { transform: scale(1.02) rotate(2deg); }
+                    80% { transform: scale(0.98) rotate(-1deg); }
+                    100% { opacity: 1; transform: scale(1) rotate(0); }
+                }
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.1); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(modal);
+
+            // Close on outside click
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        function showSuccessOrderModal(paymentMethod, total) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+
+            const paymentName = {
+                'gopay': 'GoPay', 'ovo': 'OVO', 'dana': 'DANA', 'shopeepay': 'ShopeePay',
+                'bca': 'Bank BCA', 'mandiri': 'Bank Mandiri', 'cod': 'Cash on Delivery'
+            };
+
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 20px;
+                    padding: 40px;
+                    max-width: 450px;
+                    width: 90%;
+                    text-align: center;
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                    animation: bounceIn 0.5s ease-out;
+                ">
+                    <div style="
+                        width: 80px;
+                        height: 80px;
+                        margin: 0 auto 20px;
+                        background: #fff3e0;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                        <svg viewBox="0 0 24 24" style="width: 50px; height: 50px; stroke: #ff9800; fill: none; stroke-width: 2.5;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 22px; font-weight: 600; color: #2c2c2c; margin-bottom: 10px;">
+                        Pesanan Diterima!
+                    </h3>
+                    <p style="font-size: 15px; color: #6b6b6b; margin-bottom: 20px; line-height: 1.6;">
+                        ${paymentMethod === 'cod' ? 
+                            'Pesanan Anda sedang diproses. Siapkan uang pas saat pesanan tiba.' : 
+                            'Bukti pembayaran Anda sedang diverifikasi oleh admin. Kami akan menghubungi Anda segera.'}
+                    </p>
+                    <div style="background: #f5f5f0; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                            <span style="color: #6b6b6b;">Status:</span>
+                            <span style="font-weight: 600; color: #ff9800;">Menunggu Verifikasi</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                            <span style="color: #6b6b6b;">Pembayaran:</span>
+                            <span style="font-weight: 600; color: #2c2c2c;">${paymentName[paymentMethod]}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 16px; padding-top: 10px; border-top: 1px solid #e0e0e0;">
+                            <span style="color: #6b6b6b; font-weight: 600;">Total:</span>
+                            <span style="font-weight: 600; color: #8b7355;">Rp ${total.toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+                    <button onclick="window.location.href='/riwayat'" style="
+                        width: 100%;
+                        background: #ff9800;
+                        color: white;
+                        border: none;
+                        padding: 12px 40px;
+                        border-radius: 25px;
+                        font-size: 15px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        margin-bottom: 10px;
+                    ">Lihat Status Pesanan</button>
+                    <button onclick="window.location.href='/'" style="
+                        width: 100%;
+                        background: white;
+                        color: #4a4a4a;
+                        border: 2px solid #e0e0e0;
+                        padding: 12px 40px;
+                        border-radius: 25px;
+                        font-size: 15px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">Kembali ke Beranda</button>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+        }
+
+        function showLoginRequiredModal() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 20px;
+                    padding: 40px;
+                    max-width: 400px;
+                    width: 90%;
+                    text-align: center;
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                    animation: scaleIn 0.3s ease-out;
+                ">
+                    <div style="
+                        width: 80px;
+                        height: 80px;
+                        margin: 0 auto 20px;
+                        background: #fff3e0;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                        <svg viewBox="0 0 24 24" style="width: 45px; height: 45px; stroke: #ff9800; fill: none; stroke-width: 2.5;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="10" r="3"></circle>
+                            <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 22px; font-weight: 600; color: #2c2c2c; margin-bottom: 10px;">
+                        Login Diperlukan
+                    </h3>
+                    <p style="font-size: 15px; color: #6b6b6b; margin-bottom: 25px; line-height: 1.5;">
+                        Silakan login terlebih dahulu untuk melakukan checkout
+                    </p>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="this.closest('div').parentElement.remove()" style="
+                            flex: 1;
+                            background: #f5f5f0;
+                            color: #4a4a4a;
+                            border: none;
+                            padding: 12px 20px;
+                            border-radius: 10px;
+                            font-size: 15px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">Batal</button>
+                        <button onclick="window.location.href='/login'" style="
+                            flex: 1;
+                            background: #8b7355;
+                            color: white;
+                            border: none;
+                            padding: 12px 20px;
+                            border-radius: 10px;
+                            font-size: 15px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">Login</button>
+                    </div>
+                </div>
+            `;
+
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes scaleIn {
+                    from { opacity: 0; transform: scale(0.8); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(modal);
+
+            // Close on outside click
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Menu - Toko Kue Kharisma</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5deb3;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1002;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            color: #2c2c2c;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateX(-3px);
+        }
+
+        .btn-back svg {
+            width: 20px;
+            height: 20px;
+            stroke: #2c2c2c;
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .store-name {
+            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+            font-size: 28px;
+            color: #2c2c2c;
+            font-style: italic;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1002;
+            position: relative;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: #4a4a4a;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        nav a {
+            color: #4a4a4a;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: #2c2c2c;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            position: relative;
+            z-index: 1002;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            position: relative;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #2c2c2c;
+            transition: transform 0.2s;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn svg {
+            width: 26px;
+            height: 26px;
+            stroke: #2c2c2c;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .icon-label {
+            font-size: 10px;
+            color: #4a4a4a;
+            font-weight: 600;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #d32f2f;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Menu Section */
+        .menu-section {
+            padding: 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .menu-title {
+            font-size: 32px;
+            color: #2c2c2c;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .menu-subtitle {
+            font-size: 16px;
+            color: #8b7355;
+        }
+
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: white;
+            border: 2px solid #8b7355;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8b7355;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: #8b7355;
+            color: white;
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .table-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 420px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #c8b097;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: #8b7355;
+        }
+
+        .pagination-info {
+            color: #4a4a4a;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .product-table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        .product-table th,
+        .product-table td {
+            padding: 16px 18px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            color: #4a4a4a;
+            vertical-align: middle;
+        }
+
+        .product-table th {
+            background: #f7f1e5;
+            color: #2c2c2c;
+            font-size: 14px;
+            letter-spacing: 0.02em;
+        }
+
+        .product-table tbody tr:hover {
+            background: #faf3ea;
+        }
+
+        .product-image-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .product-thumb {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid #e5d6c2;
+        }
+
+        .product-title {
+            font-weight: 700;
+            color: #2c2c2c;
+            margin-bottom: 6px;
+        }
+
+        .product-meta {
+            font-size: 13px;
+            color: #7a6c5b;
+            line-height: 1.4;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+
+        .pagination-buttons button {
+            background: #8b7355;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .pagination-buttons button:disabled {
+            background: #cfc0b1;
+            cursor: not-allowed;
+        }
+
+        .pagination-buttons button:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .btn-add-cart {
+            background: #8b7355;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-add-cart svg {
+            width: 18px;
+            height: 18px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .btn-add-cart:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image-container {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product-info {
+            text-align: center;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 8px;
+        }
+
+        .product-description {
+            font-size: 13px;
+            color: #6b6b6b;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 18px;
+            color: #2c2c2c;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-add-cart {
+            background: #8b7355;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-add-cart:hover {
+            background: #6b5845;
+            transform: scale(1.05);
+        }
+
+        .btn-add-cart svg {
+            width: 18px;
+            height: 18px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .btn-add-cart:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-add-cart .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add-cart .loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Menu */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 968px) {
+            .hamburger {
+                display: flex;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .header-left {
+                gap: 10px;
+            }
+
+            .btn-back {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .store-name {
+                font-size: 20px;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                height: 100vh;
+                background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 80px 30px 30px;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+                z-index: 1001;
+            }
+
+            nav.active {
+                right: 0;
+            }
+
+            nav a {
+                font-size: 18px;
+                padding: 15px 0;
+                width: 100%;
+                border-bottom: 1px solid rgba(74, 74, 74, 0.2);
+            }
+
+            .header-icons .icon-wrapper {
+                display: none;
+            }
+
+            .menu-section {
+                padding: 30px 20px;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <a href="/" class="btn-back">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Kembali
+            </a>
+            <div class="logo-section">
+                <span class="store-name">Toko kue kharisma</span>
+            </div>
+        </div>
+        
+        <nav id="navMenu">
+            <a href="/">home</a>
+            <a href="/menu" class="active">menu</a>
+            <a href="/kontak">kontak</a>
+            <a href="/promo">promo</a>
+        </nav>
+
+        <div class="header-icons">
+            <div class="icon-wrapper">
+                <button class="icon-btn" title="Pesan">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+                <span class="icon-label">Pesan</span>
+            </div>
+            <div class="icon-wrapper">
+                <button class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge" id="cartBadge">{{ $cartCount ?? 0 }}</span>
+                </button>
+                <span class="icon-label">Keranjang</span>
+            </div>
+            <div class="icon-wrapper">
+                <button class="icon-btn" title="Profil" onclick="window.location.href='/login'">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="10" r="3"></circle>
+                        <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
+                    </svg>
+                </button>
+                <span class="icon-label">Profil</span>
+            </div>
+        </div>
+        
+        <!-- Hamburger Menu -->
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Menu Section -->
+    <section class="menu-section">
+        <div class="menu-header">
+            <h1 class="menu-title">Menu Kue Kami</h1>
+            <p class="menu-subtitle">Pilih kue tradisional favorit Anda</p>
+        </div>
+
+        <div class="table-controls">
+            <input type="text" id="productSearch" class="search-input" placeholder="Cari produk, kategori, atau harga..." autocomplete="off">
+            <div class="pagination-info" id="paginationInfo">Menampilkan 0 produk</div>
+        </div>
+
+        <div class="product-table-wrapper">
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>Produk</th>
+                        <th>Kategori</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="pagination-buttons">
+            <button id="prevPage" onclick="changePage(-1)" disabled>Prev</button>
+            <button id="nextPage" onclick="changePage(1)" disabled>Next</button>
+        </div>
+    </section>
+
+    <script>
+        let cartCount = 0;
+
+        // Hamburger Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        // Ensure menu is closed on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+        });
+
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+        });
+
+        menuOverlay.addEventListener('click', function() {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+        });
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                menuOverlay.classList.remove('active');
+            });
+        });
+
+        // Add to Cart
+        function addToCart(btn, productId, itemName, price) {
+            // Pastikan productId adalah integer
+            const id = parseInt(productId);
+            if (isNaN(id)) {
+                console.error('Invalid product ID:', productId);
+                showNotification('ID produk tidak valid', 'error');
+                return;
+            }
+
+            // Disable button temporarily
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading">Menambah...</span>';
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            console.log('Adding to cart from menu:', { productId: id, itemName, csrfToken });
+
+            // AJAX request to add to cart
+            fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    product_id: id,
+                    quantity: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response data:', data);
+                if (data.success) {
+                    // Update cart badge
+                    document.getElementById('cartBadge').textContent = data.data.total_items;
+
+                    // Show success notification
+                    showNotification(`${itemName} berhasil ditambahkan ke keranjang!`, 'success');
+                } else {
+                    // Show error notification
+                    console.error('Add to cart failed:', data.message);
+                    showNotification(data.message || 'Gagal menambahkan ke keranjang', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
+            })
+            .finally(() => {
+                // Re-enable button
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    Keranjang
+                `;
+            });
+        }
+
+        // Notification System
+        function showNotification(message, type = 'success') {
+            const colors = {
+                success: '#4caf50',
+                error: '#f44336',
+                warning: '#ff9800',
+                info: '#2196f3'
+            };
+
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 30px;
+                background: ${colors[type]};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                font-weight: 600;
+                max-width: 400px;
+            `;
+
+            const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 18px;">${icon}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(400px); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(400px); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // View Cart
+        function viewCart() {
+            window.location.href = '/cart';
+        }
+
+        const menuProducts = {!! json_encode($products->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'description' => $product->description,
+                'price' => $product->price,
+                'stock' => $product->stock,
+                'category' => $product->category,
+                'image_url' => $product->image_url,
+            ];
+        })->toArray()) !!};
+        let currentPage = 1;
+        const perPage = 6;
+        let filteredProducts = [...menuProducts];
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('productTableBody');
+            tbody.innerHTML = '';
+
+            const start = (currentPage - 1) * perPage;
+            const pageItems = filteredProducts.slice(start, start + perPage);
+
+            if (pageItems.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="padding: 24px; text-align:center; color:#7a6c5b;">Tidak ada produk ditemukan.</td></tr>';
+            } else {
+                pageItems.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div class="product-image-cell">
+                                <img src="${product.image_url ?? '/images/products/default.jpg'}" alt="${product.name}" class="product-thumb">
+                                <div>
+                                    <div class="product-title">${product.name}</div>
+                                    <div class="product-meta">${product.description ?? ''}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${product.category ?? '-'}</td>
+                        <td>${formatCurrency(product.price)}</td>
+                        <td>${product.stock ?? 0}</td>
+                        <td><button class="btn-add-cart" data-product-id="${product.id}" data-product-name="${product.name}">Keranjang</button></td>
+                    `;
+                    
+                    // Add event listener untuk tombol
+                    const button = row.querySelector('.btn-add-cart');
+                    button.addEventListener('click', function() {
+                        const productId = this.getAttribute('data-product-id');
+                        const productName = this.getAttribute('data-product-name');
+                        addToCart(this, productId, productName, product.price);
+                    });
+                    
+                    tbody.appendChild(row);
+                });
+            }
+
+            const pageCount = Math.max(1, Math.ceil(filteredProducts.length / perPage));
+            document.getElementById('paginationInfo').textContent = `Halaman ${currentPage} dari ${pageCount} · Menampilkan ${filteredProducts.length} produk`;
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= pageCount;
+        }
+
+        function changePage(direction) {
+            const pageCount = Math.max(1, Math.ceil(filteredProducts.length / perPage));
+            currentPage = Math.min(pageCount, Math.max(1, currentPage + direction));
+            renderTable();
+        }
+
+        function filterProducts() {
+            const searchValue = document.getElementById('productSearch').value.trim().toLowerCase();
+            filteredProducts = menuProducts.filter(product => {
+                const searchData = `${product.name} ${product.description || ''} ${product.category} ${product.price}`.toLowerCase();
+                return searchData.includes(searchValue);
+            });
+            currentPage = 1;
+            renderTable();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('productSearch').addEventListener('input', filterProducts);
+            renderTable();
+        });
+    </script>
+</body>
+</html>
