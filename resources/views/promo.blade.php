@@ -541,45 +541,45 @@
             <div class="package-card">
                 <div class="discount-badge">Diskon 20%</div>
                 <div class="package-image-container">
-                    <img src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=400&q=80" alt="Paketan Hemat A" class="package-image">
+                    <img src="/images/products/dadar-gulung.jpg" alt="Paketan Hemat A" class="package-image">
                 </div>
                 <h3 class="package-name">Paketan Hemat A</h3>
-                <p class="package-description">Isi 5 macem kue</p>
+                <p class="package-description">Dadar Gulung, Lemper, Putu Ayu, Lupis, Kue Apem</p>
                 <div class="package-price">
                     <span class="original-price">Rp 25.000</span>
                     <span class="discount-price">Rp 20.000</span>
                 </div>
-                <button class="btn-buy-package" onclick="buyPackage('Paketan Hemat A')">BELI SEKARANG</button>
+                <button class="btn-buy-package" onclick="window.location.href='/menu'">PESAN SEKARANG</button>
             </div>
 
             <!-- Package 2 -->
             <div class="package-card">
                 <div class="discount-badge">Diskon 20%</div>
                 <div class="package-image-container">
-                    <img src="https://images.unsplash.com/photo-1587241321921-91a834d82ffc?w=400&q=80" alt="Paketan Hemat B" class="package-image">
+                    <img src="/images/products/kue-talam-suji.jpg" alt="Paketan Hemat B" class="package-image">
                 </div>
                 <h3 class="package-name">Paketan Hemat B</h3>
-                <p class="package-description">Isi 5 macem kue</p>
+                <p class="package-description">Talam Suji, Pepe Hijau, Pepe Pelangi, Ongol-Ongol, Kue Lumpur</p>
                 <div class="package-price">
                     <span class="original-price">Rp 25.000</span>
                     <span class="discount-price">Rp 20.000</span>
                 </div>
-                <button class="btn-buy-package" onclick="buyPackage('Paketan Hemat B')">BELI SEKARANG</button>
+                <button class="btn-buy-package" onclick="window.location.href='/menu'">PESAN SEKARANG</button>
             </div>
 
             <!-- Package 3 -->
             <div class="package-card">
                 <div class="discount-badge">Diskon 20%</div>
                 <div class="package-image-container">
-                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80" alt="Paketan Hemat D" class="package-image">
+                    <img src="/images/products/bolu-pelangi.jpg" alt="Paketan Hemat C" class="package-image">
                 </div>
-                <h3 class="package-name">Paketan Hemat D</h3>
-                <p class="package-description">Isi 5 macem kue</p>
+                <h3 class="package-name">Paketan Hemat C</h3>
+                <p class="package-description">Bolu Pelangi, Pie Buah, Pie Brownies, Risoles, Pastel</p>
                 <div class="package-price">
                     <span class="original-price">Rp 25.000</span>
                     <span class="discount-price">Rp 20.000</span>
                 </div>
-                <button class="btn-buy-package" onclick="buyPackage('Paketan Hemat D')">BELI SEKARANG</button>
+                <button class="btn-buy-package" onclick="window.location.href='/menu'">PESAN SEKARANG</button>
             </div>
         </div>
     </section>
@@ -612,10 +612,6 @@
 
         function scrollToPackages() {
             document.getElementById('packages').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function buyPackage(packageName) {
-            alert(`${packageName} ditambahkan ke keranjang!`);
         }
 
         // Update cart badge

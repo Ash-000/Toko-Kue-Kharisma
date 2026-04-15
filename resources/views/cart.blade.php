@@ -1668,7 +1668,7 @@
             const fileInput = document.getElementById('proofFile');
             
             // For COD, skip file validation
-            if (paymentMethod !== 'cod' && !fileInput.files[0]) {
+            if (paymentMethod !== 'cod' && (!fileInput || !fileInput.files[0])) {
                 showWarningModal();
                 return;
             }
@@ -1677,18 +1677,41 @@
             btn.textContent = 'Mengirim...';
             btn.disabled = true;
 
-            // Simulate upload
-            setTimeout(() => {
-                // Close payment modal
-                document.getElementById('paymentInstructionModal').remove();
-                
-                // Clear cart
-                cartData = {};
-                localStorage.removeItem('cart');
-                
-                // Show success
-                showSuccessOrderModal(paymentMethod, total);
-            }, 2000);
+            // Ambil catatan dari form checkout
+            const notes = document.querySelector('#checkoutForm textarea[name="notes"]')?.value || '';
+
+            fetch('/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    payment_method: paymentMethod,
+                    notes: notes,
+                }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Tutup modal pembayaran
+                    const instrModal = document.getElementById('paymentInstructionModal');
+                    if (instrModal) instrModal.remove();
+
+                    // Tampilkan modal sukses
+                    showSuccessOrderModal(paymentMethod, total, data.order_number);
+                } else {
+                    btn.textContent = paymentMethod === 'cod' ? 'Konfirmasi Pesanan' : 'Kirim Bukti Pembayaran';
+                    btn.disabled = false;
+                    showNotification(data.message || 'Gagal membuat pesanan', 'error');
+                }
+            })
+            .catch(() => {
+                btn.textContent = paymentMethod === 'cod' ? 'Konfirmasi Pesanan' : 'Kirim Bukti Pembayaran';
+                btn.disabled = false;
+                showNotification('Terjadi kesalahan, silakan coba lagi', 'error');
+            });
         }
 
         function showWarningModal() {
@@ -1816,7 +1839,7 @@
             });
         }
 
-        function showSuccessOrderModal(paymentMethod, total) {
+        function showSuccessOrderModal(paymentMethod, total, orderNumber) {
             const modal = document.createElement('div');
             modal.style.cssText = `
                 position: fixed;
@@ -1832,8 +1855,8 @@
             `;
 
             const paymentName = {
-                'gopay': 'GoPay', 'ovo': 'OVO', 'dana': 'DANA', 'shopeepay': 'ShopeePay',
-                'bca': 'Bank BCA', 'mandiri': 'Bank Mandiri', 'cod': 'Cash on Delivery'
+                'qris': 'QRIS',
+                'cod': 'Cash on Delivery (COD)',
             };
 
             modal.innerHTML = `
@@ -1851,33 +1874,37 @@
                         width: 80px;
                         height: 80px;
                         margin: 0 auto 20px;
-                        background: #fff3e0;
+                        background: #e8f5e9;
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                     ">
-                        <svg viewBox="0 0 24 24" style="width: 50px; height: 50px; stroke: #ff9800; fill: none; stroke-width: 2.5;">
+                        <svg viewBox="0 0 24 24" style="width: 50px; height: 50px; stroke: #4caf50; fill: none; stroke-width: 2.5;">
                             <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 6v6l4 2"></path>
+                            <polyline points="8 12 11 15 16 9"></polyline>
                         </svg>
                     </div>
                     <h3 style="font-size: 22px; font-weight: 600; color: #2c2c2c; margin-bottom: 10px;">
-                        Pesanan Diterima!
+                        Pesanan Berhasil Dibuat!
                     </h3>
                     <p style="font-size: 15px; color: #6b6b6b; margin-bottom: 20px; line-height: 1.6;">
                         ${paymentMethod === 'cod' ? 
                             'Pesanan Anda sedang diproses. Siapkan uang pas saat pesanan tiba.' : 
-                            'Bukti pembayaran Anda sedang diverifikasi oleh admin. Kami akan menghubungi Anda segera.'}
+                            'Pesanan Anda diterima. Admin akan segera memverifikasi dan menghubungi Anda.'}
                     </p>
                     <div style="background: #f5f5f0; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                            <span style="color: #6b6b6b;">No. Pesanan:</span>
+                            <span style="font-weight: 600; color: #2c2c2c;">${orderNumber}</span>
+                        </div>
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
                             <span style="color: #6b6b6b;">Status:</span>
                             <span style="font-weight: 600; color: #ff9800;">Menunggu Verifikasi</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
                             <span style="color: #6b6b6b;">Pembayaran:</span>
-                            <span style="font-weight: 600; color: #2c2c2c;">${paymentName[paymentMethod]}</span>
+                            <span style="font-weight: 600; color: #2c2c2c;">${paymentName[paymentMethod] || paymentMethod}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; font-size: 16px; padding-top: 10px; border-top: 1px solid #e0e0e0;">
                             <span style="color: #6b6b6b; font-weight: 600;">Total:</span>
@@ -1886,7 +1913,7 @@
                     </div>
                     <button onclick="window.location.href='/riwayat'" style="
                         width: 100%;
-                        background: #ff9800;
+                        background: #4caf50;
                         color: white;
                         border: none;
                         padding: 12px 40px;

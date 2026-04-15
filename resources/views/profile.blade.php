@@ -681,31 +681,37 @@
             <!-- Profile Info Section -->
             <section id="info" class="content-section active">
                 <h2 class="section-title">Informasi Profil</h2>
-                <form>
+                @if(session('success'))
+                    <div style="background:#e8f5e9;border:1px solid #4caf50;color:#2e7d32;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if($errors->any())
+                    <div style="background:#ffebee;border:1px solid #f44336;color:#c62828;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;">
+                        <ul style="margin:0;padding-left:18px;">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <form action="{{ route('profile.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="firstName">Nama Lengkap</label>
-                            <input type="text" id="firstName" class="form-control" value="{{ $user->name ?? '' }}">
+                            <label for="name">Nama Lengkap</label>
+                            <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="lastName">Username</label>
-                            <input type="text" id="lastName" class="form-control" value="{{ $user->email ?? '' }}" disabled>
+                            <label for="email_display">Email</label>
+                            <input type="text" id="email_display" class="form-control" value="{{ $user->email }}" disabled style="background:#f5f5f0;color:#888;">
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" class="form-control" value="{{ $user->email ?? '' }}">
                     </div>
 
                     <div class="form-group">
                         <label for="phone">Nomor Telepon</label>
-                        <input type="tel" id="phone" class="form-control" value="081234567890">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="birthdate">Tanggal Lahir</label>
-                        <input type="date" id="birthdate" class="form-control" value="1990-01-01">
+                        <input type="tel" id="phone" name="phone" class="form-control" value="{{ old('phone', $user->phone ?? '') }}" placeholder="Contoh: 08123456789">
                     </div>
 
                     <button type="submit" class="btn-save">Simpan Perubahan</button>
@@ -716,47 +722,35 @@
             <section id="orders" class="content-section">
                 <h2 class="section-title">Riwayat Pesanan</h2>
 
+                @forelse($orders as $order)
                 <div class="order-card">
                     <div class="order-header">
-                        <span class="order-id">#ORDER-001</span>
-                        <span class="order-status status-completed">Selesai</span>
+                        <span class="order-id">#{{ $order->order_number }}</span>
+                        @php
+                            $statusMap = [
+                                'pending'     => ['label' => 'Menunggu Verifikasi', 'class' => 'status-pending'],
+                                'verified'    => ['label' => 'Diverifikasi',        'class' => 'status-processing'],
+                                'in_progress' => ['label' => 'Diproses',            'class' => 'status-processing'],
+                                'completed'   => ['label' => 'Selesai',             'class' => 'status-completed'],
+                                'cancelled'   => ['label' => 'Dibatalkan',          'class' => 'status-pending'],
+                            ];
+                            $s = $statusMap[$order->status] ?? ['label' => ucfirst($order->status), 'class' => 'status-pending'];
+                        @endphp
+                        <span class="order-status {{ $s['class'] }}">{{ $s['label'] }}</span>
                     </div>
                     <div class="order-items">
-                        3x Kue Pepe, 2x Kue Putri Ayu, 1x Kue Lopis
+                        @foreach($order->orderItems as $item)
+                            {{ $item->quantity }}x {{ $item->product->name ?? '-' }}<br>
+                        @endforeach
                     </div>
                     <div class="order-footer">
-                        <span class="order-date">15 Januari 2026</span>
-                        <span class="order-total">Rp 20.000</span>
+                        <span class="order-date">{{ $order->created_at->format('d F Y') }}</span>
+                        <span class="order-total">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
                     </div>
                 </div>
-
-                <div class="order-card">
-                    <div class="order-header">
-                        <span class="order-id">#ORDER-002</span>
-                        <span class="order-status status-processing">Diproses</span>
-                    </div>
-                    <div class="order-items">
-                        1x Paketan Hemat A
-                    </div>
-                    <div class="order-footer">
-                        <span class="order-date">8 Februari 2026</span>
-                        <span class="order-total">Rp 20.000</span>
-                    </div>
-                </div>
-
-                <div class="order-card">
-                    <div class="order-header">
-                        <span class="order-id">#ORDER-003</span>
-                        <span class="order-status status-pending">Menunggu</span>
-                    </div>
-                    <div class="order-items">
-                        5x Kue Dadar Gulung
-                    </div>
-                    <div class="order-footer">
-                        <span class="order-date">8 Februari 2026</span>
-                        <span class="order-total">Rp 12.500</span>
-                    </div>
-                </div>
+                @empty
+                <p style="color:#8b7355;font-size:15px;">Belum ada pesanan. <a href="/menu" style="color:#2c2c2c;font-weight:600;">Mulai belanja</a></p>
+                @endforelse
             </section>
 
             <!-- Address Section -->
@@ -764,52 +758,54 @@
                 <h2 class="section-title">Alamat Pengiriman</h2>
 
                 <div class="address-card">
-                    <span class="address-label">Alamat Utama</span>
-                    <div class="address-name">{{ $user->name ?? 'User' }}</div>
-                    <div class="address-phone">081234567890</div>
+                    <span class="address-label">Alamat Toko</span>
+                    <div class="address-name">Toko Kue Kharisma</div>
+                    <div class="address-phone">+62 896-3649-1354</div>
                     <div class="address-detail">
-                        Jl. Merdeka No. 123, RT 01/RW 02<br>
-                        Kelurahan Sukamaju, Kecamatan Bandung Tengah<br>
-                        Kota Bandung, Jawa Barat 40123
+                        Jl. Pasar Dramaga No.74, RT.002/RW.003<br>
+                        Dramaga, Kec. Dramaga, Bogor Barat<br>
+                        Jawa Barat 16680
                     </div>
                 </div>
 
-                <div class="address-card">
-                    <span class="address-label">Alamat Kantor</span>
-                    <div class="address-name">{{ $user->name ?? 'User' }}</div>
-                    <div class="address-phone">081234567890</div>
-                    <div class="address-detail">
-                        Gedung Plaza Indonesia, Lantai 5<br>
-                        Jl. Thamrin No. 28-30<br>
-                        Jakarta Pusat, DKI Jakarta 10350
-                    </div>
-                </div>
-
-                <button class="btn-add-address" onclick="alert('Fitur tambah alamat akan segera tersedia!')">
-                    + Tambah Alamat Baru
-                </button>
+                <p style="font-size:14px;color:#8b7355;margin-top:10px;">
+                    Untuk pengiriman, hubungi kami melalui halaman <a href="/kontak" style="color:#2c2c2c;font-weight:600;">Kontak</a>.
+                </p>
             </section>
 
             <!-- Settings Section -->
             <section id="settings" class="content-section">
-                <h2 class="section-title">Pengaturan</h2>
+                <h2 class="section-title">Ubah Password</h2>
+                @if(session('password_success'))
+                    <div style="background:#e8f5e9;border:1px solid #4caf50;color:#2e7d32;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;">
+                        {{ session('password_success') }}
+                    </div>
+                @endif
+                @if(session('password_error'))
+                    <div style="background:#ffebee;border:1px solid #f44336;color:#c62828;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;">
+                        {{ session('password_error') }}
+                    </div>
+                @endif
+                <form action="{{ route('profile.password') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <label for="current_password">Password Saat Ini</label>
+                        <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Masukkan password saat ini" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="currentPassword">Password Saat Ini</label>
-                    <input type="password" id="currentPassword" class="form-control" placeholder="Masukkan password saat ini">
-                </div>
+                    <div class="form-group">
+                        <label for="new_password">Password Baru</label>
+                        <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Minimal 8 karakter" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="newPassword">Password Baru</label>
-                    <input type="password" id="newPassword" class="form-control" placeholder="Masukkan password baru">
-                </div>
+                    <div class="form-group">
+                        <label for="new_password_confirmation">Konfirmasi Password Baru</label>
+                        <input type="password" id="new_password_confirmation" name="new_password_confirmation" class="form-control" placeholder="Ulangi password baru" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="confirmPassword">Konfirmasi Password Baru</label>
-                    <input type="password" id="confirmPassword" class="form-control" placeholder="Konfirmasi password baru">
-                </div>
-
-                <button type="submit" class="btn-save">Ubah Password</button>
+                    <button type="submit" class="btn-save">Ubah Password</button>
+                </form>
             </section>
         </main>
     </div>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\Order;
 
 class AuthController extends Controller
 {
@@ -20,14 +21,54 @@ class AuthController extends Controller
 
     public function showProfile()
     {
-        // Get authenticated user from database
         $user = Auth::user();
-        
+
         if (!$user) {
             return redirect('/login');
         }
-        
-        return view('profile', compact('user'));
+
+        $orders = Order::with('orderItems.product')
+            ->where('user_id', $user->id)
+            ->latest()
+            ->get();
+
+        return view('profile', compact('user', 'orders'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'name'  => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'current_password'      => 'required',
+            'new_password'          => 'required|min:8|confirmed',
+        ]);
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->route('profile')
+                ->with('password_error', 'Password saat ini tidak sesuai.')
+                ->withFragment('settings');
+        }
+
+        $user->update(['password' => Hash::make($request->new_password)]);
+
+        return redirect()->route('profile')
+            ->with('password_success', 'Password berhasil diubah.')
+            ->withFragment('settings');
     }
 
     public function showLogin()

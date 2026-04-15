@@ -683,7 +683,6 @@
                         <th>Produk</th>
                         <th>Kategori</th>
                         <th>Harga</th>
-                        <th>Stok</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -863,7 +862,6 @@
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => $product->price,
-                'stock' => $product->stock,
                 'category' => $product->category,
                 'image_url' => $product->image_url,
             ];
@@ -904,7 +902,6 @@
                         </td>
                         <td>${product.category ?? '-'}</td>
                         <td>${formatCurrency(product.price)}</td>
-                        <td>${product.stock ?? 0}</td>
                         <td><button class="btn-add-cart" data-product-id="${product.id}" data-product-name="${product.name}">Keranjang</button></td>
                     `;
                     

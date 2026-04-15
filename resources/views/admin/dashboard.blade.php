@@ -633,7 +633,6 @@
                         <th>Nama Produk</th>
                         <th>Kategori</th>
                         <th>Harga</th>
-                        <th>Stok</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -644,7 +643,6 @@
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->category }}</td>
                         <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                        <td>{{ $product->stock }}</td>
                         <td>
                             <div class="action-btns">
                                 <button class="btn-action btn-edit">Edit</button>

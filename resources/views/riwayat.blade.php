@@ -470,13 +470,17 @@
                         <div class="timeline-title">
                             @if($order->status == 'pending')
                                 Menunggu Verifikasi
+                            @elseif($order->status == 'cancelled')
+                                Pesanan Dibatalkan
                             @else
                                 Pesanan telah diverifikasi
                             @endif
                         </div>
                         <div class="timeline-description">
                             @if($order->status == 'pending')
-                                Bukti pembayaran sedang dicek admin
+                                Pesanan sedang menunggu konfirmasi admin
+                            @elseif($order->status == 'cancelled')
+                                Pesanan ini telah dibatalkan
                             @else
                                 Pesanan telah dikonfirmasi admin
                             @endif
@@ -484,6 +488,21 @@
                     </div>
                 </div>
 
+                @if($order->status == 'cancelled')
+                <!-- Cancelled state -->
+                <div class="timeline-item">
+                    <div class="timeline-icon" style="background:#d32f2f;">
+                        <svg viewBox="0 0 24 24">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </div>
+                    <div class="timeline-content" style="background:#ffebee;">
+                        <div class="timeline-title" style="color:#d32f2f;">Pesanan Dibatalkan</div>
+                        <div class="timeline-description">Pesanan ini tidak dapat diproses lebih lanjut</div>
+                    </div>
+                </div>
+                @else
                 <!-- Step 2: In Progress -->
                 <div class="timeline-item">
                     <div class="timeline-icon {{ in_array($order->status, ['in_progress', 'completed']) ? 'completed' : ($order->status == 'verified' ? 'active' : '') }}">
@@ -528,6 +547,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
 
             <div class="order-items">
@@ -736,11 +756,9 @@
                 .catch(error => console.error('Error fetching order history:', error));
         }
 
-        // Load cart count and order history on page load
+        // Load cart count on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateCartBadge();
-            fetchOrderHistory();
-            setInterval(fetchOrderHistory, 5000);
         });
     </script>
 </body>

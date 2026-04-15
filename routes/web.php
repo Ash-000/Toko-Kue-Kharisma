@@ -5,10 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
-use App\Http\Middleware\EnsureAdmin;
 
 Route::get('/', [AuthController::class, 'showHome'])->name('home');
 Route::get('/menu', [ProductController::class, 'index'])->name('menu');
@@ -27,13 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/cart/count', [CartController::class, 'count'])->name('api.cart.count');
 });
 
-Route::post('/checkout', function () {
-    if (!Auth::check()) {
-        return redirect()->route('login')->with('message', 'Silakan login terlebih dahulu untuk melakukan checkout');
-    }
-    // Proses checkout
-    return redirect()->route('riwayat')->with('success', 'Pesanan berhasil dibuat!');
-})->name('checkout');
+Route::post('/checkout', [OrderController::class, 'store'])->name('checkout')->middleware('auth');
 Route::get('/kontak', function () {
     return view('kontak');
 })->name('kontak');
@@ -46,15 +38,17 @@ Route::get('/payment', function () {
 // Review routes
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
-// Admin routes
-Route::middleware([Authenticate::class, EnsureAdmin::class])->group(function () {
-    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/pesanan-baru', [AdminController::class, 'newOrders'])->name('admin.new-orders');
-    Route::post('/admin/orders/{id}/verify', [AdminController::class, 'verifyOrder'])->name('admin.orders.verify');
-});
+// Admin routes (legacy - digantikan Filament di /admin)
+// Route::middleware([Authenticate::class, EnsureAdmin::class])->group(function () {
+//     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+//     Route::get('/admin/pesanan-baru', [AdminController::class, 'newOrders'])->name('admin.new-orders');
+//     Route::post('/admin/orders/{id}/verify', [AdminController::class, 'verifyOrder'])->name('admin.orders.verify');
+// });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
+    Route::put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/profile/password', [AuthController::class, 'updatePassword'])->name('profile.password');
 });
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

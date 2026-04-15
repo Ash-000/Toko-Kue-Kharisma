@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Pembayaran - Toko Kue Kharisma</title>
     <style>
         * {
@@ -426,8 +427,8 @@
             
             <div class="summary-items">
                 <div class="summary-item">
-                    <span>Subtotal (6 item)</span>
-                    <span>Rp 15.000</span>
+                    <span>Subtotal</span>
+                    <span id="summarySubtotal">-</span>
                 </div>
                 <div class="summary-item">
                     <span>Ongkos Kirim</span>
@@ -443,7 +444,7 @@
 
             <div class="summary-total">
                 <span>Total Pembayaran</span>
-                <span>Rp 20.000</span>
+                <span id="summaryTotal">-</span>
             </div>
 
             <button class="btn-pay" id="btnPay" disabled onclick="processPayment()">
@@ -474,18 +475,31 @@
     <script>
         let selectedPaymentMethod = null;
 
+        // Load cart summary on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/cart/summary', {
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    const subtotal = data.data.total_price;
+                    const total = subtotal + 5000;
+                    document.getElementById('summarySubtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+                    document.getElementById('summaryTotal').textContent = 'Rp ' + total.toLocaleString('id-ID');
+                }
+            })
+            .catch(() => {});
+        });
+
         function selectPayment(radio) {
             selectedPaymentMethod = radio.value;
             
-            // Remove selected class from all options
             document.querySelectorAll('.payment-option').forEach(option => {
                 option.classList.remove('selected');
             });
             
-            // Add selected class to chosen option
             radio.closest('.payment-option').classList.add('selected');
-            
-            // Enable pay button
             document.getElementById('btnPay').disabled = false;
         }
 
@@ -495,19 +509,34 @@
                 return;
             }
 
-            // Show loading
             const btnPay = document.getElementById('btnPay');
             btnPay.textContent = 'Memproses...';
             btnPay.disabled = true;
 
-            // Simulate payment processing
-            setTimeout(() => {
-                // Show success modal
-                document.getElementById('successModal').classList.add('active');
-                
-                // Reset button
+            fetch('/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ payment_method: selectedPaymentMethod }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('successModal').classList.add('active');
+                } else {
+                    alert(data.message || 'Gagal membuat pesanan');
+                    btnPay.textContent = 'Bayar Sekarang';
+                    btnPay.disabled = false;
+                }
+            })
+            .catch(() => {
+                alert('Terjadi kesalahan, silakan coba lagi');
                 btnPay.textContent = 'Bayar Sekarang';
-            }, 2000);
+                btnPay.disabled = false;
+            });
         }
     </script>
 </body>
