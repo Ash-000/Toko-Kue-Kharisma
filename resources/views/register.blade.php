@@ -147,58 +147,6 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 25px 0 20px;
-            color: #4a4a4a;
-            font-size: 13px;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #4a4a4a;
-        }
-
-        .divider::before {
-            margin-right: 15px;
-        }
-
-        .divider::after {
-            margin-left: 15px;
-        }
-
-        .social-login {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .social-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-            overflow: hidden;
-        }
-
-        .social-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .social-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
         .error-message {
             color: #d32f2f;
             font-size: 12px;
@@ -268,20 +216,6 @@
 
                 <button type="submit" class="btn-register">Daftar</button>
             </form>
-
-            <div class="divider">Atau masuk dengan</div>
-
-            <div class="social-login">
-                <div class="social-btn" onclick="registerWithGoogle()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
-                </div>
-                <div class="social-btn" onclick="registerWithFacebook()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-                </div>
-                <div class="social-btn" onclick="registerWithApple()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
-                </div>
-            </div>
         </div>
     </div>
 
@@ -303,18 +237,6 @@
                     <circle cx="12" cy="12" r="3"></circle>
                 `;
             }
-        }
-
-        function registerWithGoogle() {
-            alert('Daftar dengan Google akan segera tersedia');
-        }
-
-        function registerWithFacebook() {
-            alert('Daftar dengan Facebook akan segera tersedia');
-        }
-
-        function registerWithApple() {
-            alert('Daftar dengan Apple akan segera tersedia');
         }
     </script>
 </body>

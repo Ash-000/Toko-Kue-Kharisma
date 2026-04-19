@@ -466,14 +466,6 @@
 
         <div class="header-icons">
             <div class="icon-wrapper">
-                <button class="icon-btn" title="Pesan">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Pesan</span>
-            </div>
-            <div class="icon-wrapper">
                 <button type="button" class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="21" r="1"></circle>
@@ -523,20 +515,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" class="form-control" placeholder="contoh@email.com" required>
-                    </div>
-
-                    <div class="form-group">
                         <label for="message">Pesan</label>
                         <textarea id="message" class="form-control" placeholder="Tulis pesan Anda di sini..." required></textarea>
                     </div>
 
                     <button type="submit" class="btn-submit">
                         <svg viewBox="0 0 24 24">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                         </svg>
-                        Kirim pesan
+                        Kirim pesan via WhatsApp
                     </button>
                 </form>
             </div>
@@ -626,10 +613,9 @@
 
             const phoneNumber = '6289636491354';
             const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
             const message = document.getElementById('message').value.trim();
 
-            const whatsappText = `Halo, saya ${name}.\nEmail: ${email}.\n\nPesan: ${message}`;
+            const whatsappText = `Halo, saya ${name}.\n\nPesan: ${message}`;
             const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappText)}`;
 
             window.open(whatsappURL, '_blank');

@@ -478,14 +478,6 @@
 
         <div class="header-icons">
             <div class="icon-wrapper">
-                <button class="icon-btn" title="Pesan">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Pesan</span>
-            </div>
-            <div class="icon-wrapper">
                 <button type="button" class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="21" r="1"></circle>

@@ -13,13 +13,18 @@ class OrderController extends Controller
 {
     public function history()
     {
-        // Get orders for logged in user
         $orders = Order::with(['orderItems.product'])
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
-        return view('riwayat', compact('orders'));
+        // Order number yang sudah pernah diberi ulasan
+        $reviewedOrders = \App\Models\Review::whereIn(
+            'order_number',
+            $orders->pluck('order_number')
+        )->pluck('order_number')->toArray();
+
+        return view('riwayat', compact('orders', 'reviewedOrders'));
     }
 
     /**
@@ -64,6 +69,7 @@ class OrderController extends Controller
                 'discount'       => $discount,
                 'total'          => $total,
                 'payment_method' => $request->payment_method,
+                'notes'          => $request->notes,
                 'status'         => 'pending',
             ]);
 

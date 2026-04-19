@@ -37,6 +37,7 @@ Route::get('/payment', function () {
 
 // Review routes
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+Route::get('/ulasan', [ReviewController::class, 'index'])->name('reviews.index');
 
 // Admin routes (legacy - digantikan Filament di /admin)
 // Route::middleware([Authenticate::class, EnsureAdmin::class])->group(function () {

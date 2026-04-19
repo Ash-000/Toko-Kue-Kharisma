@@ -17,6 +17,7 @@ class Order extends Model
         'discount',
         'total',
         'payment_method',
+        'notes',
         'status',
     ];
 

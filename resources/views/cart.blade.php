@@ -388,39 +388,6 @@
             color: #2c2c2c;
         }
 
-        .promo-code {
-            margin: 20px 0;
-        }
-
-        .promo-input {
-            display: flex;
-            gap: 10px;
-        }
-
-        .promo-input input {
-            flex: 1;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-
-        .btn-apply {
-            background: #2c2c2c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-apply:hover {
-            background: #000;
-        }
-
         .btn-checkout {
             width: 100%;
             background: #2c2c2c;
@@ -895,14 +862,6 @@
 
         <div class="header-icons">
             <div class="icon-wrapper">
-                <button class="icon-btn" title="Pesan">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Pesan</span>
-            </div>
-            <div class="icon-wrapper">
                 <button class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="21" r="1"></circle>
@@ -988,13 +947,6 @@
             <div class="summary-row">
                 <span>Diskon</span>
                 <span id="discount" style="color: #d32f2f;">- Rp 0</span>
-            </div>
-
-            <div class="promo-code">
-                <div class="promo-input">
-                    <input type="text" id="promoInput" placeholder="Kode promo">
-                    <button class="btn-apply" onclick="applyPromo()">Pakai</button>
-                </div>
             </div>
 
             <div class="summary-row total">
@@ -1429,27 +1381,6 @@
                 closeDeleteModal();
             }
         });
-
-        // Apply Promo Code
-        function applyPromo() {
-            const promoCode = document.getElementById('promoInput').value.toUpperCase();
-            
-            if (promoCode === 'DISKON20') {
-                const subtotal = parseInt(document.getElementById('subtotalAmount').textContent.replace(/[^0-9]/g, ''));
-                const discount = subtotal * 0.2;
-                document.getElementById('discount').textContent = `- Rp ${discount.toLocaleString('id-ID')}`;
-                
-                const shipping = 5000;
-                const total = subtotal + shipping - discount;
-                document.getElementById('totalAmount').textContent = `Rp ${total.toLocaleString('id-ID')}`;
-                
-                alert('Kode promo berhasil digunakan! Diskon 20%');
-            } else if (promoCode === '') {
-                alert('Masukkan kode promo terlebih dahulu');
-            } else {
-                alert('Kode promo tidak valid');
-            }
-        }
 
         // Checkout
         function checkout() {

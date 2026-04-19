@@ -15,8 +15,9 @@ class AuthController extends Controller
     public function showHome()
     {
         $products = Product::take(4)->get();
-        $reviews = Review::latest()->get();
-        return view('home', compact('products', 'reviews'));
+        $reviews  = Review::latest()->take(10)->get();
+        $totalReviews = Review::count();
+        return view('home', compact('products', 'reviews', 'totalReviews'));
     }
 
     public function showProfile()

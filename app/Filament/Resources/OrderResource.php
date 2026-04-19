@@ -230,6 +230,7 @@ class OrderResource extends Resource
                         TextEntry::make('payment_method')->label('Metode Bayar')
                             ->formatStateUsing(fn ($state) => strtoupper($state)),
                         TextEntry::make('created_at')->label('Tanggal Pesan')->dateTime('d M Y, H:i'),
+                        TextEntry::make('notes')->label('Catatan')->default('-')->columnSpanFull(),
                     ]),
 
                 Section::make('Rincian Harga')

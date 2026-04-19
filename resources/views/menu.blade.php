@@ -283,70 +283,31 @@
             font-size: 14px;
         }
 
-        .product-table-wrapper {
-            overflow-x: auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .product-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 760px;
+        @media (max-width: 1100px) {
+            .products-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
-        .product-table th,
-        .product-table td {
-            padding: 16px 18px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-            color: #4a4a4a;
-            vertical-align: middle;
+        @media (max-width: 768px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
-        .product-table th {
-            background: #f7f1e5;
-            color: #2c2c2c;
-            font-size: 14px;
-            letter-spacing: 0.02em;
-        }
-
-        .product-table tbody tr:hover {
-            background: #faf3ea;
-        }
-
-        .product-image-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .product-thumb {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 14px;
-            border: 1px solid #e5d6c2;
-        }
-
-        .product-title {
-            font-weight: 700;
-            color: #2c2c2c;
-            margin-bottom: 6px;
-        }
-
-        .product-meta {
-            font-size: 13px;
-            color: #7a6c5b;
-            line-height: 1.4;
+        @media (max-width: 480px) {
+            .products-grid { grid-template-columns: 1fr; }
         }
 
         .pagination-buttons {
             display: flex;
             gap: 12px;
-            margin-top: 20px;
-            justify-content: flex-end;
+            margin-top: 30px;
+            justify-content: center;
         }
 
         .pagination-buttons button {
@@ -354,7 +315,7 @@
             color: white;
             border: none;
             border-radius: 12px;
-            padding: 12px 18px;
+            padding: 12px 24px;
             cursor: pointer;
             font-weight: 600;
             transition: background 0.2s ease, transform 0.2s ease;
@@ -623,14 +584,6 @@
 
         <div class="header-icons">
             <div class="icon-wrapper">
-                <button class="icon-btn" title="Pesan">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Pesan</span>
-            </div>
-            <div class="icon-wrapper">
                 <button class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="21" r="1"></circle>
@@ -672,23 +625,11 @@
         </div>
 
         <div class="table-controls">
-            <input type="text" id="productSearch" class="search-input" placeholder="Cari produk, kategori, atau harga..." autocomplete="off">
+            <input type="text" id="productSearch" class="search-input" placeholder="Cari produk..." autocomplete="off">
             <div class="pagination-info" id="paginationInfo">Menampilkan 0 produk</div>
         </div>
 
-        <div class="product-table-wrapper">
-            <table class="product-table">
-                <thead>
-                    <tr>
-                        <th>Produk</th>
-                        <th>Kategori</th>
-                        <th>Harga</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="productTableBody"></tbody>
-            </table>
-        </div>
+        <div class="products-grid" id="productsGrid"></div>
 
         <div class="pagination-buttons">
             <button id="prevPage" onclick="changePage(-1)" disabled>Prev</button>
@@ -867,7 +808,7 @@
             ];
         })->toArray()) !!};
         let currentPage = 1;
-        const perPage = 6;
+        const perPage = 8;
         let filteredProducts = [...menuProducts];
 
         function formatCurrency(value) {
@@ -878,47 +819,50 @@
             }).format(value);
         }
 
-        function renderTable() {
-            const tbody = document.getElementById('productTableBody');
-            tbody.innerHTML = '';
+        function renderGrid() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
 
             const start = (currentPage - 1) * perPage;
             const pageItems = filteredProducts.slice(start, start + perPage);
 
             if (pageItems.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="padding: 24px; text-align:center; color:#7a6c5b;">Tidak ada produk ditemukan.</td></tr>';
+                grid.innerHTML = '<p style="text-align:center;color:#7a6c5b;padding:40px;grid-column:1/-1;">Tidak ada produk ditemukan.</p>';
             } else {
                 pageItems.forEach(product => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>
-                            <div class="product-image-cell">
-                                <img src="${product.image_url ?? '/images/products/default.jpg'}" alt="${product.name}" class="product-thumb">
-                                <div>
-                                    <div class="product-title">${product.name}</div>
-                                    <div class="product-meta">${product.description ?? ''}</div>
-                                </div>
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `
+                        <div class="product-image-container">
+                            <img src="${product.image_url ?? '/images/products/default.jpg'}" alt="${product.name}" class="product-image">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-price">Rp ${Number(product.price).toLocaleString('id-ID')}</p>
+                            <div class="product-actions">
+                                <button class="btn-add-cart" data-product-id="${product.id}" data-product-name="${product.name}">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                    </svg>
+                                    Masukkan ke keranjang
+                                </button>
                             </div>
-                        </td>
-                        <td>${product.category ?? '-'}</td>
-                        <td>${formatCurrency(product.price)}</td>
-                        <td><button class="btn-add-cart" data-product-id="${product.id}" data-product-name="${product.name}">Keranjang</button></td>
+                        </div>
                     `;
-                    
-                    // Add event listener untuk tombol
-                    const button = row.querySelector('.btn-add-cart');
+
+                    const button = card.querySelector('.btn-add-cart');
                     button.addEventListener('click', function() {
-                        const productId = this.getAttribute('data-product-id');
-                        const productName = this.getAttribute('data-product-name');
-                        addToCart(this, productId, productName, product.price);
+                        addToCart(this, product.id, product.name, product.price);
                     });
-                    
-                    tbody.appendChild(row);
+
+                    grid.appendChild(card);
                 });
             }
 
             const pageCount = Math.max(1, Math.ceil(filteredProducts.length / perPage));
-            document.getElementById('paginationInfo').textContent = `Halaman ${currentPage} dari ${pageCount} · Menampilkan ${filteredProducts.length} produk`;
+            document.getElementById('paginationInfo').textContent = `Halaman ${currentPage} dari ${pageCount} · ${filteredProducts.length} produk`;
             document.getElementById('prevPage').disabled = currentPage <= 1;
             document.getElementById('nextPage').disabled = currentPage >= pageCount;
         }
@@ -926,22 +870,22 @@
         function changePage(direction) {
             const pageCount = Math.max(1, Math.ceil(filteredProducts.length / perPage));
             currentPage = Math.min(pageCount, Math.max(1, currentPage + direction));
-            renderTable();
+            renderGrid();
         }
 
         function filterProducts() {
             const searchValue = document.getElementById('productSearch').value.trim().toLowerCase();
             filteredProducts = menuProducts.filter(product => {
-                const searchData = `${product.name} ${product.description || ''} ${product.category} ${product.price}`.toLowerCase();
+                const searchData = `${product.name} ${product.description || ''} ${product.price}`.toLowerCase();
                 return searchData.includes(searchValue);
             });
             currentPage = 1;
-            renderTable();
+            renderGrid();
         }
 
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('productSearch').addEventListener('input', filterProducts);
-            renderTable();
+            renderGrid();
         });
     </script>
 </body>

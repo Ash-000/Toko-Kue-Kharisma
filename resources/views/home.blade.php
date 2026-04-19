@@ -430,64 +430,6 @@
             border-radius: 5px;
         }
 
-        /* Search Bar */
-        .search-container {
-            position: absolute;
-            top: 20px;
-            right: 50px;
-            z-index: 20;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: #f5f5f0;
-            border-radius: 25px;
-            padding: 10px 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-bar input {
-            border: none;
-            background: none;
-            outline: none;
-            padding: 5px 15px;
-            width: 250px;
-            color: #6b6b6b;
-        }
-
-        .search-bar input::placeholder {
-            color: #a89f8c;
-        }
-
-        .search-btn {
-            background: #2c2c2c;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: white;
-            transition: background 0.3s;
-        }
-
-        .search-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke: white;
-            fill: none;
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .search-btn:hover {
-            background: #000;
-        }
-
         /* Best Sellers Section */
         .best-sellers {
             padding: 50px;
@@ -1093,14 +1035,6 @@
 
         <div class="header-icons">
             <div class="icon-wrapper">
-                <button class="icon-btn" title="Pesan">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Pesan</span>
-            </div>
-            <div class="icon-wrapper">
                 <button class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="21" r="1"></circle>
@@ -1133,18 +1067,6 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="search-container">
-            <div class="search-bar">
-                <input type="text" placeholder="Cari menu">
-                <button class="search-btn">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
         <!-- Navigation Areas -->
         <div class="slider-nav slider-nav-left" onclick="prevSlide()"></div>
         <div class="slider-nav slider-nav-right" onclick="nextSlideManual()"></div>
@@ -1208,10 +1130,6 @@
     <section class="reviews-section">
         <div class="reviews-header">
             <h2 class="reviews-title">Customer reviews</h2>
-            <div class="add-review-wrapper">
-                <button class="add-review-btn" onclick="addReview()">⊕</button>
-                <span class="add-review-text">tambahkan ulasan</span>
-            </div>
         </div>
 
         <div class="reviews-container">
@@ -1225,16 +1143,33 @@
                         </svg>
                     </div>
                     <div class="review-info">
-                        <div class="review-stars">{{ str_repeat('★', $review->rating) }}</div>
+                        <div class="review-stars">{{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}</div>
                         <div class="review-name">{{ $review->name }}</div>
+                        <div style="font-size:12px;color:#a89f8c;margin-top:2px;">{{ $review->created_at->format('d M Y') }}</div>
                     </div>
                 </div>
-                <p class="review-text">
-                    {{ $review->review }}
-                </p>
+                <p class="review-text">{{ $review->review }}</p>
             </div>
             @endforeach
         </div>
+
+        @if($totalReviews > 10)
+        <div style="text-align:center;margin-top:30px;">
+            <a href="{{ route('reviews.index') }}" style="
+                display: inline-block;
+                background: #2c2c2c;
+                color: white;
+                padding: 12px 35px;
+                border-radius: 25px;
+                font-size: 15px;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.3s;
+            " onmouseover="this.style.background='#000'" onmouseout="this.style.background='#2c2c2c'">
+                Lihat Selengkapnya ({{ $totalReviews }} ulasan)
+            </a>
+        </div>
+        @endif
     </section>
 
     <!-- Review Modal -->
@@ -1646,58 +1581,7 @@
             }, 3000);
         }
 
-        // Search functionality
-        document.querySelector('.search-btn').addEventListener('click', function() {
-            performSearch();
-        });
-
-        document.querySelector('.search-bar input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        });
-
-        function performSearch() {
-            const searchInput = document.querySelector('.search-bar input');
-            const searchValue = searchInput.value.toLowerCase();
-            
-            if (searchValue) {
-                // Clear search input
-                searchInput.value = '';
-                
-                // Scroll to best sellers section
-                document.querySelector('.best-sellers').scrollIntoView({ behavior: 'smooth' });
-                
-                // Filter products
-                const productCards = document.querySelectorAll('.product-card');
-                let foundCount = 0;
-                
-                productCards.forEach(card => {
-                    const productName = card.querySelector('.product-name').textContent.toLowerCase();
-                    
-                    if (productName.includes(searchValue)) {
-                        card.style.display = 'block';
-                        card.style.animation = 'highlight 0.5s';
-                        foundCount++;
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-                
-                if (foundCount === 0) {
-                    // Show not found modal
-                    document.getElementById('notFoundKeyword').textContent = `"${searchValue}"`;
-                    document.getElementById('notFoundModal').classList.add('active');
-                    
-                    // Show all products again
-                    productCards.forEach(card => {
-                        card.style.display = 'block';
-                    });
-                }
-            } else {
-                alert('Masukkan kata kunci pencarian');
-            }
-        }
+        // Search functionality dihapus
 
         function closeNotFoundModal() {
             document.getElementById('notFoundModal').classList.remove('active');

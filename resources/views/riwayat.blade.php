@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Riwayat Pemesanan - Toko Kue Kharisma</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -27,152 +24,39 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+        .header-left { display: flex; align-items: center; gap: 20px; }
 
         .btn-back {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 10px;
-            color: #2c2c2c;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.3); border: none;
+            padding: 8px 15px; border-radius: 10px;
+            color: #2c2c2c; font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; text-decoration: none;
         }
-
-        .btn-back:hover {
-            background: rgba(255, 255, 255, 0.5);
-            transform: translateX(-3px);
-        }
-
-        .btn-back svg {
-            width: 20px;
-            height: 20px;
-            stroke: #2c2c2c;
-            fill: none;
-            stroke-width: 2.5;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-        }
+        .btn-back:hover { background: rgba(255,255,255,0.5); transform: translateX(-3px); }
+        .btn-back svg { width: 20px; height: 20px; stroke: #2c2c2c; fill: none; stroke-width: 2.5; }
 
         .store-name {
-            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
-            font-size: 28px;
-            color: #2c2c2c;
-            font-style: italic;
-            font-weight: bold;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            font-family: 'Brush Script MT', cursive;
+            font-size: 28px; color: #2c2c2c;
+            font-style: italic; font-weight: bold;
         }
 
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 10px;
-            z-index: 1001;
-        }
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 1001; }
+        .hamburger span { width: 30px; height: 3px; background: #4a4a4a; border-radius: 3px; transition: all 0.3s; }
 
-        .hamburger span {
-            width: 30px;
-            height: 3px;
-            background: #4a4a4a;
-            border-radius: 3px;
-            transition: all 0.3s;
-        }
+        nav { display: flex; gap: 30px; align-items: center; transition: all 0.3s; }
+        nav a { color: #4a4a4a; text-decoration: none; font-size: 15px; font-weight: 600; transition: color 0.3s; }
+        nav a:hover { color: #2c2c2c; }
 
-        nav {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-            transition: all 0.3s;
-        }
+        .header-icons { display: flex; gap: 20px; align-items: center; }
+        .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 3px; position: relative; }
+        .icon-btn { background: none; border: none; cursor: pointer; color: #2c2c2c; transition: transform 0.2s; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+        .icon-btn svg { width: 26px; height: 26px; stroke: #2c2c2c; fill: none; stroke-width: 2; }
+        .icon-label { font-size: 10px; color: #4a4a4a; font-weight: 600; }
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: #d32f2f; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
 
-        nav a {
-            color: #4a4a4a;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #2c2c2c;
-        }
-
-        .header-icons {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #2c2c2c;
-            transition: transform 0.2s;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-btn svg {
-            width: 26px;
-            height: 26px;
-            stroke: #2c2c2c;
-            fill: none;
-            stroke-width: 2;
-        }
-
-        .icon-label {
-            font-size: 10px;
-            color: #4a4a4a;
-            font-weight: 600;
-        }
-
-        .icon-wrapper {
-            position: relative;
-        }
-
-        .cart-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #d32f2f;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Main Content */
+        /* Main */
         .riwayat-container {
             max-width: 900px;
             margin: 50px auto;
@@ -186,207 +70,99 @@
             margin-bottom: 30px;
         }
 
-        /* Order Card */
+        /* Order Card — sama dengan profile */
         .order-card {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #8b7355;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         .order-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f5f5f0;
+            margin-bottom: 12px;
         }
 
-        .order-id {
-            font-size: 18px;
+        .order-id { font-size: 16px; font-weight: 600; color: #2c2c2c; }
+
+        .order-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 600;
-            color: #2c2c2c;
         }
+        .status-completed  { background: #4caf50; color: white; }
+        .status-processing { background: #ff9800; color: white; }
+        .status-pending    { background: #9e9e9e; color: white; }
+        .status-cancelled  { background: #d32f2f; color: white; }
 
-        .order-date {
-            font-size: 14px;
-            color: #8b7355;
-        }
+        .order-items { font-size: 14px; color: #6b6b6b; margin-bottom: 10px; }
 
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 60px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #e0e0e0;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 30px;
-        }
-
-        .timeline-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .timeline-icon {
-            position: absolute;
-            left: -40px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
-        }
-
-        .timeline-icon.completed {
-            background: #4caf50;
-        }
-
-        .timeline-icon.active {
-            background: #2196f3;
-        }
-
-        .timeline-icon svg {
-            width: 22px;
-            height: 22px;
-            stroke: white;
-            fill: none;
-            stroke-width: 2.5;
-        }
-
-        .timeline-content {
-            background: #f5f5f0;
-            padding: 15px 20px;
-            border-radius: 10px;
-        }
-
-        .timeline-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c2c2c;
-            margin-bottom: 5px;
-        }
-
-        .timeline-description {
-            font-size: 14px;
-            color: #6b6b6b;
-            line-height: 1.5;
-        }
-
-        .order-items {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .order-items-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #4a4a4a;
-            margin-bottom: 10px;
-        }
-
-        .order-items-list {
-            font-size: 14px;
-            color: #6b6b6b;
-            line-height: 1.6;
-        }
-
-        .order-total {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #e0e0e0;
+        .order-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
         }
 
-        .total-label {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c2c2c;
-        }
+        .order-date  { font-size: 13px; color: #8b7355; }
+        .order-total { font-size: 16px; font-weight: 600; color: #2c2c2c; }
 
-        .total-amount {
-            font-size: 18px;
-            font-weight: bold;
-            color: #8b7355;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 20px;
-        }
-
-        .empty-state svg {
-            width: 100px;
-            height: 100px;
-            stroke: #d4b896;
-            fill: none;
-            stroke-width: 1.5;
-            margin-bottom: 20px;
-        }
-
-        .empty-state-text {
-            font-size: 18px;
-            color: #8b7355;
-            margin-bottom: 20px;
-        }
-
-        .btn-shop {
+        .btn-review {
+            margin-top: 12px;
+            width: 100%;
+            padding: 10px;
             background: #8b7355;
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 15px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             transition: all 0.3s;
         }
+        .btn-review:hover { background: #6b5845; transform: translateY(-2px); }
+        .btn-review svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; }
 
-        .btn-shop:hover {
-            background: #6b5845;
-        }
+        /* Review Modal */
+        .review-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
+        .review-modal.active { display: flex; }
+        .review-modal-content { background: white; border-radius: 20px; padding: 35px 30px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .review-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .review-modal-title { font-size: 22px; font-weight: 600; color: #2c2c2c; }
+        .btn-close-review { background: none; border: none; font-size: 26px; color: #8b7355; cursor: pointer; }
+        .stars-input { display: flex; gap: 8px; font-size: 36px; margin-bottom: 20px; }
+        .star { cursor: pointer; color: #e0e0e0; transition: color 0.2s; }
+        .star.active { color: #ffd700; }
+        .review-form-group { margin-bottom: 15px; }
+        .review-form-group label { display: block; font-size: 14px; font-weight: 600; color: #4a4a4a; margin-bottom: 6px; }
+        .review-form-control { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; color: #2c2c2c; transition: border-color 0.3s; font-family: Arial, sans-serif; }
+        .review-form-control:focus { outline: none; border-color: #8b7355; }
+        textarea.review-form-control { resize: vertical; min-height: 100px; }
+        .btn-submit-review { width: 100%; background: #8b7355; color: white; border: none; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
+        .btn-submit-review:hover { background: #6b5845; }
+
+        /* Mobile */
+        .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+        .menu-overlay.active { display: block; }
 
         @media (max-width: 768px) {
-            .riwayat-container {
-                padding: 0 20px;
-            }
-
-            .order-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .timeline {
-                padding-left: 50px;
-            }
-
-            .timeline-icon {
-                left: -35px;
-                width: 35px;
-                height: 35px;
-            }
+            header { padding: 15px 20px; }
+            .riwayat-container { padding: 0 20px; }
+            .hamburger { display: flex; }
+            nav { position: fixed; top: 0; right: -100%; width: 300px; height: 100vh; background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%); flex-direction: column; justify-content: flex-start; padding: 80px 30px 30px; box-shadow: -5px 0 15px rgba(0,0,0,0.2); z-index: 1000; }
+            nav.active { right: 0; }
+            nav a { font-size: 18px; padding: 15px 0; width: 100%; border-bottom: 1px solid rgba(74,74,74,0.2); }
+            .order-header { flex-direction: column; align-items: flex-start; gap: 8px; }
         }
     </style>
 </head>
@@ -413,14 +189,6 @@
         </nav>
 
         <div class="header-icons">
-            <div class="icon-wrapper">
-                <button class="icon-btn" title="Pesan">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Pesan</span>
-            </div>
             <div class="icon-wrapper">
                 <button class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
                     <svg viewBox="0 0 24 24">
@@ -452,137 +220,56 @@
         @forelse($orders as $order)
         <div class="order-card">
             <div class="order-header">
-                <div>
-                    <div class="order-id">#{{ $order->order_number }}</div>
-                    <div class="order-date">{{ $order->created_at->format('d F Y, H:i') }}</div>
-                </div>
-            </div>
-
-            <div class="timeline">
-                <!-- Step 1: Verified -->
-                <div class="timeline-item">
-                    <div class="timeline-icon {{ in_array($order->status, ['verified', 'in_progress', 'completed']) ? 'completed' : ($order->status == 'pending' ? 'active' : '') }}">
-                        <svg viewBox="0 0 24 24">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-title">
-                            @if($order->status == 'pending')
-                                Menunggu Verifikasi
-                            @elseif($order->status == 'cancelled')
-                                Pesanan Dibatalkan
-                            @else
-                                Pesanan telah diverifikasi
-                            @endif
-                        </div>
-                        <div class="timeline-description">
-                            @if($order->status == 'pending')
-                                Pesanan sedang menunggu konfirmasi admin
-                            @elseif($order->status == 'cancelled')
-                                Pesanan ini telah dibatalkan
-                            @else
-                                Pesanan telah dikonfirmasi admin
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-                @if($order->status == 'cancelled')
-                <!-- Cancelled state -->
-                <div class="timeline-item">
-                    <div class="timeline-icon" style="background:#d32f2f;">
-                        <svg viewBox="0 0 24 24">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </div>
-                    <div class="timeline-content" style="background:#ffebee;">
-                        <div class="timeline-title" style="color:#d32f2f;">Pesanan Dibatalkan</div>
-                        <div class="timeline-description">Pesanan ini tidak dapat diproses lebih lanjut</div>
-                    </div>
-                </div>
-                @else
-                <!-- Step 2: In Progress -->
-                <div class="timeline-item">
-                    <div class="timeline-icon {{ in_array($order->status, ['in_progress', 'completed']) ? 'completed' : ($order->status == 'verified' ? 'active' : '') }}">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        </svg>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-title">
-                            @if($order->status == 'in_progress')
-                                Pesanan sedang dibuat
-                            @else
-                                Pesanan sedang dibuat oleh penjual
-                            @endif
-                        </div>
-                        <div class="timeline-description">Pesanan Anda sedang dalam proses pembuatan</div>
-                    </div>
-                </div>
-
-                <!-- Step 3: Completed -->
-                <div class="timeline-item">
-                    <div class="timeline-icon {{ $order->status == 'completed' ? 'completed' : '' }}">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                        </svg>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-title">
-                            @if($order->status == 'completed')
-                                Pesanan telah diterima
-                            @else
-                                Pesanan selesai, menuju lokasi
-                            @endif
-                        </div>
-                        <div class="timeline-description">
-                            @if($order->status == 'completed')
-                                Terima kasih telah berbelanja di toko kami!
-                            @else
-                                Pesanan akan segera dikirim ke alamat Anda
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                @endif
+                <span class="order-id">#{{ $order->order_number }}</span>
+                @php
+                    $statusMap = [
+                        'pending'     => ['label' => 'Menunggu Verifikasi', 'class' => 'status-pending'],
+                        'verified'    => ['label' => 'Diverifikasi',        'class' => 'status-processing'],
+                        'in_progress' => ['label' => 'Diproses',            'class' => 'status-processing'],
+                        'completed'   => ['label' => 'Selesai',             'class' => 'status-completed'],
+                        'cancelled'   => ['label' => 'Dibatalkan',          'class' => 'status-cancelled'],
+                    ];
+                    $s = $statusMap[$order->status] ?? ['label' => ucfirst($order->status), 'class' => 'status-pending'];
+                @endphp
+                <span class="order-status {{ $s['class'] }}">{{ $s['label'] }}</span>
             </div>
 
             <div class="order-items">
-                <div class="order-items-title">Detail Pesanan:</div>
-                <div class="order-items-list">
-                    @foreach($order->orderItems as $item)
-                        {{ $item->quantity }}x {{ $item->product->name }}<br>
-                    @endforeach
-                </div>
+                @foreach($order->orderItems as $item)
+                    {{ $item->quantity }}x {{ $item->product->name ?? '-' }}<br>
+                @endforeach
             </div>
 
-            <div class="order-total">
-                <span class="total-label">Total Pembayaran:</span>
-                <span class="total-amount">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
+            <div class="order-footer">
+                <span class="order-date">{{ $order->created_at->format('d F Y') }}</span>
+                <span class="order-total">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
             </div>
+
+            @if($order->status === 'completed')
+            @if(in_array($order->order_number, $reviewedOrders))
+            <div style="margin-top:12px;padding:10px;background:#f5f5f0;border-radius:10px;text-align:center;font-size:14px;color:#8b7355;font-weight:600;">
+                ✓ Sudah diberi ulasan
+            </div>
+            @else
+            <button class="btn-review" onclick="openReviewModal('{{ $order->order_number }}')">
+                <svg viewBox="0 0 24 24">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                Beri Ulasan
+            </button>
+            @endif
+            @endif
         </div>
         @empty
-        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 20px;">
-            <svg viewBox="0 0 24 24" style="width: 80px; height: 80px; stroke: #d4b896; fill: none; stroke-width: 1.5; margin-bottom: 20px;">
+        <div style="text-align:center;padding:60px 20px;background:white;border-radius:20px;">
+            <svg viewBox="0 0 24 24" style="width:80px;height:80px;stroke:#d4b896;fill:none;stroke-width:1.5;margin-bottom:20px;">
                 <circle cx="9" cy="21" r="1"></circle>
                 <circle cx="20" cy="21" r="1"></circle>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
             </svg>
-            <h3 style="font-size: 20px; color: #2c2c2c; margin-bottom: 10px;">Belum Ada Pesanan</h3>
-            <p style="font-size: 15px; color: #6b6b6b; margin-bottom: 20px;">Anda belum memiliki riwayat pesanan</p>
-            <button onclick="window.location.href='/menu'" style="
-                background: #8b7355;
-                color: white;
-                border: none;
-                padding: 12px 30px;
-                border-radius: 25px;
-                font-size: 15px;
-                font-weight: 600;
-                cursor: pointer;
-            ">Mulai Belanja</button>
+            <h3 style="font-size:20px;color:#2c2c2c;margin-bottom:10px;">Belum Ada Pesanan</h3>
+            <p style="font-size:15px;color:#6b6b6b;margin-bottom:20px;">Anda belum memiliki riwayat pesanan</p>
+            <button onclick="window.location.href='/menu'" style="background:#8b7355;color:white;border:none;padding:12px 30px;border-radius:25px;font-size:15px;font-weight:600;cursor:pointer;">Mulai Belanja</button>
         </div>
         @endforelse
         </div>
@@ -760,6 +447,114 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateCartBadge();
         });
+    </script>
+
+    <!-- Review Modal -->
+    <div class="review-modal" id="reviewModal">
+        <div class="review-modal-content">
+            <div class="review-modal-header">
+                <h2 class="review-modal-title">Beri Ulasan</h2>
+                <button class="btn-close-review" onclick="closeReviewModal()">×</button>
+            </div>
+
+            <p style="font-size:13px;color:#8b7355;margin-bottom:15px;" id="reviewOrderLabel"></p>
+
+            <div>
+                <label style="font-size:14px;font-weight:600;color:#4a4a4a;display:block;margin-bottom:8px;">Rating</label>
+                <div class="stars-input" id="starsInput">
+                    <span class="star" onclick="setRating(1)">★</span>
+                    <span class="star" onclick="setRating(2)">★</span>
+                    <span class="star" onclick="setRating(3)">★</span>
+                    <span class="star" onclick="setRating(4)">★</span>
+                    <span class="star" onclick="setRating(5)">★</span>
+                </div>
+                <input type="hidden" id="ratingValue" value="0">
+            </div>
+
+            <div class="review-form-group">
+                <label for="reviewName">Nama</label>
+                <input type="text" id="reviewName" class="review-form-control" placeholder="Nama Anda" value="{{ auth()->user()->name ?? '' }}">
+            </div>
+
+            <div class="review-form-group">
+                <label for="reviewText">Ulasan</label>
+                <textarea id="reviewText" class="review-form-control" placeholder="Ceritakan pengalaman Anda..."></textarea>
+            </div>
+
+            <button class="btn-submit-review" onclick="submitReview()">Kirim Ulasan</button>
+        </div>
+    </div>
+
+    <script>
+        let currentOrderNumber = '';
+
+        function openReviewModal(orderNumber) {
+            currentOrderNumber = orderNumber;
+            document.getElementById('reviewOrderLabel').textContent = 'Pesanan #' + orderNumber;
+            document.getElementById('reviewModal').classList.add('active');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.remove('active');
+            document.getElementById('reviewText').value = '';
+            document.getElementById('ratingValue').value = '0';
+            document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+            currentOrderNumber = '';
+        }
+
+        document.getElementById('reviewModal').addEventListener('click', function(e) {
+            if (e.target === this) closeReviewModal();
+        });
+
+        function setRating(rating) {
+            document.getElementById('ratingValue').value = rating;
+            document.querySelectorAll('.star').forEach((star, i) => {
+                star.classList.toggle('active', i < rating);
+            });
+        }
+
+        function submitReview() {
+            const rating = document.getElementById('ratingValue').value;
+            const name   = document.getElementById('reviewName').value.trim();
+            const review = document.getElementById('reviewText').value.trim();
+
+            if (rating === '0') { alert('Silakan pilih rating terlebih dahulu!'); return; }
+            if (!name)          { alert('Nama tidak boleh kosong.'); return; }
+            if (!review)        { alert('Ulasan tidak boleh kosong.'); return; }
+
+            const btn = document.querySelector('.btn-submit-review');
+            btn.textContent = 'Mengirim...';
+            btn.disabled = true;
+
+            fetch('/reviews', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ name, rating: parseInt(rating), review, order_number: currentOrderNumber })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    closeReviewModal();
+                    showNotif('Ulasan berhasil dikirim. Terima kasih!', 'success');
+                } else {
+                    showNotif(data.message || 'Gagal mengirim ulasan.', 'error');
+                }
+            })
+            .catch(() => showNotif('Terjadi kesalahan, coba lagi.', 'error'))
+            .finally(() => { btn.textContent = 'Kirim Ulasan'; btn.disabled = false; });
+        }
+
+        function showNotif(message, type) {
+            const el = document.createElement('div');
+            el.style.cssText = `position:fixed;top:100px;right:30px;background:${type==='success'?'#4caf50':'#f44336'};color:white;padding:15px 25px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.3);z-index:10000;font-weight:600;`;
+            el.textContent = message;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 3500);
+        }
     </script>
 </body>
 </html>

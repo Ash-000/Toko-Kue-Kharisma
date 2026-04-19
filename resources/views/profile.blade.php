@@ -580,14 +580,6 @@
 
         <div class="header-icons">
             <div class="icon-wrapper">
-                <button class="icon-btn" title="Pesan">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Pesan</span>
-            </div>
-            <div class="icon-wrapper">
                 <button type="button" class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="21" r="1"></circle>
@@ -722,7 +714,7 @@
             <section id="orders" class="content-section">
                 <h2 class="section-title">Riwayat Pesanan</h2>
 
-                @forelse($orders as $order)
+                @forelse($orders->take(3) as $order)
                 <div class="order-card">
                     <div class="order-header">
                         <span class="order-id">#{{ $order->order_number }}</span>
@@ -751,6 +743,24 @@
                 @empty
                 <p style="color:#8b7355;font-size:15px;">Belum ada pesanan. <a href="/menu" style="color:#2c2c2c;font-weight:600;">Mulai belanja</a></p>
                 @endforelse
+
+                @if($orders->count() > 3)
+                <a href="{{ route('riwayat') }}" style="
+                    display: block;
+                    text-align: center;
+                    margin-top: 15px;
+                    padding: 12px;
+                    background: #f5f5f0;
+                    border-radius: 10px;
+                    color: #8b7355;
+                    font-weight: 600;
+                    font-size: 14px;
+                    text-decoration: none;
+                    transition: background 0.3s;
+                " onmouseover="this.style.background='#e8e0d0'" onmouseout="this.style.background='#f5f5f0'">
+                    Lihat Semua Pesanan ({{ $orders->count() }}) →
+                </a>
+                @endif
             </section>
 
             <!-- Address Section -->
