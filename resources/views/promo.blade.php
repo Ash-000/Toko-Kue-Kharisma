@@ -19,7 +19,7 @@
         /* Header */
         header {
             background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px 50px;
+            padding: 15px clamp(15px, 4vw, 50px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -448,6 +448,18 @@
             .packages-grid {
                 grid-template-columns: 1fr;
             }
+
+            .header-icons {
+                margin-left: auto;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .promo-packages { padding: 30px 15px; }
+            .promo-hero { height: 250px; padding: 0 15px; }
+            .promo-content { padding: 25px 20px; }
+            .promo-title { font-size: 24px; }
         }
     </style>
 </head>

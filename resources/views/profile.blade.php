@@ -19,7 +19,7 @@
         /* Header */
         header {
             background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px 50px;
+            padding: 15px clamp(15px, 4vw, 50px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -550,6 +550,18 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
+
+            .header-icons {
+                margin-left: auto;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-container { padding: 0 15px; margin: 20px auto; }
+            .profile-content { padding: 20px 15px; }
+            .profile-sidebar { padding: 20px 15px; }
+            .section-title { font-size: 20px; }
         }
     </style>
 </head>
@@ -767,20 +779,36 @@
             <section id="address" class="content-section">
                 <h2 class="section-title">Alamat Pengiriman</h2>
 
-                <div class="address-card">
-                    <span class="address-label">Alamat Toko</span>
-                    <div class="address-name">Toko Kue Kharisma</div>
-                    <div class="address-phone">+62 896-3649-1354</div>
-                    <div class="address-detail">
-                        Jl. Pasar Dramaga No.74, RT.002/RW.003<br>
-                        Dramaga, Kec. Dramaga, Bogor Barat<br>
-                        Jawa Barat 16680
+                @if(session('success') && request()->has('from_address'))
+                    <div style="background:#e8f5e9;border:1px solid #4caf50;color:#2e7d32;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;">
+                        Alamat berhasil disimpan.
                     </div>
-                </div>
+                @endif
 
-                <p style="font-size:14px;color:#8b7355;margin-top:10px;">
-                    Untuk pengiriman, hubungi kami melalui halaman <a href="/kontak" style="color:#2c2c2c;font-weight:600;">Kontak</a>.
-                </p>
+                <form action="{{ route('profile.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="name" value="{{ $user->name }}">
+                    <input type="hidden" name="phone" value="{{ $user->phone ?? '' }}">
+
+                    <div class="form-group">
+                        <label for="address">Alamat Lengkap</label>
+                        <textarea id="address" name="address" class="form-control" rows="4"
+                            placeholder="Contoh: Jl. Merdeka No. 10, RT 01/RW 02, Kel. Sukamaju, Kec. Bogor Tengah, Kota Bogor, Jawa Barat 16110"
+                            style="resize:vertical;">{{ old('address', $user->address ?? '') }}</textarea>
+                        <p style="font-size:12px;color:#8b7355;margin-top:6px;">
+                            Alamat ini akan digunakan sebagai alamat pengiriman pesanan Anda.
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn-save">Simpan Alamat</button>
+                </form>
+
+                @if(empty($user->address))
+                <div style="margin-top:15px;padding:15px;background:#fff3e0;border:1px solid #f0c27b;border-radius:10px;font-size:14px;color:#6b4f1d;">
+                    ⚠️ Anda belum mengisi alamat pengiriman. Lengkapi alamat sebelum melakukan checkout.
+                </div>
+                @endif
             </section>
 
             <!-- Settings Section -->
@@ -885,6 +913,19 @@
         // Load cart count on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateCartBadge();
+
+            // Auto-buka tab sesuai hash URL (misal /profile#address)
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById(hash)) {
+                // Sembunyikan semua section
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.profile-menu a').forEach(a => a.classList.remove('active'));
+                // Tampilkan section yang diminta
+                document.getElementById(hash).classList.add('active');
+                // Aktifkan menu item yang sesuai
+                const menuLink = document.querySelector(`.profile-menu a[onclick*="'${hash}'"]`);
+                if (menuLink) menuLink.classList.add('active');
+            }
         });
     </script>
 </body>

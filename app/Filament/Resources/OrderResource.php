@@ -231,6 +231,7 @@ class OrderResource extends Resource
                             ->formatStateUsing(fn ($state) => strtoupper($state)),
                         TextEntry::make('created_at')->label('Tanggal Pesan')->dateTime('d M Y, H:i'),
                         TextEntry::make('notes')->label('Catatan')->default('-')->columnSpanFull(),
+                        TextEntry::make('delivery_address')->label('Alamat Pengiriman')->default('-')->columnSpanFull(),
                     ]),
 
                 Section::make('Rincian Harga')

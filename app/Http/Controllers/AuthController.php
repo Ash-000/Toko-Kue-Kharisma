@@ -41,8 +41,9 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'name'  => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'name'    => 'required|string|max:255',
+            'phone'   => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
         ]);
 
         $user->update($validated);

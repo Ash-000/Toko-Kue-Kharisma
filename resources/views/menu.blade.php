@@ -20,7 +20,7 @@
         /* Header */
         header {
             background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px 50px;
+            padding: 15px clamp(15px, 4vw, 50px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -546,10 +546,6 @@
                 border-bottom: 1px solid rgba(74, 74, 74, 0.2);
             }
 
-            .header-icons .icon-wrapper {
-                display: none;
-            }
-
             .menu-section {
                 padding: 30px 20px;
             }
@@ -557,6 +553,17 @@
             .menu-grid {
                 grid-template-columns: 1fr;
             }
+
+            .header-icons {
+                margin-left: auto;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .menu-section { padding: 20px 15px; }
+            .menu-title { font-size: 24px; }
         }
     </style>
 </head>
@@ -604,13 +611,13 @@
                 </button>
                 <span class="icon-label">Profil</span>
             </div>
-        </div>
-        
-        <!-- Hamburger Menu -->
-        <div class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
+
+            <!-- Hamburger Menu -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </header>
 

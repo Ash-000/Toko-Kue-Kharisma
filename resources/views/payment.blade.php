@@ -20,7 +20,7 @@
         /* Header */
         header {
             background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px 50px;
+            padding: 15px clamp(15px, 4vw, 50px);
             display: flex;
             justify-content: space-between;
             align-items: center;

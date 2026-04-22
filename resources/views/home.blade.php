@@ -20,7 +20,7 @@
         /* Header */
         header {
             background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px 50px;
+            padding: 15px clamp(15px, 4vw, 50px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -194,6 +194,7 @@
             }
 
             .header-icons {
+                margin-left: auto;
                 gap: 15px;
             }
 
@@ -1013,6 +1014,14 @@
                 flex-direction: column;
                 gap: 20px;
             }
+        }
+
+        @media (max-width: 480px) {
+            .best-sellers { padding: 30px 15px; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .about-section { padding: 40px 15px; }
+            .reviews-section { padding: 30px 15px; }
+            .hero { height: 250px; }
         }
     </style>
 </head>

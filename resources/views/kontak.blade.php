@@ -20,7 +20,7 @@
         /* Header */
         header {
             background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px 50px;
+            padding: 15px clamp(15px, 4vw, 50px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -436,6 +436,17 @@
             .contact-form {
                 padding: 30px 20px;
             }
+
+            .header-icons {
+                margin-left: auto;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-container { padding: 0 15px; margin: 20px auto; }
+            .contact-form { padding: 20px 15px; }
+            .contact-title { font-size: 24px; }
         }
     </style>
 </head>

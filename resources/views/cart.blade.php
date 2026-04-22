@@ -20,7 +20,7 @@
         /* Header */
         header {
             background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px 50px;
+            padding: 15px clamp(15px, 4vw, 50px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -832,6 +832,19 @@
                 position: static;
                 margin-top: 10px;
             }
+
+            .header-icons {
+                margin-left: auto;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cart-container { padding: 0 15px; margin: 20px auto; }
+            .cart-items { padding: 20px 15px; }
+            .cart-summary { padding: 20px 15px; }
+            .item-name { font-size: 15px; }
+            .checkout-modal-content { padding: 20px 15px; }
         }
     </style>
 </head>
@@ -1630,8 +1643,44 @@
                     const instrModal = document.getElementById('paymentInstructionModal');
                     if (instrModal) instrModal.remove();
 
+                    // Reset cart badge ke 0
+                    const badge = document.getElementById('cartBadge');
+                    if (badge) badge.textContent = '0';
+
+                    // Kosongkan tampilan cart items
+                    const cartContainer = document.getElementById('cartItemsContainer');
+                    if (cartContainer) {
+                        cartContainer.innerHTML = `
+                            <div class="empty-cart">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                <p class="empty-cart-text">Keranjang belanja Anda masih kosong</p>
+                                <button class="btn-shop-now" onclick="window.location.href='/menu'">Belanja Sekarang</button>
+                            </div>
+                        `;
+                    }
+
+                    // Reset summary
+                    const totalItems = document.getElementById('totalItems');
+                    const subtotalAmount = document.getElementById('subtotalAmount');
+                    const totalAmount = document.getElementById('totalAmount');
+                    if (totalItems) totalItems.textContent = '0';
+                    if (subtotalAmount) subtotalAmount.textContent = 'Rp 0';
+                    if (totalAmount) totalAmount.textContent = 'Rp 5.000';
+
                     // Tampilkan modal sukses
                     showSuccessOrderModal(paymentMethod, total, data.order_number);
+                } else if (data.require_address) {
+                    btn.textContent = paymentMethod === 'cod' ? 'Konfirmasi Pesanan' : 'Kirim Bukti Pembayaran';
+                    btn.disabled = false;
+                    // Tutup modal pembayaran
+                    const instrModal = document.getElementById('paymentInstructionModal');
+                    if (instrModal) instrModal.remove();
+                    closeCheckoutModal();
+                    showAddressRequiredModal();
                 } else {
                     btn.textContent = paymentMethod === 'cod' ? 'Konfirmasi Pesanan' : 'Kirim Bukti Pembayaran';
                     btn.disabled = false;
@@ -1868,6 +1917,38 @@
                 </div>
             `;
 
+            document.body.appendChild(modal);
+        }
+
+        function showAddressRequiredModal() {
+            const modal = document.createElement('div');
+            modal.id = 'addressRequiredModal';
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.6); z-index: 10001;
+                display: flex; align-items: center; justify-content: center; padding: 20px;
+            `;
+            modal.innerHTML = `
+                <div style="background:white;border-radius:20px;padding:35px 30px;max-width:420px;width:100%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+                    <div style="width:70px;height:70px;margin:0 auto 20px;background:#fff3e0;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                        <svg viewBox="0 0 24 24" style="width:38px;height:38px;stroke:#ff9800;fill:none;stroke-width:2;">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <h3 style="font-size:20px;font-weight:600;color:#2c2c2c;margin-bottom:10px;">Alamat Pengiriman Belum Diisi</h3>
+                    <p style="font-size:14px;color:#6b6b6b;margin-bottom:25px;line-height:1.6;">
+                        Silakan lengkapi alamat pengiriman di profil Anda sebelum melakukan checkout.
+                    </p>
+                    <a href="/profile#address" style="display:block;background:#8b7355;color:white;padding:12px 30px;border-radius:25px;font-size:15px;font-weight:600;text-decoration:none;margin-bottom:10px;">
+                        Isi Alamat Sekarang
+                    </a>
+                    <button onclick="document.getElementById('addressRequiredModal').remove()" style="background:none;border:none;color:#8b7355;font-size:14px;cursor:pointer;margin-top:5px;">
+                        Tutup
+                    </button>
+                </div>
+            `;
+            modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
             document.body.appendChild(modal);
         }
 

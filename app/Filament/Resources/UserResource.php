@@ -46,6 +46,11 @@ class UserResource extends Resource
                     ->label('No. Telepon')
                     ->tel(),
 
+                \Filament\Forms\Components\Textarea::make('address')
+                    ->label('Alamat')
+                    ->rows(3)
+                    ->columnSpanFull(),
+
                 Select::make('role')
                     ->label('Role')
                     ->options([

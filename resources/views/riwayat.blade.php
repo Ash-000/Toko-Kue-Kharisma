@@ -17,7 +17,7 @@
         /* Header */
         header {
             background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px 50px;
+            padding: 15px clamp(15px, 4vw, 50px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -163,6 +163,13 @@
             nav.active { right: 0; }
             nav a { font-size: 18px; padding: 15px 0; width: 100%; border-bottom: 1px solid rgba(74,74,74,0.2); }
             .order-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .header-icons { margin-left: auto; gap: 10px; }
+        }
+
+        @media (max-width: 480px) {
+            .riwayat-container { padding: 0 15px; margin: 20px auto; }
+            .page-title { font-size: 22px; }
+            .order-card { padding: 15px; }
         }
     </style>
 </head>

@@ -39,6 +39,15 @@ class OrderController extends Controller
 
         $user = Auth::user();
 
+        // Cek alamat user
+        if (empty($user->address)) {
+            return response()->json([
+                'success'          => false,
+                'message'          => 'Silakan lengkapi alamat pengiriman terlebih dahulu.',
+                'require_address'  => true,
+            ], 422);
+        }
+
         // Ambil cart items beserta produk
         $cartItems = Cart::forUser($user->id)->with('product')->get();
 
@@ -62,15 +71,16 @@ class OrderController extends Controller
             $orderNumber = 'ORD-' . strtoupper(uniqid());
 
             $order = Order::create([
-                'order_number'   => $orderNumber,
-                'user_id'        => $user->id,
-                'subtotal'       => $subtotal,
-                'shipping_cost'  => $shippingCost,
-                'discount'       => $discount,
-                'total'          => $total,
-                'payment_method' => $request->payment_method,
-                'notes'          => $request->notes,
-                'status'         => 'pending',
+                'order_number'     => $orderNumber,
+                'user_id'          => $user->id,
+                'subtotal'         => $subtotal,
+                'shipping_cost'    => $shippingCost,
+                'discount'         => $discount,
+                'total'            => $total,
+                'payment_method'   => $request->payment_method,
+                'notes'            => $request->notes,
+                'delivery_address' => $user->address,
+                'status'           => 'pending',
             ]);
 
             // Buat order items & kurangi stok
