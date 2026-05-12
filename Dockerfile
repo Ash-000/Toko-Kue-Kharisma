@@ -17,7 +17,8 @@ RUN apk add --no-cache \
     mysql-client
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+RUN apk add --no-cache icu-dev libzip-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         pdo_mysql \
         mbstring \
@@ -25,7 +26,9 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         pcntl \
         bcmath \
         gd \
-        opcache
+        opcache \
+        intl \
+        zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
