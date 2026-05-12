@@ -24,14 +24,5 @@
     </div>
 </div>
 
-{{-- Pesan / WhatsApp --}}
-<div class="icon-wrapper">
-    <a href="https://wa.me/6289636491354?text=Halo%20Toko%20Kue%20Kharisma%2C%20saya%20ingin%20bertanya..."
-       target="_blank" class="icon-btn" title="Hubungi Kami via WhatsApp" style="text-decoration:none;">
-        <svg viewBox="0 0 24 24">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-    </a>
-    <span class="icon-label">Pesan</span>
-</div>
+
 @endauth

@@ -76,6 +76,20 @@ class AuthController extends Controller
             return !is_null($value);
         });
 
+        // Proses upload foto profil jika ada
+        if ($request->hasFile('photo')) {
+            $file     = $request->file('photo');
+            $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $path     = $file->storeAs('avatars', $filename, 'public');
+
+            // Hapus foto lama jika bukan default
+            if ($user->photo && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->photo)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->photo);
+            }
+
+            $dataUpdate['photo'] = $path;
+        }
+
         $user->update($dataUpdate);
 
         $pesan = $request->has('address') ? 'Alamat pengiriman berhasil diperbarui!' : 'Informasi profil berhasil diperbarui!';

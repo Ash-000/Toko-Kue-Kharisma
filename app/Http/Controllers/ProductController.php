@@ -24,7 +24,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        return view('product-detail', compact('product'));
+        // Detail produk ditangani via modal di halaman menu
+        abort(404);
     }
 }

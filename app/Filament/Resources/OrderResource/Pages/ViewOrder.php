@@ -60,7 +60,8 @@ class ViewOrder extends ViewRecord
                             'verified_at' => now(),
                         ]);
 
-                        $this->record->update(['status' => 'confirmed']);
+                        // in_progress = pembayaran terverifikasi, pesanan diproses
+                        $this->record->update(['status' => 'in_progress']);
 
                         Notification::make()
                             ->title('Pembayaran Berhasil Diverifikasi')
@@ -145,7 +146,7 @@ class ViewOrder extends ViewRecord
                     $this->record->update(['status' => 'in_progress']);
                     $this->refreshFormData(['status']);
                 })
-                ->visible(fn () => in_array($this->record->status, ['verified', 'confirmed']));
+                ->visible(fn () => $this->record->status === 'verified');
 
         $actions[] = Actions\Action::make('complete')
                 ->label('Selesai')
@@ -167,7 +168,7 @@ class ViewOrder extends ViewRecord
                     $this->record->update(['status' => 'cancelled']);
                     $this->refreshFormData(['status']);
                 })
-                ->visible(fn () => in_array($this->record->status, ['pending', 'verified', 'confirmed', 'pending_payment']));
+                ->visible(fn () => in_array($this->record->status, ['pending', 'verified', 'in_progress']));
 
         return $actions;
     }

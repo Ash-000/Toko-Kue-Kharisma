@@ -489,7 +489,7 @@
         /* Hero Section */
         .hero {
             position: relative;
-            height: 250px;
+            height: 420px;
             overflow: hidden;
             cursor: pointer;
         }
@@ -592,7 +592,7 @@
     padding: 25px;
     text-align: center;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 0.6s ease forwards;
@@ -606,16 +606,17 @@
 .product-card:nth-child(5) { animation-delay: 0.5s; }
 .product-card:nth-child(6) { animation-delay: 0.6s; }
 
-/* INI YANG KURANG */
 @keyframes fadeUp {
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
 .product-card:hover {
     transform: translateY(-10px) scale(1.03);
     box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #dfc4a3 0%, #d4b896 100%);
 }
 
         @keyframes highlight {
@@ -1164,7 +1165,7 @@
             .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
             .about-section { padding: 40px 15px; }
             .reviews-section { padding: 30px 15px; }
-            .hero { height: 250px; }
+            .hero { height: 220px; }
         }
         .hero {
     animation: zoomHero 6s ease-in-out infinite alternate;
@@ -1184,28 +1185,9 @@
     opacity: 1;
     transform: translateY(0);
 }
-/* Efek kartu produk biar interaktif */
-.product-card {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Biar ada efek mantul (bounce) dikit */
-    opacity: 0;
-    transform: translateY(30px);
-}
-
-/* Saat muncul lewat scroll */
-.product-card.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.product-card:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 20px 30px rgba(0,0,0,0.15);
-    background: linear-gradient(135deg, #dfc4a3 0%, #d4b896 100%);
-}
-
 /* Animasi Gambar biar nge-zoom di dalam kartu */
 .product-image-container {
-    overflow: hidden; /* Wajib ada ini */
+    overflow: hidden;
 }
 
 .product-image {
@@ -1275,16 +1257,6 @@
                 </div>
             </div>
 
-            <!-- Pesan / WhatsApp -->
-            <div class="icon-wrapper">
-                <a href="https://wa.me/6289636491354?text=Halo%20Toko%20Kue%20Kharisma%2C%20saya%20ingin%20bertanya..." 
-                   target="_blank" class="icon-btn" title="Hubungi Kami via WhatsApp">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                </a>
-                <span class="icon-label">Pesan</span>
-            </div>
             @endauth
 
             <div class="icon-wrapper">
@@ -1350,7 +1322,7 @@
             @foreach($products as $product)
                 @include('partials.product-card', [
                     'product' => $product,
-                    'showDescription' => false,
+                    'showDescription' => true,
                     'buttonLabel' => 'Masukkan ke keranjang'
                 ])
             @endforeach
@@ -1974,29 +1946,6 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.fade-up').forEach(el => {
     observer.observe(el);
 });
-</script>
-<script>
-    // Inisialisasi Observer
-    const observerOptions = {
-        threshold: 0.2 // Muncul kalau 20% elemen udah masuk layar
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                // Kasih delay dikit tiap kartu biar munculnya gantian (staggered)
-                setTimeout(() => {
-                    entry.target.classList.add('show');
-                }, index * 100); 
-                observer.unobserve(entry.target); // Cukup animasiin sekali aja
-            }
-        });
-    }, observerOptions);
-
-    // Targetkan semua kartu produk
-    document.querySelectorAll('.product-card').forEach((card) => {
-        observer.observe(card);
-    });
 </script>
 </body>
 </html>

@@ -114,57 +114,12 @@ class PaymentController extends Controller
     }
 
     /**
-     * Verify payment (admin)
+     * Verify payment (admin) - Ditangani via Filament PaymentProofResource
+     * Method ini tidak digunakan
      */
-    public function verify(Request $request, $paymentProofId)
-    {
-        $request->validate([
-            'status' => 'required|in:verified,rejected',
-            'notes'  => 'nullable|string|max:1000',
-        ]);
-
-        $paymentProof = PaymentProof::findOrFail($paymentProofId);
-
-        if ($request->status === 'verified') {
-            $paymentProof->update([
-                'status'      => 'verified',
-                'admin_notes' => $request->notes,
-                'verified_at' => now(),
-            ]);
-
-            // Update order status to in_progress
-            $paymentProof->order->update(['status' => 'in_progress']);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Pembayaran berhasil diverifikasi',
-            ]);
-        } else {
-            $paymentProof->update([
-                'status'      => 'rejected',
-                'admin_notes' => $request->notes,
-            ]);
-
-            // Update order status back to pending
-            $paymentProof->order->update(['status' => 'pending']);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Pembayaran ditolak',
-            ]);
-        }
-    }
 
     /**
-     * List semua payment proofs (admin)
+     * List semua payment proofs (admin) - Ditangani via Filament PaymentProofResource
+     * Method ini tidak digunakan
      */
-    public function listPending()
-    {
-        $paymentProofs = PaymentProof::where('status', 'pending')
-            ->with(['order.user'])
-            ->latest()
-            ->paginate(10);
-
-        return view('admin.payment-verification', compact('paymentProofs'));
-    }
 }

@@ -154,6 +154,8 @@
         .status-processing { background: #ff9800; color: white; }
         .status-pending    { background: #9e9e9e; color: white; }
         .status-cancelled  { background: #d32f2f; color: white; }
+        .status-shipping   { background: #2196f3; color: white; }
+        .status-verified   { background: #8b7355; color: white; }
 
         .order-items { font-size: 14px; color: #6b6b6b; margin-bottom: 10px; }
 
@@ -235,9 +237,6 @@
             .order-card { padding: 15px; }
         }
         
-      .status-shipping { background: #2196f3; color: white; }                                                                                                            
-                                                                                                                  
-    </style>
     @include('partials.notif-styles')
 </head>
 <body>
@@ -306,8 +305,7 @@
          @php
     $statusMap = [
         'pending'     => ['label' => 'Menunggu Pembayaran', 'class' => 'status-pending'],
-        'paid'        => ['label' => 'Dibayar',             'class' => 'status-shipping'],
-        'verified'    => ['label' => 'Diverifikasi',        'class' => 'status-shipping'],
+        'verified'    => ['label' => 'Diverifikasi',        'class' => 'status-verified'],
         'in_progress' => ['label' => 'Diproses',            'class' => 'status-processing'],
         'shipping'    => ['label' => 'Dikirim',             'class' => 'status-shipping'],
         'completed'   => ['label' => 'Selesai',             'class' => 'status-completed'],

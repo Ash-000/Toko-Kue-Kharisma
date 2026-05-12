@@ -167,58 +167,6 @@
             z-index: 1;
         }
 
-        /* Info Box untuk Persyaratan Promo - IMPROVED */
-        .promo-info-box {
-            background: linear-gradient(135deg, #fff4e6 0%, #ffe8cc 100%);
-            border-left: 6px solid #d32f2f;
-            padding: 24px 28px;
-            border-radius: 12px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 16px rgba(211, 47, 47, 0.15);
-            animation: slideInDown 0.5s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-        .promo-info-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: rgba(211, 47, 47, 0.05);
-            border-radius: 50%;
-            transform: translate(50%, -50%);
-        }
-        .promo-info-box h3 {
-            color: #d32f2f;
-            margin-bottom: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            z-index: 1;
-        }
-        .promo-info-box p {
-            color: #4a4a4a;
-            font-size: 15px;
-            line-height: 1.7;
-            font-weight: 500;
-            position: relative;
-            z-index: 1;
-        }
-        .promo-info-box strong {
-            color: #d32f2f;
-            font-weight: 700;
-        }
-        
-        @keyframes slideInDown {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
         .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 1001; }
         .hamburger span { width: 30px; height: 3px; background: #4a4a4a; border-radius: 3px; transition: all 0.3s; }
         .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
@@ -292,11 +240,6 @@
     <section class="promo-packages">
         <h2 class="section-title">Paket Promo Spesial</h2>
         <div class="section-divider"></div>
-
-        <div class="promo-info-box">
-            <h3>⚠️ Persyaratan Promo</h3>
-            <p>Promo ini berlaku jika Anda telah membeli minimal <strong>2 produk</strong> dari bagian <strong>Menu</strong> kami. Diskon eksklusif ini adalah apresiasi kami untuk pelanggan setia!</p>
-        </div>
 
         <div class="packages-grid">
             <div class="package-card">

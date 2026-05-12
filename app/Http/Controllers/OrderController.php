@@ -280,18 +280,9 @@ $order = Order::create([
         return response()->json(['orders' => $orders]);
     }
     
-    // Tambahkan di dalam class OrderController
-
-public function updateStatus(Request $request, $id)
-{
-    $request->validate([
-        'status' => 'required|in:shipping,completed'
-    ]);
-
-    $order = Order::findOrFail($id);
-    $order->status = $request->status;
-    $order->save();
-
-    return back()->with('success', 'Status pesanan berhasil diperbarui menjadi ' . $request->status);
-}
+    public function updateStatus(Request $request, $id)
+    {
+        // Status update ditangani via Filament admin panel
+        abort(404);
+    }
 }

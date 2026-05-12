@@ -1129,67 +1129,31 @@ function showDetail(productId) {
     const modal = document.getElementById('productModal');
     const modalBody = document.getElementById('modalBody');
 
-    // Kumpulan variasi kalimat promosi supaya tidak bosan
-    const variasiTeks = [
-        "Dibuat dengan resep rahasia keluarga Kharisma yang dijaga kemurniannya. Menggunakan bahan pilihan untuk tekstur yang pas di lidah.",
-        "Camilan legendaris yang cocok menemani waktu santai Anda. Tanpa bahan pengawet dan dijamin fresh setiap hari langsung dari dapur kami.",
-        "Menghadirkan cita rasa tradisional yang otentik dalam setiap gigitan. Sangat lembut, manisnya pas, dan bikin ketagihan siapa saja.",
-        "Kue istimewa yang diproses secara higienis menggunakan bahan-bahan premium. Pilihan terbaik untuk hidangan acara keluarga atau arisan."
-    ];
-
-    // Pilih teks secara acak berdasarkan ID produk supaya konsisten tapi beda antar produk
-    const indexAcak = productId % variasiTeks.length;
-    const extraDesc = variasiTeks[indexAcak];
-
-    // Gabungkan deskripsi asli database dengan teks acak tadi
-    let descAsli = product.description || `${product.name} yang enak dan lezat.`;
-    let fullDescription = `${descAsli} ${extraDesc}`;
+    const description = product.description || `${product.name} yang enak dan lezat.`;
 
     modalBody.innerHTML = `
         <img src="${product.image_url ?? '/images/products/default.jpg'}" class="modal-img">
         <div style="flex: 1; display: flex; flex-direction: column;">
-            <h2 style="color: #2c2c2c; margin-bottom: 5px; font-size: 1.8rem;">${product.name}</h2>
-            
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px; color: #777; font-size: 0.95rem;">
-                <div style="display: flex; align-items: center; gap: 4px;">
-                    <span style="color: #ff9800; font-size: 1.2rem;">★</span> 
-                    <span style="font-weight: bold; color: #333;">4.8</span> 
-                    <span>(2.2k ulasan)</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    <span>5.4k dilihat</span>
-                </div>
-            </div>
+            <h2 style="color: #2c2c2c; margin-bottom: 15px; font-size: 1.8rem;">${product.name}</h2>
 
-            <p style="color: #8b7355; font-weight: bold; font-size: 1.6rem; margin-bottom: 15px;">
+            <p style="color: #8b7355; font-weight: bold; font-size: 1.6rem; margin-bottom: 20px;">
                 Rp ${Number(product.price).toLocaleString('id-ID')}
             </p>
-            
+
             <div style="flex-grow: 1;">
-                <h4 style="color: #4a4a4a; margin-bottom: 5px;">Deskripsi Produk:</h4>
-                <p class="product-description-text" style="
-                    color: #555; 
-                    line-height: 1.6; 
-                    text-align: justify; 
-                    margin-bottom: 20px;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 4;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                    min-height: 6.4em;
-                ">
-                    ${fullDescription}
+                <h4 style="color: #4a4a4a; margin-bottom: 8px;">Deskripsi Produk:</h4>
+                <p style="color: #555; line-height: 1.7; text-align: justify; margin-bottom: 20px;">
+                    ${description}
                 </p>
             </div>
-            
+
             <div class="modal-footer-actions" style="display: flex; flex-direction: row; gap: 15px; align-items: center; border-top: 1px solid rgba(139, 115, 85, 0.1); padding-top: 20px;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <label style="color: #555; font-weight: 600; white-space: nowrap;">Jumlah:</label>
-                    <input type="number" id="detailQty" value="1" min="1" 
+                    <input type="number" id="detailQty" value="1" min="1"
                         style="width: 70px; padding: 12px; border-radius: 12px; border: 1.5px solid #d4b896; text-align: center; background: white;">
                 </div>
-                <button class="btn-add-cart" style="flex: 1; padding: 15px; height: 50px;" 
+                <button class="btn-add-cart" style="flex: 1; padding: 15px; height: 50px;"
                     onclick="closeModal(); addToCart(this, ${product.id}, '${product.name}', ${product.price})">
                     Tambah ke Keranjang
                 </button>

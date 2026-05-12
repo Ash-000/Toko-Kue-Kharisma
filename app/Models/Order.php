@@ -27,6 +27,14 @@ class Order extends Model
         'midtrans_raw_notification',
     ];
 
+    protected $casts = [
+        'midtrans_raw_notification' => 'array',
+        'subtotal'                  => 'decimal:2',
+        'shipping_cost'             => 'decimal:2',
+        'discount'                  => 'decimal:2',
+        'total'                     => 'decimal:2',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

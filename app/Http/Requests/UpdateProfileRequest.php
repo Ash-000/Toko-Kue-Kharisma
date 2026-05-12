@@ -24,6 +24,7 @@ class UpdateProfileRequest extends FormRequest
             'longitude' => 'nullable|string',
             'birthdate' => 'nullable|date',
             'gender'    => 'nullable|string',
+            'photo'     => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
 
