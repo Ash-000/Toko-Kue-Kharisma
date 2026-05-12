@@ -1,5 +1,8 @@
 FROM php:8.3-fpm-alpine
 
+# Force rebuild - cache bust
+ARG CACHEBUST=1
+
 # Install dependencies
 RUN apk add --no-cache \
     nginx \
