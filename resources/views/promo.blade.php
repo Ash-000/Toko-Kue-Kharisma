@@ -2,12 +2,13 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Promo - Toko Kue Kharisma</title>
     <style>
         /* --- CSS TETAP SAMA SEPERTI SEBELUMNYA --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { overflow-x: hidden; max-width: 100%; }
         body { font-family: Arial, Helvetica, sans-serif; background: #f5deb3; }
         header { 
             background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%); 

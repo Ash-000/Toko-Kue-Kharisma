@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Toko Kue Kharisma</title>
     <style>
@@ -10,6 +10,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
         }
 
         body {
@@ -1162,10 +1167,16 @@
 
         @media (max-width: 480px) {
             .best-sellers { padding: 30px 15px; }
-            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .about-section { padding: 40px 15px; }
             .reviews-section { padding: 30px 15px; }
             .hero { height: 220px; }
+            .product-card { padding: 12px; }
+            .product-image-container { height: 130px; }
+            .product-name { font-size: 13px; }
+            .product-price { font-size: 13px; }
+            .btn-add-cart { padding: 8px 10px; font-size: 12px; gap: 4px; }
+            .btn-add-cart svg { width: 14px; height: 14px; }
         }
         .hero {
     animation: zoomHero 6s ease-in-out infinite alternate;
