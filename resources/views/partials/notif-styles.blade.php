@@ -12,6 +12,16 @@
     box-shadow: 0 8px 30px rgba(0,0,0,0.15); z-index: 2000; overflow: hidden;
 }
 .notif-dropdown.active { display: block; }
+
+@media (max-width: 768px) {
+    .notif-dropdown {
+        position: fixed;
+        top: 70px;
+        right: 10px;
+        left: 10px;
+        width: auto;
+    }
+}
 .notif-header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 14px 16px; border-bottom: 1px solid #f0f0f0;

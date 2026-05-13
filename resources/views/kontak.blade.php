@@ -438,7 +438,7 @@
             display: block;
         }
 
-        @media (max-width: 968px) {
+        @media (max-width: 768px) {
             .hamburger {
                 display: flex;
             }

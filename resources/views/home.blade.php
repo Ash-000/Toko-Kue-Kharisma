@@ -241,6 +241,16 @@
             overflow: hidden;
         }
         .notif-dropdown.active { display: block; }
+
+        @media (max-width: 768px) {
+            .notif-dropdown {
+                position: fixed;
+                top: 70px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+            }
+        }
         .notif-header {
             display: flex;
             justify-content: space-between;

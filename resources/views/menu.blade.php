@@ -580,7 +580,7 @@ nav {
             pointer-events: auto;
         }
 
-        @media (max-width: 968px) {
+        @media (max-width: 768px) {
             .hamburger {
                 display: flex;
             }
@@ -614,6 +614,7 @@ nav {
                 padding: 80px 30px 30px;
                 box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
                 z-index: 1001;
+                display: flex;
             }
 
             nav.active {
