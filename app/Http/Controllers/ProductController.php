@@ -22,7 +22,7 @@ class ProductController extends Controller
         return view('menu', compact('products', 'cartCount'));
     }
 
-    public function show($id)
+    public function show(Product $product)
     {
         // Detail produk ditangani via modal di halaman menu
         abort(404);

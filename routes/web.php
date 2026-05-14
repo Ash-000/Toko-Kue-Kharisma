@@ -18,6 +18,7 @@ Route::get('/kontak', fn() => view('kontak'))->name('kontak');
 Route::get('/ulasan', [ReviewController::class, 'index'])->name('reviews.index');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::get('/api/cart/count', [CartController::class, 'count'])->name('api.cart.count');
+Route::get('/menu/{product:slug}', [ProductController::class, 'show'])->name('product.detail');
 
 // Auth (Guest)
 Route::middleware('guest')->group(function () {

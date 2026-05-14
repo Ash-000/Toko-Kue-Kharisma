@@ -193,7 +193,7 @@
 <body>
     <div class="login-container">
         <h1 class="store-name">Toko kue kharisma</h1>
-        <p class="welcome-text">WELCOME BACK</p>
+        <p class="welcome-text">SELAMAT DATANG KEMBALI</p>
 
         <div class="form-card">
             <form action="{{ route('login.submit') }}" method="POST">

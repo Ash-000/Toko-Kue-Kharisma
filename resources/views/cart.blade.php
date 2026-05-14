@@ -1858,7 +1858,7 @@ function checkout() {
                 } catch (e) {
                     btn.textContent = paymentMethod === 'qris' ? 'Bayar dengan QRIS' : (paymentMethod === 'cod' ? 'Konfirmasi Pesanan' : 'Kirim Bukti Pembayaran');
                     btn.disabled = false;
-                    showNotification('Terjadi kesalahan: ' + (e?.message || 'unknown'), 'error');
+                    showNotification('Terjadi kesalahan: ' + (e?.message || 'tidak diketahui'), 'error');
                 }
             }
 
@@ -2011,7 +2011,7 @@ function checkout() {
 
                 const paymentName = {
                     'qris': 'QRIS',
-                    'cod': 'Cash on Delivery (COD)',
+                    'cod': 'Bayar di Tempat (COD)',
                     'bank_transfer': 'Transfer Bank',
                 };
 
