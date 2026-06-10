@@ -349,7 +349,7 @@
                     <span class="step-title">Instruksi Pembayaran</span>
                 </div>
                 <div class="step-content">
-                    <p>📍 <strong>Rekening Tujuan:</strong></p>
+                    <p><strong>Rekening Tujuan:</strong></p>
                     <p style="margin-left: 25px; margin-top: 5px;">
                         Bank: <strong>BCA</strong><br>
                         No. Rekening: <strong>1234567890</strong><br>
@@ -444,7 +444,7 @@
             const file = e.target.files[0];
             if (file) {
                 fileLabel.classList.add('has-file');
-                filePreview.innerHTML = `✓ ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                filePreview.innerHTML = `✔ ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
             } else {
                 fileLabel.classList.remove('has-file');
                 filePreview.innerHTML = '';
@@ -496,7 +496,7 @@
 
                 if (data.success) {
                     successMessage.innerHTML = `
-                        <strong>✓ Sukses!</strong><br>
+                        <strong>Sukses!</strong><br>
                         ${data.message}<br>
                         <small style="display: block; margin-top: 10px;">Anda akan diarahkan ke halaman riwayat dalam 3 detik...</small>
                     `;

@@ -305,7 +305,7 @@
         .notif-empty { padding: 30px 16px; text-align: center; color: #aaa; font-size: 13px; }
 
         /* Mobile Menu */
-        @media (max-width: 968px) {
+        @media (max-width: 768px) {
             .hamburger {
                 display: flex;
             }
@@ -342,6 +342,98 @@
 
             .icon-label {
                 font-size: 9px;
+            }
+
+            .store-name {
+                font-size: 22px;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .best-sellers {
+                padding: 40px 20px;
+            }
+
+            .hero {
+                height: 350px;
+            }
+        }
+
+        /* Tablet breakpoint */
+        @media (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 25px;
+            }
+
+            .best-sellers {
+                padding: 40px 30px;
+            }
+        }
+
+        /* Small mobile */
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .best-sellers {
+                padding: 30px 15px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .product-name {
+                font-size: 14px;
+            }
+
+            .product-price {
+                font-size: 14px;
+            }
+
+            .btn-add-cart {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+
+            .hero {
+                height: 280px;
+            }
+
+            .about-section {
+                padding: 40px 20px;
+            }
+
+            .about-title {
+                font-size: 36px;
+            }
+
+            .reviews-section {
+                padding: 40px 20px;
+            }
+        }
+
+        /* Extra small mobile */
+        @media (max-width: 375px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .store-name {
+                font-size: 18px;
+            }
+
+            nav {
+                width: 250px;
+            }
+
+            .hero {
+                height: 250px;
             }
         }
 
@@ -1905,10 +1997,10 @@
                         return;
                     }
 
-                    const iconMap = { success: '✅', info: 'ℹ️', warning: '⚠️' };
+                    const iconMap = { success: '✔', info: 'i', warning: '!' };
                     list.innerHTML = data.notifications.map(n => `
                         <div class="notif-item ${n.is_read ? '' : 'unread'}" onclick="readNotif(${n.id})">
-                            <div class="notif-icon ${n.type}">${iconMap[n.type] || '🔔'}</div>
+                            <div class="notif-icon ${n.type}">${iconMap[n.type] || 'i'}</div>
                             <div class="notif-content">
                                 <div class="notif-title">${n.title}</div>
                                 <div class="notif-msg">${n.message}</div>

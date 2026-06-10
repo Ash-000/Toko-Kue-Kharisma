@@ -23,10 +23,10 @@
                     return;
                 }
 
-                const iconMap = { success: '✅', info: 'ℹ️', warning: '⚠️' };
+                const iconMap = { success: '✔', info: 'i', warning: '!' };
                 list.innerHTML = data.notifications.map(n => `
                     <div class="notif-item ${n.is_read ? '' : 'unread'}" onclick="readNotif(${n.id})">
-                        <div class="notif-icon ${n.type}">${iconMap[n.type] || '🔔'}</div>
+                        <div class="notif-icon ${n.type}">${iconMap[n.type] || 'i'}</div>
                         <div class="notif-content">
                             <div class="notif-title">${n.title}</div>
                             <div class="notif-msg">${n.message}</div>

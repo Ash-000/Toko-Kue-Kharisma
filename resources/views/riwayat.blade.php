@@ -230,12 +230,84 @@
             nav a { font-size: 18px; padding: 15px 0; width: 100%; border-bottom: 1px solid rgba(74,74,74,0.2); }
             .order-header { flex-direction: column; align-items: flex-start; gap: 8px; }
             .header-icons { gap: 10px; }
+
+            .store-name {
+                font-size: 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+        }
+
+        /* Tablet breakpoint */
+        @media (max-width: 1024px) {
+            .riwayat-container {
+                padding: 0 30px;
+            }
         }
 
         @media (max-width: 480px) {
-            .riwayat-container { padding: 0 15px; margin: 20px auto; }
-            .page-title { font-size: 22px; }
-            .order-card { padding: 15px; }
+            .riwayat-container { 
+                padding: 0 15px; 
+                margin: 20px auto; 
+            }
+            
+            .page-title { 
+                font-size: 22px; 
+            }
+            
+            .order-card { 
+                padding: 15px; 
+            }
+
+            .order-id {
+                font-size: 15px;
+            }
+
+            .order-items {
+                font-size: 13px;
+            }
+
+            .order-total {
+                font-size: 15px;
+            }
+
+            .btn-review {
+                font-size: 13px;
+                padding: 9px;
+            }
+
+            .review-modal-content {
+                padding: 25px 20px;
+            }
+
+            .review-modal-title {
+                font-size: 20px;
+            }
+
+            .stars-input {
+                font-size: 32px;
+            }
+        }
+
+        /* Extra small mobile */
+        @media (max-width: 375px) {
+            .store-name {
+                font-size: 18px;
+            }
+
+            nav {
+                width: 250px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .order-card {
+                padding: 12px;
+            }
         }
         
     @include('partials.notif-styles')
@@ -331,7 +403,7 @@
             @if($order->status === 'completed')
             @if(in_array($order->order_number, $reviewedOrders))
             <div style="margin-top:12px;padding:10px;background:#f5f5f0;border-radius:10px;text-align:center;font-size:14px;color:#8b7355;font-weight:600;">
-                ✓ Sudah diberi ulasan
+                Sudah diberi ulasan
             </div>
             @else
             <button class="btn-review" onclick="openReviewModal('{{ $order->order_number }}')">

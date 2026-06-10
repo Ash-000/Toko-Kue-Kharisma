@@ -268,27 +268,20 @@ nav {
         }
 
       .menu-title {
-    font-family: 'Georgia', serif; /* Pakai serif biar lebih elegan */
+    font-family: 'Georgia', serif;
     font-size: 38px;
     position: relative;
     display: inline-block;
     padding-bottom: 10px;
+    color: #8b7355;
+    font-weight: 600;
 }
 
-.menu-title::after {
-    content: '🍰'; /* Ikon kue kecil sebagai pemanis */
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 20px;
-}
-
-/* Tambahkan garis di bawah subtitle */
 .menu-subtitle {
     margin-top: 15px;
     font-style: italic;
     opacity: 0.8;
+    color: #8b7355;
 }
 
         /* Category Filter */
@@ -640,12 +633,85 @@ nav {
                 margin-left: auto;
                 gap: 10px;
             }
+
+            .store-name {
+                font-size: 20px;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .menu-section {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Tablet breakpoint */
+        @media (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .menu-section {
+                padding: 40px 30px;
+            }
         }
 
         @media (max-width: 480px) {
-            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-            .menu-section { padding: 20px 15px; }
-            .menu-title { font-size: 24px; }
+            .products-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 15px; 
+            }
+            
+            .menu-section { 
+                padding: 20px 15px; 
+            }
+            
+            .menu-title { 
+                font-size: 28px; 
+            }
+
+            .menu-subtitle {
+                font-size: 14px;
+            }
+
+            .search-input {
+                font-size: 14px;
+                padding: 10px 14px;
+            }
+
+            .product-name {
+                font-size: 16px;
+            }
+
+            .product-price {
+                font-size: 16px;
+            }
+
+            .btn-add-cart {
+                font-size: 13px;
+                padding: 8px 16px;
+            }
+        }
+
+        /* Extra small mobile */
+        @media (max-width: 375px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .store-name {
+                font-size: 18px;
+            }
+
+            nav {
+                width: 250px;
+            }
+
+            .menu-title {
+                font-size: 24px;
+            }
         }
         .product-image {
     max-width: 100%;
@@ -949,7 +1015,6 @@ nav {
                     // Update cart badge
                     document.getElementById('cartBadge').textContent = data.data.total_items;
 
-                    // Show success notification
                     showNotification(`${itemName} berhasil ditambahkan ke keranjang!`, 'success');
                 } else {
                     // Show error notification
@@ -998,7 +1063,7 @@ nav {
                 max-width: 400px;
             `;
 
-            const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+            const icon = type === 'success' ? '✔' : type === 'error' ? '✖' : 'i';
             notification.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 18px;">${icon}</span>

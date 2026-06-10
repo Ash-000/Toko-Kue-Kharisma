@@ -791,7 +791,7 @@
                 transform: translateY(-2px);
             }
 
-            @media (max-width: 968px) {
+            @media (max-width: 768px) {
                 .hamburger {
                     display: flex;
                 }
@@ -841,13 +841,93 @@
                     margin-left: auto;
                     gap: 10px;
                 }
+
+                .store-name {
+                    font-size: 20px;
+                }
+
+                header {
+                    padding: 15px 20px;
+                }
+            }
+
+            /* Tablet breakpoint */
+            @media (max-width: 1024px) {
+                .cart-container {
+                    gap: 25px;
+                }
             }
 
             @media (max-width: 480px) {
-                .cart-container { padding: 0 15px; margin: 20px auto; }
-                .cart-items { padding: 20px 15px; }
-                .cart-summary { padding: 20px 15px; }
-                .item-name { font-size: 15px; }
+                .cart-container { 
+                    padding: 0 15px; 
+                    margin: 20px auto; 
+                }
+                
+                .cart-items { 
+                    padding: 20px 15px; 
+                }
+                
+                .cart-summary { 
+                    padding: 20px 15px; 
+                }
+                
+                .item-name { 
+                    font-size: 15px; 
+                }
+
+                .cart-title {
+                    font-size: 24px;
+                    margin-bottom: 20px;
+                }
+
+                .item-image {
+                    width: 80px;
+                    height: 80px;
+                }
+
+                .item-price {
+                    font-size: 14px;
+                }
+
+                .qty-display {
+                    font-size: 14px;
+                }
+
+                .checkout-modal-content { 
+                    padding: 20px 15px; 
+                }
+
+                .checkout-title {
+                    font-size: 22px;
+                }
+
+                .form-input {
+                    padding: 10px 12px;
+                    font-size: 13px;
+                }
+            }
+
+            /* Extra small mobile */
+            @media (max-width: 375px) {
+                .store-name {
+                    font-size: 18px;
+                }
+
+                nav {
+                    width: 250px;
+                }
+
+                .cart-title {
+                    font-size: 22px;
+                }
+
+                .item-controls {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 10px;
+                }
+            }
                 .checkout-modal-content { padding: 20px 15px; }
             }
         </style>
@@ -1051,7 +1131,7 @@
             </div>
 
             <div class="checkout-alert">
-                ⚠️ etimasi waktu pemerosesan pesanan adalah 1-2hari. Terimakasih atas kesabaran dan kepercayaan Anda! 🙏
+                <strong>Catatan:</strong> Estimasi waktu pemrosesan pesanan adalah 1-2 hari. Terima kasih atas kesabaran dan kepercayaan Anda!
             </div>
 
             <button type="submit" class="btn-submit-checkout" id="submitPayment">Konfirmasi Pesanan</button>
@@ -1400,7 +1480,7 @@
                     max-width: 400px;
                 `;
 
-                const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+                const icon = type === 'success' ? '✔' : type === 'error' ? '✖' : 'i';
                 notification.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <span style="font-size: 18px;">${icon}</span>
@@ -1683,7 +1763,7 @@ function checkout() {
                                 </h4>
                                 <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #ffc107;">
                                     <p style="font-size: 13px; color: #856404; line-height: 1.6; margin-bottom: 10px;">
-                                        <strong>📍 Rekening Tujuan:</strong><br>
+                                        <strong>Rekening Tujuan:</strong><br>
                                         Bank: <strong>BCA</strong><br>
                                         No. Rekening: <strong>1234567890</strong><br>
                                         Atas Nama: <strong>Toko Kue Kharisma</strong>

@@ -153,7 +153,7 @@
 
         #map { height: 350px; width: 100%; border-radius: 15px; border: 2px solid #f0f0f0; margin-top: 10px; }
 
-        @media (max-width: 968px) {
+        @media (max-width: 768px) {
             .profile-container { grid-template-columns: 1fr; }
             .form-row { grid-template-columns: 1fr; }
         }

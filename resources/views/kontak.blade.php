@@ -485,12 +485,97 @@
                 margin-left: auto;
                 gap: 10px;
             }
+
+            .store-name {
+                font-size: 20px;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .contact-container {
+                padding: 0 20px;
+            }
+
+            .contact-title {
+                font-size: 26px;
+            }
+
+            .contact-form {
+                padding: 30px 20px;
+            }
+
+            .contact-info {
+                margin-top: 30px;
+            }
+        }
+
+        /* Tablet breakpoint */
+        @media (max-width: 1024px) {
+            .contact-container {
+                gap: 40px;
+            }
         }
 
         @media (max-width: 480px) {
-            .contact-container { padding: 0 15px; margin: 20px auto; }
-            .contact-form { padding: 20px 15px; }
-            .contact-title { font-size: 24px; }
+            .contact-container { 
+                padding: 0 15px; 
+                margin: 20px auto; 
+            }
+            
+            .contact-form { 
+                padding: 20px 15px; 
+            }
+            
+            .contact-title { 
+                font-size: 24px;
+                margin-bottom: 25px;
+            }
+
+            .form-control {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .btn-submit {
+                padding: 12px 40px;
+                font-size: 15px;
+            }
+
+            .info-card {
+                padding: 20px;
+                min-height: auto;
+            }
+
+            .info-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .info-icon svg {
+                width: 26px;
+                height: 26px;
+            }
+
+            .info-text {
+                font-size: 14px;
+            }
+        }
+
+        /* Extra small mobile */
+        @media (max-width: 375px) {
+            .store-name {
+                font-size: 18px;
+            }
+
+            nav {
+                width: 250px;
+            }
+
+            .contact-title {
+                font-size: 22px;
+            }
         }
     </style>
     @include('partials.notif-styles')

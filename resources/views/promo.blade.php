@@ -190,6 +190,77 @@
             }
             nav.active { right: 0; }
             nav a { font-size: 18px; padding: 15px 0; width: 100%; border-bottom: 1px solid rgba(74,74,74,0.2); }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .store-name {
+                font-size: 20px;
+            }
+
+            .promo-packages {
+                padding: 40px 20px;
+            }
+
+            .packages-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+        }
+
+        /* Tablet breakpoint */
+        @media (max-width: 1024px) {
+            .packages-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .promo-packages {
+                padding: 40px 30px;
+            }
+        }
+
+        /* Small mobile */
+        @media (max-width: 480px) {
+            .promo-packages {
+                padding: 30px 15px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .package-card {
+                padding: 20px;
+            }
+
+            .package-name {
+                font-size: 18px;
+            }
+
+            .package-description {
+                font-size: 13px;
+            }
+
+            .btn-buy-package {
+                font-size: 13px;
+                padding: 8px 16px;
+            }
+        }
+
+        /* Extra small mobile */
+        @media (max-width: 375px) {
+            .store-name {
+                font-size: 18px;
+            }
+
+            nav {
+                width: 250px;
+            }
+
+            .section-title {
+                font-size: 22px;
+            }
         }
     </style>
     @include('partials.notif-styles')
@@ -338,7 +409,7 @@
             .then(data => {
                 if (data) {
                     if (data.success) {
-                        showNotification('✅ ' + (data.message || 'Berhasil ditambah ke keranjang'), 'success');
+                        showNotification(data.message || 'Berhasil ditambah ke keranjang', 'success');
                         updateCartBadge();
                     } else {
                         showNotification(data.message || 'Gagal menambahkan ke keranjang', 'error');
@@ -346,7 +417,7 @@
                 }
             })
             .catch(error => {
-                showNotification('❌ Terjadi kesalahan: ' + error.message, 'error');
+                showNotification('Terjadi kesalahan: ' + error.message, 'error');
             });
         }
 
