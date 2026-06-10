@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Profil - Toko Kue Kharisma</title>
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    {{-- Leaflet hanya dimuat saat tab Alamat dibuka --}}
     
     <style>
         :root {
@@ -340,7 +339,7 @@
         </main>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script>
         // Tab System
         function showSection(sectionId) {
@@ -348,8 +347,8 @@
             document.querySelectorAll('.profile-menu a').forEach(a => a.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             document.getElementById('menu-' + sectionId).classList.add('active');
-            if(sectionId === 'address') { 
-                setTimeout(() => { map.invalidateSize(); }, 300); 
+            if (sectionId === 'address') {
+                loadLeaflet();
             }
         }
 
@@ -362,9 +361,33 @@
             reader.readAsDataURL(e.target.files[0]);
         });
 
-        // Map System
+        // Lazy load Leaflet hanya saat tab Alamat dibuka
+        let leafletLoaded = false;
         let map, marker;
-        document.addEventListener('DOMContentLoaded', function() {
+
+        function loadLeaflet() {
+            if (leafletLoaded) {
+                setTimeout(() => { if (map) map.invalidateSize(); }, 300);
+                return;
+            }
+
+            // Load CSS
+            const css = document.createElement('link');
+            css.rel = 'stylesheet';
+            css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+            document.head.appendChild(css);
+
+            // Load JS
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+            script.onload = function() {
+                leafletLoaded = true;
+                initMap();
+            };
+            document.head.appendChild(script);
+        }
+
+        function initMap() {
             const savedLat = parseFloat(document.getElementById('lat').value) || -6.5971;
             const savedLng = parseFloat(document.getElementById('lng').value) || 106.8060;
 
@@ -403,10 +426,10 @@
                             marker.setLatLng([lat, lon]);
                             updateCoords(lat, lon);
                         }
-                    } catch (e) { console.error(e); }
+                    } catch (e) {}
                 }, 1000);
             });
-        });
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

@@ -1071,7 +1071,7 @@ const card = document.createElement('div');
 card.className = 'product-card';
 card.innerHTML = `
     <div class="product-image-container" onclick="showDetail(${product.id})" style="cursor:pointer;">
-        <img src="${product.image_url ?? '/images/products/default.jpg'}" alt="${product.name}" class="product-image">
+        <img src="${product.image_url ?? '/images/products/default.jpg'}" alt="${product.name}" class="product-image" loading="lazy">
     </div>
     <div class="product-info">
         <h3 class="product-name" onclick="showDetail(${product.id})" style="cursor:pointer;">${product.name}</h3>

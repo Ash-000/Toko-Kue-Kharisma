@@ -939,7 +939,7 @@
                         $itemImage = $isPackage ? 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=200' : ($item->product->image_url ?? 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=200');
                     @endphp
                     <div class="cart-item" data-id="{{ $item->product_id }}" data-price="{{ $itemPrice }}">
-                        <img src="{{ $itemImage }}" alt="{{ $itemName }}" class="item-image">
+                        <img src="{{ $itemImage }}" alt="{{ $itemName }}" class="item-image" loading="lazy">
                         <div class="item-details">
                             <h3 class="item-name">{{ $itemName }}</h3>
                             <p class="item-price">Rp {{ number_format($itemPrice, 0, ',', '.') }}</p>
@@ -2240,10 +2240,6 @@ function checkout() {
                 });
             }
         </script>
-        <script
-            src="https://app.sandbox.midtrans.com/snap/snap.js"
-            data-client-key="{{ config('services.midtrans.client_key') }}"
-        ></script>
     @include('partials.notif-scripts')
     </body>
     </html>

@@ -1,6 +1,6 @@
 <div class="product-card">
     <div class="product-image-container">
-        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="product-image">
+        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="product-image" loading="lazy">
     </div>
     <div class="product-info">
         <h3 class="product-name">{{ $product->name }}</h3>

@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="Toko Kue Kharisma - Kue tradisional lezat dari Dramaga, Bogor Barat">
     <title>Toko Kue Kharisma</title>
+    <link rel="preconnect" href="https://app.sandbox.midtrans.com">
+    <link rel="dns-prefetch" href="https://app.sandbox.midtrans.com">
     <style>
         * {
             margin: 0;
@@ -1359,8 +1362,8 @@
         </p>
 
         <div class="about-images">
-            <img src="/images/products/bolu-pelangi.jpg" alt="Bolu Pelangi" class="about-image">
-            <img src="/images/products/putu-ayu.jpg" alt="Putu Ayu" class="about-image">
+            <img src="/images/products/bolu-pelangi.jpg" alt="Bolu Pelangi" class="about-image" loading="lazy">
+            <img src="/images/products/putu-ayu.jpg" alt="Putu Ayu" class="about-image" loading="lazy">
         </div>
 
         <p class="about-description">

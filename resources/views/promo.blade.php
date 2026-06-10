@@ -246,7 +246,7 @@
             <div class="package-card">
                 <div class="discount-badge">Diskon 20%</div>
                 <div class="package-image-container">
-                    <img src="/images/products/pasar.jpg" alt="Paket A" class="package-image">
+                    <img src="/images/products/pasar.jpg" alt="Paket A" class="package-image" loading="lazy">
                 </div>
                 <h3 class="package-name">Paketan Hemat A</h3>
                 <p class="package-description">Dadar Gulung, Lemper, Putu Ayu, Lupis, Kue Apem</p>
@@ -262,7 +262,7 @@
             <div class="package-card">
                 <div class="discount-badge">Diskon 20%</div>
                 <div class="package-image-container">
-                    <img src="/images/products/keren.jpg" alt="Paket B" class="package-image">
+                    <img src="/images/products/keren.jpg" alt="Paket B" class="package-image" loading="lazy">
                 </div>
                 <h3 class="package-name">Paketan Hemat B</h3>
                 <p class="package-description">Talam Suji, Pepe Hijau, Pepe Pelangi, Ongol-Ongol, Kue Lumpur</p>
@@ -278,7 +278,7 @@
             <div class="package-card">
                 <div class="discount-badge">Diskon 20%</div>
                 <div class="package-image-container">
-                    <img src="/images/products/gacor.jpg" alt="Paket C" class="package-image">
+                    <img src="/images/products/gacor.jpg" alt="Paket C" class="package-image" loading="lazy">
                 </div>
                 <h3 class="package-name">Paketan Hemat C</h3>
                 <p class="package-description">Bolu Pelangi, Pie Buah, Pie Brownies, Risoles, Pastel</p>
