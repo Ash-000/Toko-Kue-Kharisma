@@ -4,241 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kontak - Toko Kue Kharisma</title>
+    @include('partials.font-styles')
+    <link rel="stylesheet" href="/css/main.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body { overflow-x: hidden; max-width: 100%; }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #f5deb3 0%, #f4d4a8 100%);
-            min-height: 100vh;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px clamp(15px, 4vw, 50px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .btn-back {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 10px;
-            color: #2c2c2c;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .btn-back:hover {
-            background: rgba(255, 255, 255, 0.5);
-            transform: translateX(-3px);
-        }
-
-        .btn-back svg {
-            width: 20px;
-            height: 20px;
-            stroke: #2c2c2c;
-            fill: none;
-            stroke-width: 2.5;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-        }
-
-        .store-name {
-            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
-            font-size: 28px;
-            color: #2c2c2c;
-            font-style: italic;
-            font-weight: bold;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 10px;
-            z-index: 1001;
-        }
-
-        .hamburger span {
-            width: 30px;
-            height: 3px;
-            background: #4a4a4a;
-            border-radius: 3px;
-            transition: all 0.3s;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(8px, -8px);
-        }
-
-        nav {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-            transition: all 0.3s;
-        }
-
-      /* Gaya dasar link nav */
-        nav a {
-            color: #4a4a4a;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: capitalize; /* Biar huruf depan otomatis gede */
-            position: relative; /* Penting untuk efek underline */
-            padding: 5px 0;
-            transition: color 0.3s ease;
-        }
-
-        /* Efek Underline yang mengalir dari tengah */
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
-            background-color: #8b7355;
-            transition: all 0.3s ease-in-out;
-            transform: translateX(-50%);
-        }
-
-        /* Warna & Underline saat Hover */
-        nav a:hover {
-            color: #2c2c2c;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* Gaya untuk link yang sedang aktif (Kontak) */
-        nav a.active {
-            color: #8b7355;
-        }
-
-        nav a.active::after {
-            width: 80%; /* Garis bawah tetap ada di menu aktif */
-            background-color: #8b7355;
-        }
-
-        /* Tambahan: Sedikit animasi floating biar lebih 'hidup' */
-        @keyframes navFloat {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-2px); }
-            100% { transform: translateY(0); }
-        }
-
-        nav a:hover {
-            animation: navFloat 1s ease-in-out infinite;
-        }
-        .header-icons {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #2c2c2c;
-            transition: transform 0.2s;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-btn svg {
-            width: 22px;
-            height: 22px;
-            stroke: #2c2c2c;
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .icon-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .icon-label {
-            font-size: 9px;
-            color: #4a4a4a;
-            font-weight: 600;
-        }
-
-        .icon-wrapper {
-            position: relative;
-        }
-
-        .cart-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #d32f2f;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         /* Contact Container */
         .contact-container {
             max-width: 1200px;
             margin: 50px auto;
+            margin-top: 120px;
             padding: 0 50px;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -251,15 +24,15 @@
             align-items: center;
             gap: 15px;
             font-size: 32px;
-            font-weight: 600;
-            color: #2c2c2c;
+            font-weight: 700;
+            color: var(--color-text);
             margin-bottom: 40px;
         }
 
         .contact-title svg {
             width: 40px;
             height: 40px;
-            stroke: #8b7355;
+            stroke: var(--color-brown);
             fill: none;
             stroke-width: 2;
         }
@@ -267,9 +40,9 @@
         /* Contact Form */
         .contact-form {
             background: rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
+            border-radius: var(--radius-xl);
             padding: 40px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-md);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -281,26 +54,26 @@
         .form-group label {
             display: block;
             font-size: 16px;
-            color: #8b7355;
+            color: var(--color-brown);
             margin-bottom: 10px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .form-control {
             width: 100%;
             padding: 15px 20px;
             border: 2px solid #e0e0e0;
-            border-radius: 15px;
+            border-radius: var(--radius-md);
             background: white;
             font-size: 15px;
-            color: #2c2c2c;
+            color: var(--color-text);
             transition: all 0.3s;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Nunito', sans-serif;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: #8b7355;
+            border-color: var(--color-brown);
             box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
             transform: translateY(-2px);
         }
@@ -311,13 +84,13 @@
         }
 
         .btn-submit {
-            background: linear-gradient(135deg, #8b7355 0%, #6b5845 100%);
+            background: linear-gradient(135deg, var(--color-brown) 0%, var(--color-brown-dark) 100%);
             color: white;
             border: none;
             padding: 15px 50px;
             border-radius: 25px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
@@ -354,8 +127,8 @@
             gap: 20px;
             background: rgba(255, 255, 255, 0.8);
             padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
             min-height: 90px;
             transition: all 0.3s;
             backdrop-filter: blur(10px);
@@ -364,7 +137,7 @@
 
         .info-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-md);
         }
 
         .info-icon {
@@ -374,8 +147,8 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            background: linear-gradient(135deg, #8b7355 0%, #6b5845 100%);
-            border-radius: 15px;
+            background: linear-gradient(135deg, var(--color-brown) 0%, var(--color-brown-dark) 100%);
+            border-radius: var(--radius-md);
             box-shadow: 0 4px 15px rgba(139, 115, 85, 0.3);
         }
 
@@ -393,8 +166,8 @@
 
         .info-label {
             font-size: 14px;
-            color: #8b7355;
-            font-weight: 600;
+            color: var(--color-brown);
+            font-weight: 700;
             margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -402,14 +175,14 @@
 
         .info-text {
             font-size: 16px;
-            color: #2c2c2c;
+            color: var(--color-text);
             line-height: 1.6;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .info-note {
             font-size: 13px;
-            color: #6b6b6b;
+            color: var(--color-text-light);
             margin-top: 10px;
             line-height: 1.5;
         }
@@ -422,79 +195,15 @@
             word-break: break-word;
         }
 
-        /* Mobile Menu */
-        .menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        .menu-overlay.active {
-            display: block;
+        @media (max-width: 1024px) {
+            .contact-container {
+                gap: 40px;
+            }
         }
 
         @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            nav {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 300px;
-                height: 100vh;
-                background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-                flex-direction: column;
-                justify-content: flex-start;
-                padding: 80px 30px 30px;
-                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
-                z-index: 1000;
-            }
-
-            nav.active {
-                right: 0;
-            }
-
-            nav a {
-                font-size: 18px;
-                padding: 15px 0;
-                width: 100%;
-                border-bottom: 1px solid rgba(74, 74, 74, 0.2);
-            }
-
             .contact-container {
                 grid-template-columns: 1fr;
-                padding: 0 20px;
-            }
-
-            .contact-title {
-                font-size: 24px;
-            }
-
-            .contact-form {
-                padding: 30px 20px;
-            }
-
-            .header-icons {
-                margin-left: auto;
-                gap: 10px;
-            }
-
-            .store-name {
-                font-size: 20px;
-            }
-
-            header {
-                padding: 15px 20px;
-            }
-
-            .contact-container {
                 padding: 0 20px;
             }
 
@@ -511,17 +220,11 @@
             }
         }
 
-        /* Tablet breakpoint */
-        @media (max-width: 1024px) {
-            .contact-container {
-                gap: 40px;
-            }
-        }
-
         @media (max-width: 480px) {
             .contact-container { 
                 padding: 0 15px; 
                 margin: 20px auto; 
+                margin-top: 100px;
             }
             
             .contact-form { 
@@ -562,82 +265,13 @@
                 font-size: 14px;
             }
         }
-
-        /* Extra small mobile */
-        @media (max-width: 375px) {
-            .store-name {
-                font-size: 18px;
-            }
-
-            nav {
-                width: 250px;
-            }
-
-            .contact-title {
-                font-size: 22px;
-            }
-        }
     </style>
     @include('partials.notif-styles')
+    @include('partials.auto-hide-navbar')
+    @include('partials.enhanced-interactions')
 </head>
-<body>
-    <!-- Menu Overlay -->
-    <div class="menu-overlay" id="menuOverlay"></div>
-
-    <!-- Header -->
-    <header>
-        <div class="header-left">
-            <a href="/" class="btn-back">
-                <svg viewBox="0 0 24 24">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
-                </svg>
-                Kembali
-            </a>
-            <div class="logo-section">
-                <span class="store-name">Toko kue kharisma</span>
-            </div>
-        </div>
-        
- <nav id="navMenu">
-    <a href="/" class="{{ Request::is('/') ? 'active' : '' }}">home</a>
-    <a href="/menu" class="{{ Request::is('menu') ? 'active' : '' }}">menu</a>
-    <a href="/riwayat" class="{{ Request::is('riwayat') ? 'active' : '' }}">riwayat</a>
-    <a href="/kontak" class="{{ Request::is('kontak') ? 'active' : '' }}">kontak</a>
-    <a href="/promo" class="{{ Request::is('promo') ? 'active' : '' }}">promo</a>
-</nav>
-
-        <div class="header-icons">
-            @include('partials.header-icons')
-            <div class="icon-wrapper">
-                <button type="button" class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    <span class="cart-badge" id="cartBadge">0</span>
-                </button>
-                <span class="icon-label">Keranjang</span>
-            </div>
-            <div class="icon-wrapper">
-                <button class="icon-btn" title="Profil" onclick="window.location.href='/profile'">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <circle cx="12" cy="10" r="3"></circle>
-                        <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Profil</span>
-            </div>
-            
-            <!-- Hamburger Menu -->
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </header>
+<body style="overflow-x: hidden !important; max-width: 100vw !important; margin: 0 !important;">
+    @include('partials.header')
 
     <!-- Contact Container -->
     <div class="contact-container">
@@ -786,5 +420,8 @@
         });
     </script>
     @include('partials.notif-scripts')
+    
+    {{-- Bottom Navigation (Mobile) --}}
+    @include('partials.bottom-nav')
 </body>
 </html>

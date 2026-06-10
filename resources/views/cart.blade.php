@@ -5,204 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Keranjang Belanja - Toko Kue Kharisma</title>
-        @include('partials.skeleton-loader')
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/css/main.css">
+        @include('partials.font-styles')
         <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            html, body { overflow-x: hidden; max-width: 100%; }
-
-            body {
-                font-family: Arial, Helvetica, sans-serif;
-                background: #f5deb3;
-            }
-
-            /* Header */
-            header {
-                background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-                padding: 15px clamp(15px, 4vw, 50px);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                position: sticky;
-                top: 0;
-                z-index: 1003;
-            }
-
-            .header-left {
-                display: flex;
-                align-items: center;
-                gap: 20px;
-            }
-
-            .btn-back {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                background: rgba(255, 255, 255, 0.3);
-                border: none;
-                padding: 8px 15px;
-                border-radius: 10px;
-                color: #2c2c2c;
-                font-size: 15px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s;
-                text-decoration: none;
-            }
-
-            .btn-back:hover {
-                background: rgba(255, 255, 255, 0.5);
-                transform: translateX(-3px);
-            }
-
-            .btn-back svg {
-                width: 20px;
-                height: 20px;
-                stroke: #2c2c2c;
-                fill: none;
-                stroke-width: 2.5;
-            }
-
-            .logo-section {
-                display: flex;
-                align-items: center;
-            }
-
-            .store-name {
-                font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
-                font-size: 28px;
-                color: #2c2c2c;
-                font-style: italic;
-                font-weight: bold;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            }
-
-            .hamburger {
-                display: none;
-                flex-direction: column;
-                gap: 5px;
-                cursor: pointer;
-                padding: 10px;
-                z-index: 1001;
-            }
-
-            .hamburger span {
-                width: 30px;
-                height: 3px;
-                background: #4a4a4a;
-                border-radius: 3px;
-                transition: all 0.3s;
-            }
-
-            .hamburger.active span:nth-child(1) {
-                transform: rotate(45deg) translate(8px, 8px);
-            }
-
-            .hamburger.active span:nth-child(2) {
-                opacity: 0;
-            }
-
-            .hamburger.active span:nth-child(3) {
-                transform: rotate(-45deg) translate(8px, -8px);
-            }
-
-            nav {
-                display: flex;
-                gap: 30px;
-                align-items: center;
-                transition: all 0.3s;
-            }
-
-            nav a {
-                color: #4a4a4a;
-                text-decoration: none;
-                font-size: 15px;
-                font-weight: 600;
-                transition: color 0.3s;
-            }
-
-            nav a:hover {
-                color: #2c2c2c;
-            }
-
-            .header-icons {
-                display: flex;
-                gap: 20px;
-                align-items: center;
-            }
-
-            .icon-wrapper {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 3px;
-                position: relative;
-            }
-
-            .icon-btn {
-                background: none;
-                border: none;
-                font-size: 24px;
-                cursor: pointer;
-                color: #2c2c2c;
-                transition: transform 0.2s;
-                width: 32px;
-                height: 32px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .icon-btn svg {
-                width: 22px;
-                height: 22px;
-                stroke: #2c2c2c;
-                fill: none;
-                stroke-width: 2;
-                stroke-linecap: round;
-                stroke-linejoin: round;
-            }
-
-            .icon-btn:hover {
-                transform: scale(1.1);
-            }
-
-            .icon-label {
-                font-size: 9px;
-                color: #4a4a4a;
-                font-weight: 600;
-            }
-
-            .cart-badge {
-                position: absolute;
-                top: -5px;
-                right: -5px;
-                background: #d32f2f;
-                color: white;
-                border-radius: 50%;
-                width: 16px;
-                height: 16px;
-                font-size: 10px;
-                font-weight: bold;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
 
             /* Cart Container */
-            .cart-container {
-                max-width: 1200px;
-                margin: 50px auto;
-                padding: 0 50px;
-                display: grid;
-                grid-template-columns: 1fr 400px;
-                gap: 30px;
-            }
 
             .cart-title {
                 font-size: 28px;
@@ -429,21 +239,7 @@
                 background: #f5f5f0;
             }
 
-            /* Mobile Menu */
-            .menu-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 999;
-            }
-
-            .menu-overlay.active {
-                display: block;
-            }
+            /* Mobile Menu - handled by main.css */
 
             /* Checkout Modal */
             .checkout-modal {
@@ -673,8 +469,6 @@
                     grid-template-columns: 1fr;
                 }
             }
-
-            /* Delete Confirmation Modal */
             .delete-modal {
                 display: none;
                 position: fixed;
@@ -793,72 +587,8 @@
                 transform: translateY(-2px);
             }
 
-            @media (max-width: 768px) {
-                .hamburger {
-                    display: flex;
-                }
 
-                nav {
-                    position: fixed;
-                    top: 70px;
-                    right: -100%;
-                    width: 300px;
-                    height: calc(100vh - 70px);
-                    background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-                    flex-direction: column;
-                    justify-content: flex-start;
-                    padding: 30px;
-                    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
-                    z-index: 999;
-                    transition: right 0.3s ease;
-                    overflow-y: auto;
-                }
-
-                nav.active {
-                    right: 0;
-                }
-
-                nav a {
-                    font-size: 18px;
-                    padding: 15px 0;
-                    width: 100%;
-                    border-bottom: 1px solid rgba(74, 74, 74, 0.2);
-                }
-
-                .cart-container {
-                    grid-template-columns: 1fr;
-                    padding: 0 20px;
-                }
-
-                .cart-summary {
-                    position: static;
-                }
-
-                .item-subtotal {
-                    position: static;
-                    margin-top: 10px;
-                }
-
-                .header-icons {
-                    margin-left: auto;
-                    gap: 10px;
-                }
-
-                .store-name {
-                    font-size: 20px;
-                }
-
-                header {
-                    padding: 15px 20px;
-                }
-            }
-
-            /* Tablet breakpoint */
-            @media (max-width: 1024px) {
-                .cart-container {
-                    gap: 25px;
-                }
-            }
+            /* Delete Confirmation Modal */
 
             @media (max-width: 768px) {
                 .cart-title {
@@ -1095,76 +825,23 @@
                     flex-direction: column;
                     gap: 5px;
                 }
-            }
+
                 .checkout-modal-content { padding: 20px 15px; }
             }
         </style>
         @include('partials.notif-styles')
+        @include('partials.auto-hide-navbar')
+        @include('partials.enhanced-interactions')
     </head>
-    <body>
+    <body style="overflow-x: hidden !important; max-width: 100vw !important; margin: 0 !important;">
         <!-- Midtrans Snap Script -->
         @if(!config('services.midtrans.is_production'))
             <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
         @else
             <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
         @endif
-        <!-- Menu Overlay -->
-        <div class="menu-overlay" id="menuOverlay"></div>
 
-        <!-- Header -->
-        <header>
-            <div class="header-left">
-                <a href="/" class="btn-back">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19 12H5M12 19l-7-7 7-7"/>
-                    </svg>
-                    Kembali
-                </a>
-                <div class="logo-section">
-                    <span class="store-name">Toko kue kharisma</span>
-                </div>
-            </div>
-
-            <nav id="navMenu">
-                <a href="/" class="{{ Request::is('/') ? 'active' : '' }}">Home</a>
-                <a href="/menu" class="{{ Request::is('menu') ? 'active' : '' }}">Menu</a>
-                <a href="/riwayat" class="{{ Request::is('riwayat') ? 'active' : '' }}">Riwayat</a>
-                <a href="/kontak" class="{{ Request::is('kontak') ? 'active' : '' }}">Kontak</a>
-                <a href="/promo" class="{{ Request::is('promo') ? 'active' : '' }}">Promo</a>
-            </nav>
-
-            <div class="header-icons">
-                @include('partials.header-icons')
-                <div class="icon-wrapper">
-                    <button class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                        <span class="cart-badge" id="cartBadge">{{ $totalItems }}</span>
-                    </button>
-                    <span class="icon-label">Keranjang</span>
-                </div>
-                <div class="icon-wrapper">
-                    <button class="icon-btn" title="Profil" onclick="window.location.href='/profile'">
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <circle cx="12" cy="10" r="3"></circle>
-                            <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
-                        </svg>
-                    </button>
-                    <span class="icon-label">Profil</span>
-                </div>
-                
-                <!-- Hamburger Menu -->
-                <div class="hamburger" id="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </header>
+        @include('partials.header', ['showBackButton' => true, 'backUrl' => '/', 'cartCount' => $totalItems])
 
         <!-- Cart Container -->
         <div class="cart-container">
@@ -1325,29 +1002,42 @@
             // CSRF Token untuk AJAX
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
-            // Hamburger Menu Toggle
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('navMenu');
-            const menuOverlay = document.getElementById('menuOverlay');
+            // Wait for DOM to be ready
+            document.addEventListener('DOMContentLoaded', function() {
+                // Hide Page Loader
+                const pageLoader = document.getElementById('pageLoader');
+                if (pageLoader) {
+                    setTimeout(() => {
+                        pageLoader.classList.add('hidden');
+                    }, 300);
+                }
 
-            hamburger.addEventListener('click', function() {
-                hamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
-                menuOverlay.classList.toggle('active');
-            });
+                // Hamburger Menu Toggle
+                const hamburger = document.getElementById('hamburger');
+                const navMenu = document.getElementById('navMenu');
+                const menuOverlay = document.getElementById('menuOverlay');
 
-            menuOverlay.addEventListener('click', function() {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-                menuOverlay.classList.remove('active');
-            });
+                if (hamburger && navMenu && menuOverlay) {
+                    hamburger.addEventListener('click', function() {
+                        hamburger.classList.toggle('active');
+                        navMenu.classList.toggle('active');
+                        menuOverlay.classList.toggle('active');
+                    });
 
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', function() {
-                    hamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    menuOverlay.classList.remove('active');
-                });
+                    menuOverlay.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                        menuOverlay.classList.remove('active');
+                    });
+
+                    document.querySelectorAll('nav a').forEach(link => {
+                        link.addEventListener('click', function() {
+                            hamburger.classList.remove('active');
+                            navMenu.classList.remove('active');
+                            menuOverlay.classList.remove('active');
+                        });
+                    });
+                }
             });
 
             // AJAX Helper Function
@@ -2489,5 +2179,8 @@ function checkout() {
             }
         </script>
     @include('partials.notif-scripts')
+    
+    {{-- Bottom Navigation (Mobile) --}}
+    @include('partials.bottom-nav')
     </body>
     </html>

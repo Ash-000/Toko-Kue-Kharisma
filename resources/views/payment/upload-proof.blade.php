@@ -5,67 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Upload Bukti Transfer - Toko Kue Kharisma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    @include('partials.font-styles')
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f5deb3;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px clamp(15px, 4vw, 50px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .btn-back {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 10px;
-            color: #2c2c2c;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .btn-back:hover {
-            background: rgba(255, 255, 255, 0.5);
-            transform: translateX(-3px);
-        }
-
-        .store-name {
-            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
-            font-size: 28px;
-            color: #2c2c2c;
-            font-style: italic;
-            font-weight: bold;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
         .container {
             max-width: 600px;
             margin: 40px auto;
@@ -313,21 +258,10 @@
             }
         }
     </style>
+    @include('partials.auto-hide-navbar')
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <div class="header-left">
-            <a href="{{ route('riwayat') }}" class="btn-back">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
-                </svg>
-                Kembali
-            </a>
-        </div>
-        <div class="store-name">Toko Kue Kharisma</div>
-        <div></div>
-    </header>
+<body style="overflow-x: hidden !important; max-width: 100vw !important; margin: 0 !important;">
+    @include('partials.header', ['showBackButton' => true, 'backUrl' => route('riwayat')])
 
     <!-- Main Content -->
     <div class="container">
@@ -517,5 +451,8 @@
             }
         });
     </script>
+
+    {{-- Bottom Navigation (Mobile) --}}
+    @include('partials.bottom-nav')
 </body>
 </html>

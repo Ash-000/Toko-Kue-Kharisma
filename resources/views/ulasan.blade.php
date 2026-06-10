@@ -4,58 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Semua Ulasan - Toko Kue Kharisma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    @include('partials.font-styles')
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { overflow-x: hidden; max-width: 100%; }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #f5deb3 0%, #f4d4a8 100%);
-            min-height: 100vh;
-        }
-
-        header {
-            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px clamp(15px, 4vw, 50px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header-left { display: flex; align-items: center; gap: 20px; }
-
-        .btn-back {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.3);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 10px;
-            color: #2c2c2c;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .btn-back:hover { background: rgba(255,255,255,0.5); transform: translateX(-3px); }
-
-        .btn-back svg { width: 20px; height: 20px; stroke: #2c2c2c; fill: none; stroke-width: 2.5; }
-
-        .store-name {
-            font-family: 'Brush Script MT', cursive;
-            font-size: 28px;
-            color: #2c2c2c;
-            font-style: italic;
-            font-weight: bold;
-        }
-
         .container {
             max-width: 900px;
             margin: 50px auto;
+            margin-top: 120px;
             padding: 0 30px;
         }
 
@@ -165,21 +123,13 @@
         .btn-back-home:hover { background: #6b5845; }
 
         @media (max-width: 768px) {
-            header { padding: 15px 20px; }
-            .container { padding: 0 20px; }
+            .container { padding: 0 20px; margin-top: 100px; }
         }
     </style>
+    @include('partials.auto-hide-navbar')
 </head>
-<body>
-    <header>
-        <div class="header-left">
-            <a href="/" class="btn-back">
-                <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                Kembali
-            </a>
-            <span class="store-name">Toko kue kharisma</span>
-        </div>
-    </header>
+<body style="overflow-x: hidden !important; max-width: 100vw !important; margin: 0 !important;">
+    @include('partials.header', ['showBackButton' => true, 'backUrl' => '/'])
 
     <div class="container">
         <div class="page-header">
@@ -213,5 +163,8 @@
         </div>
         @endforelse
     </div>
+
+    {{-- Bottom Navigation (Mobile) --}}
+    @include('partials.bottom-nav')
 </body>
 </html>

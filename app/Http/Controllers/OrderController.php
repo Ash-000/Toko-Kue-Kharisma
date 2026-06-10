@@ -19,7 +19,7 @@ class OrderController extends Controller
         $orders = Order::with(['orderItems.product'])
             ->where('user_id', Auth::id())
             ->latest()
-            ->get();
+            ->paginate(5); // Pagination 5 items per page
 
         $reviewedOrders = \App\Models\Review::whereIn(
             'order_number',

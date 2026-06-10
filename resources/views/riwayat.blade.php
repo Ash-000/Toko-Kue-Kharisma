@@ -5,135 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Riwayat Pemesanan - Toko Kue Kharisma</title>
+    @include('partials.font-styles')
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { overflow-x: hidden; max-width: 100%; }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #f5deb3 0%, #f4d4a8 100%);
-            min-height: 100vh;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px clamp(15px, 4vw, 50px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-left { display: flex; align-items: center; gap: 20px; }
-
-        .btn-back {
-            display: flex; align-items: center; gap: 10px;
-            background: rgba(255,255,255,0.3); border: none;
-            padding: 8px 15px; border-radius: 10px;
-            color: #2c2c2c; font-size: 15px; font-weight: 600;
-            cursor: pointer; transition: all 0.3s; text-decoration: none;
-        }
-        .btn-back:hover { background: rgba(255,255,255,0.5); transform: translateX(-3px); }
-        .btn-back svg { width: 20px; height: 20px; stroke: #2c2c2c; fill: none; stroke-width: 2.5; }
-
-        .store-name {
-            font-family: 'Brush Script MT', cursive;
-            font-size: 28px; color: #2c2c2c;
-            font-style: italic; font-weight: bold;
-        }
-
-        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 1001; }
-        .hamburger span { width: 30px; height: 3px; background: #4a4a4a; border-radius: 3px; transition: all 0.3s; }
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(8px, -8px); }
-
-        nav { display: flex; gap: 30px; align-items: center; transition: all 0.3s; }
-        /* Gaya dasar link nav */
-        nav a {
-            color: #4a4a4a;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: capitalize; /* Biar huruf depan otomatis gede */
-            position: relative; /* Penting untuk efek underline */
-            padding: 5px 0;
-            transition: color 0.3s ease;
-        }
-
-        /* Efek Underline yang mengalir dari tengah */
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
-            background-color: #8b7355;
-            transition: all 0.3s ease-in-out;
-            transform: translateX(-50%);
-        }
-
-        /* Warna & Underline saat Hover */
-        nav a:hover {
-            color: #2c2c2c;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* Gaya untuk link yang sedang aktif (Kontak) */
-        nav a.active {
-            color: #8b7355;
-        }
-
-        nav a.active::after {
-            width: 80%; /* Garis bawah tetap ada di menu aktif */
-            background-color: #8b7355;
-        }
-
-        /* Tambahan: Sedikit animasi floating biar lebih 'hidup' */
-        @keyframes navFloat {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-2px); }
-            100% { transform: translateY(0); }
-        }
-
-        nav a:hover {
-            animation: navFloat 1s ease-in-out infinite;
-        }
-
-        .header-icons { display: flex; gap: 20px; align-items: center; }
-        .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 3px; position: relative; }
-        .icon-btn { background: none; border: none; cursor: pointer; color: #2c2c2c; transition: transform 0.2s; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
-        .icon-btn svg { width: 22px; height: 22px; stroke: #2c2c2c; fill: none; stroke-width: 2; }
-        .icon-label { font-size: 9px; color: #4a4a4a; font-weight: 600; }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: #d32f2f; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-
         /* Main */
         .riwayat-container {
             max-width: 900px;
             margin: 50px auto;
+            margin-top: 120px;
             padding: 0 50px;
         }
 
         .page-title {
             font-size: 28px;
-            font-weight: 600;
-            color: #2c2c2c;
+            font-weight: 700;
+            color: var(--color-text);
             margin-bottom: 30px;
         }
 
         /* Order Card — sama dengan profile */
         .order-card {
             background: white;
-            border-radius: 15px;
+            border-radius: var(--radius-md);
             padding: 20px;
             margin-bottom: 15px;
-            border-left: 4px solid #8b7355;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--color-brown);
+            box-shadow: var(--shadow-sm);
         }
 
         .order-header {
@@ -143,22 +39,22 @@
             margin-bottom: 12px;
         }
 
-        .order-id { font-size: 16px; font-weight: 600; color: #2c2c2c; }
+        .order-id { font-size: 16px; font-weight: 700; color: var(--color-text); }
 
         .order-status {
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
         }
         .status-completed  { background: #4caf50; color: white; }
         .status-processing { background: #ff9800; color: white; }
         .status-pending    { background: #9e9e9e; color: white; }
         .status-cancelled  { background: #d32f2f; color: white; }
         .status-shipping   { background: #2196f3; color: white; }
-        .status-verified   { background: #8b7355; color: white; }
+        .status-verified   { background: var(--color-brown); color: white; }
 
-        .order-items { font-size: 14px; color: #6b6b6b; margin-bottom: 10px; }
+        .order-items { font-size: 14px; color: var(--color-text-mid); margin-bottom: 10px; }
 
         .order-footer {
             display: flex;
@@ -168,19 +64,19 @@
             border-top: 1px solid #e0e0e0;
         }
 
-        .order-date  { font-size: 13px; color: #8b7355; }
-        .order-total { font-size: 16px; font-weight: 600; color: #2c2c2c; }
+        .order-date  { font-size: 13px; color: var(--color-brown); }
+        .order-total { font-size: 16px; font-weight: 700; color: var(--color-text); }
 
         .btn-review {
             margin-top: 12px;
             width: 100%;
             padding: 10px;
-            background: #8b7355;
+            background: var(--color-brown);
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -188,62 +84,103 @@
             gap: 8px;
             transition: all 0.3s;
         }
-        .btn-review:hover { background: #6b5845; transform: translateY(-2px); }
+        .btn-review:hover { background: var(--color-brown-dark); transform: translateY(-2px); }
         .btn-review svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; }
 
         /* Review Modal */
         .review-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
         .review-modal.active { display: flex; }
-        .review-modal-content { background: white; border-radius: 20px; padding: 35px 30px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .review-modal-content { background: white; border-radius: 20px; padding: 35px 30px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
         .review-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .review-modal-title { font-size: 22px; font-weight: 600; color: #2c2c2c; }
-        .btn-close-review { background: none; border: none; font-size: 26px; color: #8b7355; cursor: pointer; }
+        .review-modal-title { font-size: 22px; font-weight: 700; color: var(--color-text); }
+        .btn-close-review { background: none; border: none; font-size: 26px; color: var(--color-brown); cursor: pointer; }
         .stars-input { display: flex; gap: 8px; font-size: 36px; margin-bottom: 20px; }
         .star { cursor: pointer; color: #e0e0e0; transition: color 0.2s; }
         .star.active { color: #ffd700; }
         .review-form-group { margin-bottom: 15px; }
-        .review-form-group label { display: block; font-size: 14px; font-weight: 600; color: #4a4a4a; margin-bottom: 6px; }
-        .review-form-control { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; color: #2c2c2c; transition: border-color 0.3s; font-family: Arial, sans-serif; }
-        .review-form-control:focus { outline: none; border-color: #8b7355; }
+        .review-form-group label { display: block; font-size: 14px; font-weight: 700; color: var(--color-text-mid); margin-bottom: 6px; }
+        .review-form-control { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; color: var(--color-text); transition: border-color 0.3s; font-family: 'Nunito', sans-serif; }
+        .review-form-control:focus { outline: none; border-color: var(--color-brown); }
         textarea.review-form-control { resize: vertical; min-height: 100px; }
-        .btn-submit-review { width: 100%; background: #8b7355; color: white; border: none; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
-        .btn-submit-review:hover { background: #6b5845; }
+        .btn-submit-review { width: 100%; background: var(--color-brown); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
+        .btn-submit-review:hover { background: var(--color-brown-dark); }
 
-        /* Mobile */
-        .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
-        .menu-overlay.active { display: block; }
-
-        @media (max-width: 768px) {
-            header { padding: 15px 20px; }
-            .riwayat-container { padding: 0 20px; }
-            .hamburger { display: flex; }
-            nav {
-                position: fixed; top: 70px; right: -100%;
-                width: 300px; height: calc(100vh - 70px);
-                background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-                flex-direction: column; justify-content: flex-start;
-                padding: 30px;
-                box-shadow: -5px 0 15px rgba(0,0,0,0.2); z-index: 1001;
-                transition: right 0.3s ease; overflow-y: auto;
-            }
-            nav.active { right: 0; }
-            nav a { font-size: 18px; padding: 15px 0; width: 100%; border-bottom: 1px solid rgba(74,74,74,0.2); }
-            .order-header { flex-direction: column; align-items: flex-start; gap: 8px; }
-            .header-icons { gap: 10px; }
-
-            .store-name {
-                font-size: 20px;
-            }
-
-            .page-title {
-                font-size: 24px;
-            }
+        /* Pagination */
+        .pagination-container {
+            margin-top: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
         }
 
-        /* Tablet breakpoint */
+        .pagination-info {
+            text-align: center;
+            font-size: 14px;
+            color: var(--color-text-light);
+            margin-bottom: 15px;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-page {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--color-brown);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-page:hover:not(:disabled) {
+            background: var(--color-brown-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.3);
+        }
+
+        .btn-page:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .btn-page svg {
+            stroke: currentColor;
+        }
+
+        .page-numbers {
+            padding: 10px 20px;
+            background: #f5f5f0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
         @media (max-width: 1024px) {
             .riwayat-container {
                 padding: 0 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .riwayat-container { padding: 0 20px; }
+            .order-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+            .page-title {
+                font-size: 24px;
             }
         }
 
@@ -251,6 +188,7 @@
             .riwayat-container { 
                 padding: 0 15px; 
                 margin: 20px auto; 
+                margin-top: 100px;
             }
             
             .page-title { 
@@ -290,83 +228,14 @@
                 font-size: 32px;
             }
         }
-
-        /* Extra small mobile */
-        @media (max-width: 375px) {
-            .store-name {
-                font-size: 18px;
-            }
-
-            nav {
-                width: 250px;
-            }
-
-            .page-title {
-                font-size: 20px;
-            }
-
-            .order-card {
-                padding: 12px;
-            }
-        }
-        
+    </style>        
     @include('partials.notif-styles')
+    @include('partials.auto-hide-navbar')
+    @include('partials.enhanced-interactions')
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <div class="header-left">
-            <a href="/" class="btn-back">
-                <svg viewBox="0 0 24 24">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
-                </svg>
-                Kembali
-            </a>
-            <div class="logo-section">
-                <span class="store-name">Toko kue kharisma</span>
-            </div>
-        </div>
+<body style="overflow-x: hidden !important; max-width: 100vw !important; margin: 0 !important;">
+    @include('partials.header')
 
-        <nav id="navMenu">
-            <a href="/" class="{{ Request::is('/') ? 'active' : '' }}">home</a>
-            <a href="/menu" class="{{ Request::is('menu') ? 'active' : '' }}">menu</a>
-            <a href="/riwayat" class="{{ Request::is('riwayat') ? 'active' : '' }}">riwayat</a>
-            <a href="/kontak" class="{{ Request::is('kontak') ? 'active' : '' }}">kontak</a>
-            <a href="/promo" class="{{ Request::is('promo') ? 'active' : '' }}">promo</a>
-        </nav>
-
-        <div class="header-icons">
-            @include('partials.header-icons')
-            <div class="icon-wrapper">
-                <button class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    <span class="cart-badge" id="cartBadge">0</span>
-                </button>
-                <span class="icon-label">Keranjang</span>
-            </div>
-            <div class="icon-wrapper">
-                <button class="icon-btn" title="Profil" onclick="window.location.href='/profile'">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <circle cx="12" cy="10" r="3"></circle>
-                        <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Profil</span>
-            </div>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </header>
-
-    <div class="menu-overlay" id="menuOverlay"></div>
     <!-- Main Content -->
     <div class="riwayat-container">
         <h1 class="page-title">Riwayat Pemesanan</h1>
@@ -427,6 +296,52 @@
             <button onclick="window.location.href='/menu'" style="background:#8b7355;color:white;border:none;padding:12px 30px;border-radius:25px;font-size:15px;font-weight:600;cursor:pointer;">Mulai Belanja</button>
         </div>
         @endforelse
+
+        {{-- Pagination --}}
+        @if($orders->hasPages())
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Menampilkan {{ $orders->firstItem() }} - {{ $orders->lastItem() }} dari {{ $orders->total() }} pesanan
+            </div>
+            <div class="pagination-buttons">
+                @if($orders->onFirstPage())
+                    <button class="btn-page" disabled>
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M15 18l-6-6 6-6" stroke="currentColor" fill="none" stroke-width="2"/>
+                        </svg>
+                        Prev
+                    </button>
+                @else
+                    <a href="{{ $orders->previousPageUrl() }}" class="btn-page">
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M15 18l-6-6 6-6" stroke="currentColor" fill="none" stroke-width="2"/>
+                        </svg>
+                        Prev
+                    </a>
+                @endif
+
+                <span class="page-numbers">
+                    Halaman {{ $orders->currentPage() }} dari {{ $orders->lastPage() }}
+                </span>
+
+                @if($orders->hasMorePages())
+                    <a href="{{ $orders->nextPageUrl() }}" class="btn-page">
+                        Next
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M9 18l6-6-6-6" stroke="currentColor" fill="none" stroke-width="2"/>
+                        </svg>
+                    </a>
+                @else
+                    <button class="btn-page" disabled>
+                        Next
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M9 18l6-6-6-6" stroke="currentColor" fill="none" stroke-width="2"/>
+                        </svg>
+                    </button>
+                @endif
+            </div>
+        </div>
+        @endif
         </div>
     </div>
 
@@ -699,5 +614,8 @@
         }
     </script>
     @include('partials.notif-scripts')
+    
+    {{-- Bottom Navigation (Mobile) --}}
+    @include('partials.bottom-nav')
 </body>
 </html>

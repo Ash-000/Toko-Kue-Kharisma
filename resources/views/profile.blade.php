@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Profil - Toko Kue Kharisma</title>
-    {{-- Leaflet hanya dimuat saat tab Alamat dibuka --}}
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    @include('partials.font-styles')
     <style>
         :root {
             --bg-original: #f5deb3;
@@ -16,51 +19,7 @@
             --shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html, body { overflow-x: hidden; max-width: 100%; }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-original);
-            color: var(--text-dark);
-        }
-
-        /* HEADER MODERN & HIDUP */
-        header {
-            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .btn-back {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.4);
-            padding: 8px 18px;
-            border-radius: 50px;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-
-        .btn-back:hover {
-            background: var(--white);
-            transform: translateX(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .btn-back svg { width: 18px; height: 18px; stroke-width: 3; }
-
+        /* PROFILE SPECIFIC STYLES */
         .store-logo {
             font-family: 'Brush Script MT', cursive;
             font-size: 30px;
@@ -69,8 +28,13 @@
 
         /* CONTAINER */
         .profile-container {
-            max-width: 1200px; margin: 40px auto; padding: 0 20px;
-            display: grid; grid-template-columns: 320px 1fr; gap: 30px;
+            max-width: 1200px; 
+            margin: 40px auto; 
+            margin-top: 120px;
+            padding: 0 20px;
+            display: grid; 
+            grid-template-columns: 320px 1fr; 
+            gap: 30px;
         }
 
         /* SIDEBAR */
@@ -158,19 +122,13 @@
             .form-row { grid-template-columns: 1fr; }
         }
     </style>
+    @include('partials.notif-styles')
+    @include('partials.auto-hide-navbar')
+    @include('partials.enhanced-interactions')
 </head>
-<body>
+<body style="overflow-x: hidden !important; max-width: 100vw !important; margin: 0 !important;">
 
-    <header>
-        <div class="header-left">
-            <a href="/" class="btn-back">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path></svg>
-                Kembali
-            </a>
-        </div>
-        <div class="store-logo">Toko Kue Kharisma</div>
-        <div style="width: 100px;"></div>
-    </header>
+    @include('partials.header', ['showBackButton' => true, 'backUrl' => '/'])
 
     <div class="profile-container">
         <aside class="profile-sidebar">
@@ -458,5 +416,8 @@
         @endif
     });
 </script>
+
+{{-- Bottom Navigation (Mobile) --}}
+@include('partials.bottom-nav')
 </body>
 </html>

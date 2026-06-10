@@ -8,1404 +8,233 @@
     <title>Toko Kue Kharisma</title>
     <link rel="preconnect" href="https://app.sandbox.midtrans.com">
     <link rel="dns-prefetch" href="https://app.sandbox.midtrans.com">
-    @include('partials.skeleton-loader')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    @include('partials.font-styles')
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            overflow-x: hidden;
-            max-width: 100%;
-        }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f5deb3;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 15px clamp(15px, 4vw, 50px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-        }
-
-        .store-name {
-            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
-            font-size: 28px;
-            color: #2c2c2c;
-            font-style: italic;
-            font-weight: bold;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 10px;
-            z-index: 1001;
-        }
-
-        .hamburger span {
-            width: 30px;
-            height: 3px;
-            background: #4a4a4a;
-            border-radius: 3px;
-            transition: all 0.3s;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(8px, -8px);
-        }
-
-        nav {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-            transition: all 0.3s;
-        }
-
-      /* Gaya dasar link nav */
-        nav a {
-            color: #4a4a4a;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: capitalize; /* Biar huruf depan otomatis gede */
-            position: relative; /* Penting untuk efek underline */
-            padding: 5px 0;
-            transition: color 0.3s ease;
-        }
-
-        /* Efek Underline yang mengalir dari tengah */
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
-            background-color: #8b7355;
-            transition: all 0.3s ease-in-out;
-            transform: translateX(-50%);
-        }
-
-        /* Warna & Underline saat Hover */
-        nav a:hover {
-            color: #2c2c2c;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* Gaya untuk link yang sedang aktif (Kontak) */
-        nav a.active {
-            color: #8b7355;
-        }
-
-        nav a.active::after {
-            width: 80%; /* Garis bawah tetap ada di menu aktif */
-            background-color: #8b7355;
-        }
-
-        /* Tambahan: Sedikit animasi floating biar lebih 'hidup' */
-        @keyframes navFloat {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-2px); }
-            100% { transform: translateY(0); }
-        }
-
-        nav a:hover {
-            animation: navFloat 1s ease-in-out infinite;
-        }
-
-        .header-icons {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #2c2c2c;
-            transition: transform 0.2s;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-btn svg {
-            width: 22px;
-            height: 22px;
-            stroke: #2c2c2c;
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .icon-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .icon-btn:hover svg {
-            stroke: #000;
-        }
-
-        .icon-label {
-            font-size: 9px;
-            color: #4a4a4a;
-            font-weight: 600;
-        }
-
-        .icon-wrapper {
-            position: relative;
-        }
-
-        .cart-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #d32f2f;
-            color: white;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            font-size: 10px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Notifikasi Badge */
-        .notif-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #d32f2f;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Notifikasi Dropdown */
-        .notif-dropdown {
-            display: none;
-            position: absolute;
-            top: calc(100% + 10px);
-            right: -10px;
-            width: 320px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-            z-index: 2000;
-            overflow: hidden;
-        }
-        .notif-dropdown.active { display: block; }
-
-        @media (max-width: 768px) {
-            .notif-dropdown {
-                position: fixed;
-                top: 70px;
-                right: 10px;
-                left: 10px;
-                width: auto;
-            }
-        }
-        .notif-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 16px;
-            border-bottom: 1px solid #f0f0f0;
-            font-weight: 600;
-            font-size: 14px;
-            color: #2c2c2c;
-        }
-        .notif-read-all {
-            background: none;
-            border: none;
-            color: #8b7355;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .notif-read-all:hover { text-decoration: underline; }
-        .notif-list { max-height: 320px; overflow-y: auto; }
-        .notif-item {
-            display: flex;
-            gap: 12px;
-            padding: 12px 16px;
-            border-bottom: 1px solid #f9f9f9;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .notif-item:hover { background: #faf8f5; }
-        .notif-item.unread { background: #fdf6ee; }
-        .notif-item.unread:hover { background: #f9efe0; }
-        .notif-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 16px;
-        }
-        .notif-icon.success { background: #e8f5e9; }
-        .notif-icon.info    { background: #e3f2fd; }
-        .notif-icon.warning { background: #fff3e0; }
-        .notif-content { flex: 1; }
-        .notif-title { font-size: 13px; font-weight: 600; color: #2c2c2c; margin-bottom: 2px; }
-        .notif-msg   { font-size: 12px; color: #6b6b6b; line-height: 1.4; }
-        .notif-time  { font-size: 11px; color: #aaa; margin-top: 3px; }
-        .notif-empty { padding: 30px 16px; text-align: center; color: #aaa; font-size: 13px; }
-
-        /* Mobile Menu */
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            nav {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 300px;
-                height: 100vh;
-                background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-                flex-direction: column;
-                justify-content: flex-start;
-                padding: 80px 30px 30px;
-                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
-                z-index: 1000;
-            }
-
-            nav.active {
-                right: 0;
-            }
-
-            nav a {
-                font-size: 18px;
-                padding: 15px 0;
-                width: 100%;
-                border-bottom: 1px solid rgba(74, 74, 74, 0.2);
-            }
-
-            .header-icons {
-                margin-left: auto;
-                gap: 15px;
-            }
-
-            .icon-label {
-                font-size: 9px;
-            }
-
-            .store-name {
-                font-size: 22px;
-            }
-
-            header {
-                padding: 15px 20px;
-            }
-
-            .best-sellers {
-                padding: 40px 20px;
-            }
-
-            .hero {
-                height: 350px;
-            }
-        }
-
-        /* Tablet breakpoint */
-        @media (max-width: 1024px) {
-            .products-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 25px;
-            }
-
-            .best-sellers {
-                padding: 40px 30px;
-            }
-        }
-
-        /* Small mobile */
-        @media (max-width: 480px) {
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-
-            .best-sellers {
-                padding: 30px 15px;
-            }
-
-            .section-title {
-                font-size: 24px;
-            }
-
-            .product-name {
-                font-size: 14px;
-            }
-
-            .product-price {
-                font-size: 14px;
-            }
-
-            .btn-add-cart {
-                font-size: 12px;
-                padding: 8px 16px;
-            }
-
-            .hero {
-                height: 280px;
-            }
-
-            .about-section {
-                padding: 40px 20px;
-            }
-
-            .about-title {
-                font-size: 36px;
-            }
-
-            .reviews-section {
-                padding: 40px 20px;
-            }
-        }
-
-        /* Extra small mobile */
-        @media (max-width: 375px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .store-name {
-                font-size: 18px;
-            }
-
-            nav {
-                width: 250px;
-            }
-
-            .hero {
-                height: 250px;
-            }
-        }
-
-        /* Overlay for mobile menu */
-        .menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        .menu-overlay.active {
-            display: block;
-        }
-
-        /* Review Modal */
-        .review-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .review-modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #2c2c2c;
-        }
-
-        .btn-close-modal {
-            background: none;
-            border: none;
-            font-size: 28px;
-            color: #8b7355;
-            cursor: pointer;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-
-        .btn-close-modal:hover {
-            background: #f5f5f0;
-            color: #2c2c2c;
-        }
-
-        .rating-input {
-            margin-bottom: 25px;
-        }
-
-        .rating-label {
-            display: block;
-            font-size: 16px;
-            font-weight: 600;
-            color: #4a4a4a;
-            margin-bottom: 10px;
-        }
-
-        .stars-input {
-            display: flex;
-            gap: 10px;
-            font-size: 32px;
-        }
-
-        .star {
-            cursor: pointer;
-            color: #e0e0e0;
-            transition: color 0.2s;
-        }
-
-        .star:hover,
-        .star.active {
-            color: #ffd700;
-        }
-
-        .review-form-group {
-            margin-bottom: 20px;
-        }
-
-        .review-form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #4a4a4a;
-            margin-bottom: 8px;
-        }
-
-        .review-form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #2c2c2c;
-            transition: border-color 0.3s;
-        }
-
-        .review-form-control:focus {
-            outline: none;
-            border-color: #8b7355;
-        }
-
-        textarea.review-form-control {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .btn-submit-review {
-            width: 100%;
-            background: #8b7355;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-submit-review:hover {
-            background: #6b5845;
-            transform: translateY(-2px);
-        }
-
         /* Hero Section */
-        .hero {
-            position: relative;
-            height: 420px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .hero-images {
-            display: flex;
-            height: 100%;
-            transition: transform 0.8s ease-in-out;
-        }
-
-        .hero-image {
-            min-width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-        }
-
-        /* Slider Navigation Areas */
-        .slider-nav {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 20%;
-            z-index: 5;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .slider-nav:hover {
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .slider-nav-left {
-            left: 0;
-        }
-
-        .slider-nav-right {
-            right: 0;
-        }
-
-        .slider-indicators {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 11;
-        }
-
-        .indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .indicator.active {
-            background: white;
-            width: 30px;
-            border-radius: 5px;
-        }
+        .hero { position: relative; height: 420px; overflow: hidden; cursor: pointer; width: 100%; }
+        .hero-images { display: flex; height: 100%; width: 100%; transition: transform 0.8s ease-in-out; }
+        .hero-image { min-width: 100%; width: 100%; height: 100%; background-size: cover; background-position: center; flex-shrink: 0; }
+        .slider-nav { position: absolute; top: 0; height: 100%; width: 20%; z-index: 5; cursor: pointer; transition: background 0.3s; }
+        .slider-nav:hover { background: rgba(0, 0, 0, 0.1); }
+        .slider-nav-left { left: 0; }
+        .slider-nav-right { right: 0; }
+        .slider-indicators { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 11; }
+        .indicator { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); cursor: pointer; transition: all 0.3s; }
+        .indicator.active { background: white; width: 30px; border-radius: 5px; }
 
         /* Best Sellers Section */
-        .best-sellers {
-            padding: 50px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        .best-sellers { padding: 50px 20px; max-width: 1400px; margin: 0 auto; text-align: center; }
+        .section-divider { width: 200px; height: 2px; background: var(--color-brown); margin: 0 auto 40px; }
 
-        .section-title {
-            text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 28px;
-            color: #8b7355;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .section-divider {
-            width: 200px;
-            height: 2px;
-            background: #8b7355;
-            margin: 0 auto 40px;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-       .product-card {
-    background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-    border-radius: 20px;
-    padding: 25px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.6s ease forwards;
-}
-
-/* delay animasi */
-.product-card:nth-child(1) { animation-delay: 0.1s; }
-.product-card:nth-child(2) { animation-delay: 0.2s; }
-.product-card:nth-child(3) { animation-delay: 0.3s; }
-.product-card:nth-child(4) { animation-delay: 0.4s; }
-.product-card:nth-child(5) { animation-delay: 0.5s; }
-.product-card:nth-child(6) { animation-delay: 0.6s; }
-
-@keyframes fadeUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.product-card:hover {
-    transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    background: linear-gradient(135deg, #dfc4a3 0%, #d4b896 100%);
-}
-
-        @keyframes highlight {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(139, 115, 85, 0.3); }
-        }
-
-        /* Not Found Modal */
-        .not-found-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .not-found-modal.active {
-            display: flex;
-        }
-
-        .not-found-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .not-found-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: #f5f5f0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .not-found-icon svg {
-            width: 50px;
-            height: 50px;
-            stroke: #8b7355;
-            fill: none;
-            stroke-width: 2;
-        }
-
-        .not-found-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: #2c2c2c;
-            margin-bottom: 10px;
-        }
-
-        .not-found-message {
-            font-size: 15px;
-            color: #6b6b6b;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        .not-found-keyword {
-            color: #8b7355;
-            font-weight: 600;
-        }
-
-        .btn-close-not-found {
-            background: #8b7355;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-close-not-found:hover {
-            background: #6b5845;
-            transform: translateY(-2px);
-        }
-
-        /* Success Modal */
-        .success-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1001;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .success-modal.active {
-            display: flex;
-        }
-
-        .success-modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: bounceIn 0.5s ease-out;
-        }
-
-        @keyframes bounceIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.3);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.05);
-            }
-            70% {
-                transform: scale(0.9);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: #e8f5e9;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: checkmark 0.5s ease-out 0.3s both;
-        }
-
-        @keyframes checkmark {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .success-icon svg {
-            width: 50px;
-            height: 50px;
-            stroke: #4caf50;
-            fill: none;
-            stroke-width: 3;
-        }
-
-        .success-icon svg polyline {
-            stroke-dasharray: 20;
-            stroke-dashoffset: 20;
-            animation: draw 0.5s ease-out 0.5s forwards;
-        }
-
-        @keyframes draw {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        .success-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: #2c2c2c;
-            margin-bottom: 10px;
-        }
-
-        .success-message {
-            font-size: 15px;
-            color: #6b6b6b;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .btn-close-success {
-            background: #4caf50;
-            color: white;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 25px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-close-success:hover {
-            background: #388e3c;
-            transform: translateY(-2px);
-        }
-
-        .product-image-container {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .product-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .product-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c2c2c;
-            margin-bottom: 8px;
-            text-transform: capitalize;
-        }
-
-        .product-price {
-            font-size: 16px;
-            color: #4a4a4a;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-
-        .product-info {
-            text-align: center;
-        }
-
-        .product-actions {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .product-description {
-            font-size: 13px;
-            color: #6b6b6b;
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-
-        .btn-add-cart {
-            background: #8b7355;
-            border: none;
-            border-radius: 25px;
-            padding: 10px 20px;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .btn-add-cart:hover {
-            background: #6b5845;
-            transform: scale(1.05);
-        }
-
-        .btn-add-cart .loading {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-add-cart .loading::after {
-            content: '';
-            width: 16px;
-            height: 16px;
-            border: 2px solid #ffffff;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .btn-add-cart svg {
-            width: 18px;
-            height: 18px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 2;
-        }
-
-        .btn-add-cart .icon {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        /* Decorative flowers */
-        .flower-decoration {
-            position: absolute;
-            width: 80px;
-            opacity: 0.6;
-        }
-
-        .flower-left {
-            bottom: 10px;
-            left: 20px;
-        }
-
-        .flower-right {
-            bottom: 10px;
-            right: 20px;
-        }
 
         /* About Section */
         .about-section {
-            background: linear-gradient(135deg, #f5deb3 0%, #f4d4a8 100%);
-            padding: 60px 50px;
+            background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-alt) 100%);
+            padding: 80px 50px;
         }
-
-        .about-title {
-            font-family: 'Brush Script MT', cursive;
-            font-size: 48px;
-            color: #8b7355;
-            text-align: center;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-
-        .about-subtitle {
-            text-align: center;
-            color: #8b7355;
-            font-size: 16px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .about-images {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto 40px;
-        }
-
-        .about-image {
-            width: 100%;
-            height: 200px;
-            border-radius: 15px;
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .about-description {
-            text-align: center;
-            color: #8b7355;
-            font-size: 15px;
-            line-height: 1.8;
-            max-width: 900px;
-            margin: 0 auto 30px;
-        }
-
-        .heart-divider {
-            text-align: center;
-            color: #8b7355;
-            font-size: 24px;
-            margin: 30px 0;
-        }
-
-        .heart-divider::before,
-        .heart-divider::after {
-            content: '';
-            display: inline-block;
-            width: 100px;
-            height: 1px;
-            background: #8b7355;
-            vertical-align: middle;
-            margin: 0 20px;
-        }
-
-        /* Reviews Section */
-        .reviews-section {
-            background: linear-gradient(135deg, #d4b896 0%, #c9a882 100%);
-            padding: 50px;
-        }
-
-        .reviews-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto 30px;
-        }
-
-        .reviews-title {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 28px;
-            color: #2c2c2c;
-            font-weight: 600;
-        }
-
-        .add-review-btn {
-            background: #2c2c2c;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .add-review-btn:hover {
-            background: #000;
-            transform: scale(1.1);
-        }
-
-        .add-review-text {
-            font-size: 14px;
-            font-weight: 600;
-            color: #2c2c2c;
-            margin-left: 15px;
-        }
-
-        .add-review-wrapper {
-            display: flex;
-            align-items: center;
-        }
-
-        .reviews-container {
+        .about-container {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
         }
-
-        .review-card {
-            background: #f5f5f0;
+        .about-content { display: flex; flex-direction: column; gap: 24px; }
+        .about-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139, 115, 85, 0.12);
+            color: var(--color-brown);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 50px;
+            width: fit-content;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .about-badge svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .about-title {
+            font-size: clamp(28px, 4vw, 42px);
+            color: var(--color-text);
+            line-height: 1.2;
+            margin: 0;
+        }
+        .about-subtitle {
+            color: var(--color-brown);
+            font-size: 16px;
+            line-height: 1.7;
+            margin: 0;
+        }
+        .about-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 8px;
+        }
+        .about-stat { display: flex; flex-direction: column; }
+        .about-stat-number {
+            font-family: 'Lora', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-brown-dark);
+            line-height: 1;
+        }
+        .about-stat-label {
+            font-size: 13px;
+            color: var(--color-text-light);
+            margin-top: 4px;
+        }
+        .about-description {
+            color: var(--color-text-mid);
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 0;
+            border-left: 3px solid var(--color-brown);
+            padding-left: 20px;
+        }
+        .about-images-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            position: relative;
+        }
+        .about-image-card {
             border-radius: 20px;
-            padding: 25px 30px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            aspect-ratio: 4/5;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
-
-        .review-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
+        .about-image-card:first-child { margin-top: 40px; }
+        .about-image-card:last-child { margin-bottom: 40px; }
+        .about-image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
         }
-
-        .review-avatar {
-            width: 50px;
-            height: 50px;
+        .about-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .about-deco {
+            position: absolute;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            background: #2c2c2c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(139, 115, 85, 0.08);
+            z-index: 0;
         }
+        .about-deco-1 { top: -20px; right: 40px; }
+        .about-deco-2 { bottom: -10px; left: 20px; width: 60px; height: 60px; }
 
-        .review-avatar svg {
-            width: 30px;
-            height: 30px;
-            stroke: white;
-            fill: none;
-            stroke-width: 2;
+        /* Reviews Section */
+        .reviews-section { background: linear-gradient(135deg, var(--color-header) 0%, var(--color-header-end) 100%); padding: 50px; }
+        .reviews-header { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 30px; }
+        .add-review-btn {
+            background: var(--color-text); color: white; border: none; border-radius: 50%;
+            width: 50px; height: 50px; font-size: 24px; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; transition: all 0.3s; box-shadow: var(--shadow-sm);
         }
-
-        .review-info {
-            flex: 1;
-        }
-
-        .review-stars {
-            color: #ffd700;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .review-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c2c2c;
-        }
-
-        .review-text {
-            color: #8b7355;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 768px) {
-            .about-images {
-                grid-template-columns: 1fr;
-            }
-
-            .about-title {
-                font-size: 36px;
-            }
-
-            .reviews-header {
-                flex-direction: column;
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .best-sellers { padding: 30px 15px; }
-            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .about-section { padding: 40px 15px; }
-            .reviews-section { padding: 30px 15px; }
-            .hero { height: 220px; }
-            .product-card { padding: 12px; }
-            .product-image-container { height: 130px; }
-            .product-name { font-size: 13px; }
-            .product-price { font-size: 13px; }
-            .btn-add-cart { padding: 8px 10px; font-size: 12px; gap: 4px; }
-            .btn-add-cart svg { width: 14px; height: 14px; }
-        }
-        .hero {
-    animation: zoomHero 6s ease-in-out infinite alternate;
-}
-
-@keyframes zoomHero {
-    from { transform: scale(1); }
-    to { transform: scale(1.05); }
-}
-        .fade-up {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease;
-}
-
-.fade-up.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-/* Animasi Gambar biar nge-zoom di dalam kartu */
-.product-image-container {
-    overflow: hidden;
-}
-
-.product-image {
-    transition: transform 0.5s ease;
-}
-
-.product-card:hover .product-image {
-    transform: scale(1.1) rotate(2deg); /* Ngezoom sambil miring dikit biar asik */
-}
-
-/* Animasi Tombol pas diklik */
-.btn-add-cart:active {
-    transform: scale(0.9);
-}
-/* Logo goyang dikit pas dihover */
-.store-name:hover {
-    animation: wiggle 0.5s ease-in-out;
-}
-
-@keyframes wiggle {
-    0%, 100% { transform: rotate(0); }
-    25% { transform: rotate(-3deg); }
-    75% { transform: rotate(3deg); }
-}
-    </style>
-</head>
-<body>
-    <!-- Menu Overlay -->
-    <div class="menu-overlay" id="menuOverlay"></div>
-
-    <!-- Header -->
-    <header>
-        <div class="logo-section">
-            <span class="store-name">Toko kue kharisma</span>
-        </div>
+        .add-review-btn:hover { background: #000; transform: scale(1.1); }
+        .add-review-text { font-size: 14px; font-weight: 700; color: var(--color-text); margin-left: 15px; }
+        .add-review-wrapper { display: flex; align-items: center; }
         
- <nav id="navMenu">
-    <a href="/" class="{{ Request::is('/') ? 'active' : '' }}">home</a>
-    <a href="/menu" class="{{ Request::is('menu') ? 'active' : '' }}">menu</a>
-    <a href="/riwayat" class="{{ Request::is('riwayat') ? 'active' : '' }}">riwayat</a>
-    <a href="/kontak" class="{{ Request::is('kontak') ? 'active' : '' }}">kontak</a>
-    <a href="/promo" class="{{ Request::is('promo') ? 'active' : '' }}">promo</a>
-</nav>
+        .reviews-container { max-width: 1200px; margin: 0 auto; display: grid; gap: 20px; }
+        .review-card { background: #fafafa; border-radius: 20px; padding: 25px 30px; box-shadow: var(--shadow-sm); }
+        .review-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .review-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--color-text); display: flex; align-items: center; justify-content: center; }
+        .review-avatar svg { width: 30px; height: 30px; stroke: white; fill: none; stroke-width: 2; }
+        .review-info { flex: 1; }
+        .review-stars { color: #ffd700; font-size: 16px; margin-bottom: 5px; }
+        .review-name { font-size: 16px; font-weight: 700; color: var(--color-text); }
+        .review-text { color: var(--color-brown); font-size: 14px; line-height: 1.6; }
 
-        <div class="header-icons">
-            @auth
-            <!-- Notifikasi -->
-            <div class="icon-wrapper" style="position:relative;">
-                <button class="icon-btn" title="Notifikasi" onclick="toggleNotifDropdown(event)">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                    </svg>
-                    <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
-                </button>
-                <span class="icon-label">Notifikasi</span>
+        /* Modals & Decorative */
+        .not-found-modal, .success-modal, .review-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); z-index: 1000; align-items: center; justify-content: center;
+        }
+        .not-found-modal.active, .success-modal.active, .review-modal.active { display: flex; }
+        .not-found-content, .success-modal-content, .modal-content {
+            background: white; border-radius: 20px; padding: 40px; max-width: 400px; width: 90%;
+            text-align: center; box-shadow: var(--shadow-lg); position: relative; max-height: 90vh; overflow-y: auto;
+        }
+        
+        .not-found-icon, .success-icon {
+            width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .not-found-icon { background: #f5f5f0; }
+        .not-found-icon svg { width: 50px; height: 50px; stroke: var(--color-brown); fill: none; stroke-width: 2; }
+        .success-icon { background: #e8f5e9; }
+        .success-icon svg { width: 50px; height: 50px; stroke: var(--color-green); fill: none; stroke-width: 3; }
 
-                <!-- Dropdown Notifikasi -->
-                <div class="notif-dropdown" id="notifDropdown">
-                    <div class="notif-header">
-                        <span>Notifikasi</span>
-                        <button onclick="markAllRead()" class="notif-read-all">Tandai semua dibaca</button>
-                    </div>
-                    <div class="notif-list" id="notifList">
-                        <div class="notif-empty">Tidak ada notifikasi</div>
-                    </div>
-                </div>
-            </div>
+        .not-found-title, .success-title, .modal-title { font-size: 22px; font-weight: 700; color: var(--color-text); margin-bottom: 10px; font-family: 'Lora', serif; }
+        .not-found-message, .success-message { font-size: 15px; color: var(--color-text-light); margin-bottom: 25px; line-height: 1.5; }
+        
+        .btn-close-not-found, .btn-submit-review {
+            background: var(--color-brown); color: white; border: none; padding: 12px 30px;
+            border-radius: 25px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; width: 100%;
+        }
+        .btn-close-not-found:hover, .btn-submit-review:hover { background: var(--color-brown-dark); transform: translateY(-2px); }
+        .btn-close-success { background: var(--color-green); color: white; border: none; padding: 12px 40px; border-radius: 25px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+        .btn-close-success:hover { background: #388e3c; }
 
-            @endauth
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .btn-close-modal { background: none; border: none; font-size: 28px; color: var(--color-brown); cursor: pointer; border-radius: 50%; transition: all 0.3s; width: 35px; height: 35px; }
+        .btn-close-modal:hover { background: #f5f5f0; color: var(--color-text); }
+        
+        .rating-label { display: block; font-size: 16px; font-weight: 700; color: var(--color-text-mid); margin-bottom: 10px; text-align: left; }
+        .stars-input { display: flex; gap: 10px; font-size: 32px; justify-content: center; margin-bottom: 20px; }
+        .star { cursor: pointer; color: #e0e0e0; transition: color 0.2s; }
+        .star:hover, .star.active { color: #ffd700; }
+        .review-form-group { margin-bottom: 20px; text-align: left; }
+        .review-form-group label { display: block; font-size: 14px; font-weight: 700; color: var(--color-text-mid); margin-bottom: 8px; }
+        .review-form-control { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; color: var(--color-text); font-family: 'Nunito', sans-serif; }
+        .review-form-control:focus { outline: none; border-color: var(--color-brown); }
 
-            <div class="icon-wrapper">
-                <button class="icon-btn" title="Keranjang" onclick="window.location.href='/cart'">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    <span class="cart-badge" id="cartBadge">0</span>
-                </button>
-                <span class="icon-label">Keranjang</span>
-            </div>
-            <div class="icon-wrapper">
-                <button class="icon-btn" title="Profil" onclick="window.location.href='/profile'">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <circle cx="12" cy="10" r="3"></circle>
-                        <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"></path>
-                    </svg>
-                </button>
-                <span class="icon-label">Profil</span>
-            </div>
-            
-            <!-- Hamburger Menu -->
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </header>
+        /* Animations & Specifics */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .fade-up.show { opacity: 1; transform: translateY(0); }
+        .flower-decoration { position: absolute; width: 80px; opacity: 0.6; }
+        .flower-left { bottom: 10px; left: 20px; }
+        .flower-right { bottom: 10px; right: 20px; }
+
+        @media (max-width: 1024px) {
+            .products-grid { grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        }
+        @media (max-width: 768px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .about-images-wrapper { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .about-image-card:first-child { margin-top: 0; }
+            .about-image-card:last-child { margin-bottom: 0; }
+            .about-deco { display: none; }
+            .reviews-header { flex-direction: column; gap: 20px; }
+            .hero { height: 350px; }
+        }
+        @media (max-width: 480px) {
+            .hero { height: 250px; }
+            .about-section { padding: 50px 20px; }
+            .about-container { grid-template-columns: 1fr; gap: 30px; }
+            .about-images-wrapper { order: 2; }
+            .about-image-card { aspect-ratio: 1/1; }
+            .about-stats { gap: 24px; }
+            .about-stat-number { font-size: 28px; }
+            .reviews-section { padding: 40px 20px; }
+        }
+    </style>
+    @include('partials.auto-hide-navbar')
+    @include('partials.enhanced-interactions')
+</head>
+<body style="overflow-x: hidden !important; max-width: 100vw !important; margin: 0 !important;">
+    @include('partials.header')
 
     <!-- Hero Section -->
     <section class="hero">
@@ -1435,45 +264,109 @@
         <h2 class="section-title">Best Sellers</h2>
         <div class="section-divider"></div>
 
-        {{-- Skeleton Loaders (shown while loading) --}}
-        <div class="products-grid skeleton-container" id="skeletonProducts">
-            @for($i = 0; $i < 4; $i++)
-                @include('partials.skeleton-loader')
-            @endfor
-        </div>
-
-        {{-- Actual Products (hidden initially) --}}
-        <div class="products-grid" id="actualProducts" style="display: none;">
-            @foreach($products as $product)
-                @include('partials.product-card', [
-                    'product' => $product,
-                    'showDescription' => true,
-                    'buttonLabel' => 'Masukkan ke keranjang'
-                ])
-            @endforeach
+        {{-- Products Grid --}}
+        <div class="products-grid">
+            @forelse($products as $product)
+            <div class="product-card" data-product-id="{{ $product->id }}">
+                <div class="product-image-container">
+                    @php
+                        // Priority: Use images from public/images/products/ folder
+                        // Generate image filename from product name
+                        $productSlug = \Illuminate\Support\Str::slug($product->name);
+                        
+                        // Try multiple image extensions
+                        $extensions = ['jpg', 'jpeg', 'png', 'webp'];
+                        $imageUrl = null;
+                        
+                        foreach ($extensions as $ext) {
+                            $publicImagePath = 'images/products/' . $productSlug . '.' . $ext;
+                            if (file_exists(public_path($publicImagePath))) {
+                                $imageUrl = asset($publicImagePath);
+                                break;
+                            }
+                        }
+                        
+                        // Fallback to storage if public image not found
+                        if (!$imageUrl && $product->image) {
+                            if (str_starts_with($product->image, 'http')) {
+                                $imageUrl = $product->image;
+                            } elseif (str_starts_with($product->image, 'products/')) {
+                                $imageUrl = asset('storage/' . $product->image);
+                            } else {
+                                $imageUrl = asset('storage/products/' . $product->image);
+                            }
+                        }
+                        
+                        // Last fallback - default image
+                        if (!$imageUrl) {
+                            $imageUrl = asset('images/products/bolu-pelangi.jpg');
+                        }
+                    @endphp
+                    <img src="{{ $imageUrl }}" 
+                         alt="{{ $product->name }}" 
+                         class="product-image"
+                         onerror="this.onerror=null; this.src='{{ asset('images/products/bolu-pelangi.jpg') }}';">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">{{ $product->name }}</h3>
+                    @if($product->description)
+                    <p class="product-description">{{ Str::limit($product->description, 60) }}</p>
+                    @endif
+                    <p class="product-price">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                    <div class="product-actions">
+                        <button class="btn-add-cart" 
+                                onclick="addToCart(this, {{ $product->id }}, '{{ $product->name }}', {{ $product->price }})">
+                            Masukkan ke keranjang
+                        </button>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div style="grid-column: 1/-1; text-align:center; padding:40px;">
+                <p style="color:#8b7355; font-size:16px;">Belum ada produk tersedia</p>
+            </div>
+            @endforelse
         </div>
     </section>
 
     <!-- About Section -->
     <section class="about-section">
-        <h2 class="about-title">Tentang Kami</h2>
-        <p class="about-subtitle">
-            Selamat datang di toko kue kharisma toko kue yang manis,<br>
-            enak dan lezat.
-        </p>
-
-        <div class="about-images">
-            <img src="/images/products/bolu-pelangi.jpg" alt="Bolu Pelangi" class="about-image" loading="lazy">
-            <img src="/images/products/putu-ayu.jpg" alt="Putu Ayu" class="about-image" loading="lazy">
+        <div class="about-container">
+            <div class="about-content">
+                <div class="about-badge">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    Sejak 2009
+                </div>
+                <h2 class="about-title">Tentang Kami</h2>
+                <p class="about-subtitle">
+                    Selamat datang di Toko Kue Kharisma — toko kue yang manis, enak, dan lezat.
+                </p>
+                <div class="about-stats">
+                    <div class="about-stat">
+                        <span class="about-stat-number">15+</span>
+                        <span class="about-stat-label">Tahun Pengalaman</span>
+                    </div>
+                    <div class="about-stat">
+                        <span class="about-stat-number">20+</span>
+                        <span class="about-stat-label">Varian Kue</span>
+                    </div>
+                </div>
+                <p class="about-description">
+                    Toko ini berdiri sejak tahun 2009, kami mulai dari dapur kecil dan terus bertumbuh. Toko ini membawa kebahagiaan melalui kue jaman dahulu 
+                    yang dibuat dengan cinta.
+                </p>
+            </div>
+            <div class="about-images-wrapper">
+                <div class="about-deco about-deco-1"></div>
+                <div class="about-deco about-deco-2"></div>
+                <div class="about-image-card">
+                    <img src="/images/products/bolu-pelangi.jpg" alt="Bolu Pelangi" loading="lazy">
+                </div>
+                <div class="about-image-card">
+                    <img src="/images/products/putu-ayu.jpg" alt="Putu Ayu" loading="lazy">
+                </div>
+            </div>
         </div>
-
-        <p class="about-description">
-            Toko ini berdiri sejak tahun 2009, kami mulai dari dapur kecil sampai mempunyai 
-            pedagang keliling 4 orang. toko ini membawa kebahagiaan melalui kue jaman dahulu 
-            yang di buat dengan cinta.
-        </p>
-
-        <div class="heart-divider">♡</div>
     </section>
 
     <!-- Reviews Section -->
@@ -1503,6 +396,52 @@
             @endforeach
         </div>
 
+        {{-- Pagination untuk Reviews --}}
+        @if($reviews->hasPages())
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Menampilkan {{ $reviews->firstItem() }} - {{ $reviews->lastItem() }} dari {{ $reviews->total() }} ulasan
+            </div>
+            <div class="pagination-buttons">
+                @if($reviews->onFirstPage())
+                    <button class="btn-page" disabled>
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M15 18l-6-6 6-6" stroke="currentColor" fill="none" stroke-width="2"/>
+                        </svg>
+                        Prev
+                    </button>
+                @else
+                    <a href="{{ $reviews->previousPageUrl() }}" class="btn-page">
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M15 18l-6-6 6-6" stroke="currentColor" fill="none" stroke-width="2"/>
+                        </svg>
+                        Prev
+                    </a>
+                @endif
+
+                <span class="page-numbers">
+                    Halaman {{ $reviews->currentPage() }} dari {{ $reviews->lastPage() }}
+                </span>
+
+                @if($reviews->hasMorePages())
+                    <a href="{{ $reviews->nextPageUrl() }}" class="btn-page">
+                        Next
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M9 18l6-6-6-6" stroke="currentColor" fill="none" stroke-width="2"/>
+                        </svg>
+                    </a>
+                @else
+                    <button class="btn-page" disabled>
+                        Next
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M9 18l6-6-6-6" stroke="currentColor" fill="none" stroke-width="2"/>
+                        </svg>
+                    </button>
+                @endif
+            </div>
+        </div>
+        @endif
+
         @if($totalReviews > 10)
         <div style="text-align:center;margin-top:30px;">
             <a href="{{ route('reviews.index') }}" style="
@@ -1521,6 +460,12 @@
         </div>
         @endif
     </section>
+
+    {{-- Footer --}}
+    @include('partials.footer')
+
+    {{-- Bottom Navigation (Mobile) --}}
+    @include('partials.bottom-nav')
 
     <!-- Review Modal -->
     <div class="review-modal" id="reviewModal">
@@ -1956,11 +901,83 @@
         // Load cart count on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateCartBadge();
+
+            // Hamburger Menu Toggle
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    hamburger.classList.toggle('active');
+                    menuOverlay.classList.toggle('active');
+                });
+
+                // Close menu when overlay is clicked
+                menuOverlay.addEventListener('click', function() {
+                    navMenu.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    menuOverlay.classList.remove('active');
+                });
+
+                // Close menu when a nav link is clicked
+                navMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        navMenu.classList.remove('active');
+                        hamburger.classList.remove('active');
+                        menuOverlay.classList.remove('active');
+                    });
+                });
+            }
+
             @auth
             loadNotifications();
             // Polling notifikasi tiap 30 detik
             setInterval(loadNotifications, 30000);
             @endauth
+
+            // Force show product cards immediately
+            console.log('Forcing product cards to be visible');
+            document.querySelectorAll('.product-card').forEach((card, index) => {
+                card.style.opacity = '1';
+                card.style.visibility = 'visible';
+                card.style.transform = 'translateY(0)';
+                card.style.pointerEvents = 'auto';
+                console.log('Product card ' + (index + 1) + ' forced visible');
+            });
+
+            // Verify sections are visible
+            const bestSellers = document.querySelector('.best-sellers');
+            if (bestSellers) {
+                console.log('Best Sellers section found');
+                bestSellers.style.visibility = 'visible';
+                bestSellers.style.opacity = '1';
+            } else {
+                console.error('Best Sellers section NOT found');
+            }
+
+            // Verify header and nav are visible
+            const header = document.querySelector('header');
+            const nav = document.querySelector('nav');
+            if (header) {
+                console.log('Header found');
+                header.style.visibility = 'visible';
+                header.style.pointerEvents = 'auto';
+            }
+            if (nav) {
+                console.log('Nav found');
+                nav.style.visibility = 'visible';
+                nav.style.pointerEvents = 'auto';
+            }
+
+            // Verify bottom nav
+            const bottomNav = document.querySelector('.bottom-nav');
+            if (bottomNav) {
+                console.log('Bottom nav found');
+                bottomNav.style.visibility = 'visible';
+                bottomNav.style.pointerEvents = 'auto';
+            }
 
             // Add to Cart for product cards with data attributes
             document.querySelectorAll('.btn-add-cart[data-product-id]').forEach(button => {

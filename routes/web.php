@@ -13,7 +13,7 @@ use App\Http\Controllers\NotificationController;
 // Halaman Publik
 Route::get('/', [AuthController::class, 'showHome'])->name('home');
 Route::get('/menu', [ProductController::class, 'index'])->name('menu');
-Route::get('/promo', fn() => view('promo'))->name('promo');
+// Route::get('/promo', fn() => view('promo'))->name('promo'); // Disabled
 Route::get('/kontak', fn() => view('kontak'))->name('kontak');
 Route::get('/ulasan', [ReviewController::class, 'index'])->name('reviews.index');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');

@@ -38,7 +38,8 @@ class AuthController extends Controller
                 ->get();
         }
 
-        $reviews      = Review::latest()->take(10)->get();
+        // Pagination untuk reviews - 5 per halaman
+        $reviews      = Review::latest()->paginate(5);
         $totalReviews = Review::count();
 
         return view('home', compact('products', 'reviews', 'totalReviews'));
