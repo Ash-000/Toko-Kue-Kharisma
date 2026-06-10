@@ -196,8 +196,8 @@
         }
 
         .icon-btn svg {
-            width: 26px;
-            height: 26px;
+            width: 22px;
+            height: 22px;
             stroke: #2c2c2c;
             fill: none;
             stroke-width: 2;
@@ -210,7 +210,7 @@
         }
 
         .icon-label {
-            font-size: 10px;
+            font-size: 9px;
             color: #4a4a4a;
             font-weight: 600;
         }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Menu - Toko Kue Kharisma</title>
+    @include('partials.skeleton-loader')
     <style>
         * {
             margin: 0;
@@ -218,8 +219,8 @@ nav {
         }
 
         .icon-btn svg {
-            width: 26px;
-            height: 26px;
+            width: 22px;
+            height: 22px;
             stroke: #2c2c2c;
             fill: none;
             stroke-width: 2;
@@ -232,7 +233,7 @@ nav {
         }
 
         .icon-label {
-            font-size: 10px;
+            font-size: 9px;
             color: #4a4a4a;
             font-weight: 600;
         }
@@ -244,9 +245,9 @@ nav {
             background: #d32f2f;
             color: white;
             border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -980,8 +981,11 @@ nav {
             });
         });
 
-        // Add to Cart
+        // Add to Cart with Enhanced Loading State
         function addToCart(btn, productId, itemName, price) {
+            // Prevent double-click
+            if (btn.classList.contains('btn-loading')) return;
+            
             // Pastikan productId adalah integer
             const id = parseInt(productId);
             if (isNaN(id)) {
@@ -990,9 +994,11 @@ nav {
                 return;
             }
 
-            // Disable button temporarily
+            // Add loading state
+            btn.classList.add('btn-loading');
+            const originalHTML = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = '<span class="loading">Menambah...</span>';
+            btn.innerHTML = '<span class="btn-text">Menambahkan...</span>';
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
@@ -1012,29 +1018,40 @@ nav {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update cart badge
-                    document.getElementById('cartBadge').textContent = data.data.total_items;
+                    // Update cart badge with pulse animation
+                    const badge = document.getElementById('cartBadge');
+                    if (badge) {
+                        badge.textContent = data.data.total_items;
+                        badge.classList.add('pulse');
+                        setTimeout(() => badge.classList.remove('pulse'), 500);
+                    }
+
+                    // Show success state
+                    btn.innerHTML = '<span class="success-checkmark"></span><span class="btn-text">Ditambahkan!</span>';
+                    btn.style.background = '#4caf50';
+                    
+                    // Reset after 2 seconds
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                        btn.style.background = '';
+                        btn.classList.remove('btn-loading');
+                        btn.disabled = false;
+                    }, 2000);
 
                     showNotification(`${itemName} berhasil ditambahkan ke keranjang!`, 'success');
                 } else {
                     // Show error notification
+                    btn.classList.remove('btn-loading');
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
                     showNotification(data.message || 'Gagal menambahkan ke keranjang', 'error');
                 }
             })
             .catch(error => {
-                showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
-            })
-            .finally(() => {
-                // Re-enable button
+                btn.classList.remove('btn-loading');
+                btn.innerHTML = originalHTML;
                 btn.disabled = false;
-                btn.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    Keranjang
-                `;
+                showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
             });
         }
 
@@ -1186,6 +1203,14 @@ card.innerHTML = `
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Hide page loader
+            const pageLoader = document.getElementById('pageLoader');
+            if (pageLoader) {
+                setTimeout(() => {
+                    pageLoader.classList.add('hidden');
+                }, 300);
+            }
+            
             document.getElementById('productSearch').addEventListener('input', filterProducts);
             renderGrid();
         });

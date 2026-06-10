@@ -8,6 +8,7 @@
     <title>Toko Kue Kharisma</title>
     <link rel="preconnect" href="https://app.sandbox.midtrans.com">
     <link rel="dns-prefetch" href="https://app.sandbox.midtrans.com">
+    @include('partials.skeleton-loader')
     <style>
         * {
             margin: 0;
@@ -170,8 +171,8 @@
         }
 
         .icon-btn svg {
-            width: 26px;
-            height: 26px;
+            width: 22px;
+            height: 22px;
             stroke: #2c2c2c;
             fill: none;
             stroke-width: 2;
@@ -188,7 +189,7 @@
         }
 
         .icon-label {
-            font-size: 10px;
+            font-size: 9px;
             color: #4a4a4a;
             font-weight: 600;
         }
@@ -204,9 +205,9 @@
             background: #d32f2f;
             color: white;
             border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -1434,7 +1435,15 @@
         <h2 class="section-title">Best Sellers</h2>
         <div class="section-divider"></div>
 
-        <div class="products-grid">
+        {{-- Skeleton Loaders (shown while loading) --}}
+        <div class="products-grid skeleton-container" id="skeletonProducts">
+            @for($i = 0; $i < 4; $i++)
+                @include('partials.skeleton-loader')
+            @endfor
+        </div>
+
+        {{-- Actual Products (hidden initially) --}}
+        <div class="products-grid" id="actualProducts" style="display: none;">
             @foreach($products as $product)
                 @include('partials.product-card', [
                     'product' => $product,
@@ -2062,6 +2071,106 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.fade-up').forEach(el => {
     observer.observe(el);
 });
+
+// ===== LOADING STATES =====
+
+// 1. Page Loader
+window.addEventListener('load', function() {
+    const pageLoader = document.getElementById('pageLoader');
+    if (pageLoader) {
+        setTimeout(() => {
+            pageLoader.classList.add('hidden');
+        }, 300);
+    }
+    
+    // Show actual products after skeleton
+    const skeleton = document.getElementById('skeletonProducts');
+    const actualProducts = document.getElementById('actualProducts');
+    
+    if (skeleton && actualProducts) {
+        setTimeout(() => {
+            skeleton.style.display = 'none';
+            actualProducts.style.display = 'grid';
+            actualProducts.style.animation = 'fadeIn 0.5s ease-in';
+        }, 800);
+    }
+});
+
+// 2. Add fadeIn animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+`;
+document.head.appendChild(style);
+
+// 3. Enhanced Add to Cart with Loading State
+window.addToCartWithLoading = function(btn, productId, itemName, price) {
+    // Prevent double-click
+    if (btn.classList.contains('btn-loading')) return;
+    
+    // Add loading state
+    btn.classList.add('btn-loading');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<span class="btn-text">Menambahkan...</span>';
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken || '',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            product_id: parseInt(productId),
+            quantity: 1
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update cart badge with pulse animation
+            const badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = data.data.total_items;
+                badge.classList.add('pulse');
+                setTimeout(() => badge.classList.remove('pulse'), 500);
+            }
+            
+            // Show success checkmark
+            btn.innerHTML = '<span class="success-checkmark"></span><span class="btn-text">Ditambahkan!</span>';
+            btn.style.background = '#4caf50';
+            
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.style.background = '';
+                btn.classList.remove('btn-loading');
+            }, 2000);
+            
+            showNotification(`${itemName} berhasil ditambahkan ke keranjang!`, 'success');
+        } else {
+            btn.classList.remove('btn-loading');
+            btn.innerHTML = originalHTML;
+            showNotification(data.message || 'Gagal menambahkan ke keranjang', 'error');
+        }
+    })
+    .catch(error => {
+        btn.classList.remove('btn-loading');
+        btn.innerHTML = originalHTML;
+        showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
+    });
+};
+
+// 4. Update existing addToCart function
+if (typeof window.addToCart === 'undefined') {
+    window.addToCart = window.addToCartWithLoading;
+}
+
 </script>
 </body>
 </html>

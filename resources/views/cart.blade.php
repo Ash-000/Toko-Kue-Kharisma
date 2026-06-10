@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Keranjang Belanja - Toko Kue Kharisma</title>
+        @include('partials.skeleton-loader')
         <style>
             * {
                 margin: 0;
@@ -158,8 +159,8 @@
             }
 
             .icon-btn svg {
-                width: 26px;
-                height: 26px;
+                width: 22px;
+                height: 22px;
                 stroke: #2c2c2c;
                 fill: none;
                 stroke-width: 2;
@@ -172,7 +173,7 @@
             }
 
             .icon-label {
-                font-size: 10px;
+                font-size: 9px;
                 color: #4a4a4a;
                 font-weight: 600;
             }
@@ -184,9 +185,9 @@
                 background: #d32f2f;
                 color: white;
                 border-radius: 50%;
-                width: 18px;
-                height: 18px;
-                font-size: 11px;
+                width: 16px;
+                height: 16px;
+                font-size: 10px;
                 font-weight: bold;
                 display: flex;
                 align-items: center;
@@ -260,6 +261,7 @@
                 padding: 20px;
                 border-bottom: 1px solid #f0f0f0;
                 position: relative;
+                flex-wrap: wrap;
             }
 
             .cart-item:last-child {
@@ -858,6 +860,33 @@
                 }
             }
 
+            @media (max-width: 768px) {
+                .cart-title {
+                    font-size: 22px;
+                }
+
+                .item-image {
+                    width: 80px;
+                    height: 80px;
+                }
+
+                .item-name {
+                    font-size: 15px;
+                }
+
+                .item-price {
+                    font-size: 14px;
+                }
+
+                .cart-items {
+                    padding: 25px 20px;
+                }
+
+                .cart-summary {
+                    padding: 25px 20px;
+                }
+            }
+
             @media (max-width: 480px) {
                 .cart-container { 
                     padding: 0 15px; 
@@ -873,25 +902,62 @@
                 }
                 
                 .item-name { 
-                    font-size: 15px; 
+                    font-size: 14px; 
                 }
 
                 .cart-title {
-                    font-size: 24px;
-                    margin-bottom: 20px;
+                    font-size: 20px;
+                    margin-bottom: 15px;
                 }
 
                 .item-image {
-                    width: 80px;
-                    height: 80px;
+                    width: 70px;
+                    height: 70px;
                 }
 
                 .item-price {
-                    font-size: 14px;
+                    font-size: 13px;
                 }
 
                 .qty-display {
+                    font-size: 13px;
+                }
+
+                .qty-btn {
+                    font-size: 16px;
+                    width: 22px;
+                    height: 22px;
+                }
+
+                .btn-remove {
+                    font-size: 12px;
+                }
+
+                .item-subtotal {
                     font-size: 14px;
+                }
+
+                .summary-title {
+                    font-size: 17px;
+                }
+
+                .summary-row {
+                    font-size: 13px;
+                    margin-bottom: 12px;
+                }
+
+                .summary-row.total {
+                    font-size: 16px;
+                }
+
+                .btn-checkout {
+                    font-size: 14px;
+                    padding: 12px;
+                }
+
+                .btn-continue {
+                    font-size: 13px;
+                    padding: 10px;
                 }
 
                 .checkout-modal-content { 
@@ -899,12 +965,39 @@
                 }
 
                 .checkout-title {
-                    font-size: 22px;
+                    font-size: 20px;
+                }
+
+                .section-title-small {
+                    font-size: 14px;
                 }
 
                 .form-input {
                     padding: 10px 12px;
                     font-size: 13px;
+                }
+
+                .form-group label {
+                    font-size: 13px;
+                }
+
+                .payment-option {
+                    padding: 10px;
+                    font-size: 13px;
+                }
+
+                .btn-submit-checkout {
+                    font-size: 14px;
+                    padding: 12px;
+                }
+
+                .empty-cart-text {
+                    font-size: 16px;
+                }
+
+                .btn-shop-now {
+                    font-size: 14px;
+                    padding: 10px 25px;
                 }
             }
 
@@ -919,13 +1012,88 @@
                 }
 
                 .cart-title {
-                    font-size: 22px;
+                    font-size: 18px;
+                }
+
+                .item-image {
+                    width: 60px;
+                    height: 60px;
+                }
+
+                .item-name {
+                    font-size: 13px;
+                }
+
+                .item-price {
+                    font-size: 12px;
                 }
 
                 .item-controls {
                     flex-direction: column;
                     align-items: flex-start;
-                    gap: 10px;
+                    gap: 8px;
+                }
+
+                .quantity-control {
+                    padding: 4px 12px;
+                }
+
+                .qty-display {
+                    font-size: 12px;
+                }
+
+                .qty-btn {
+                    font-size: 14px;
+                    width: 20px;
+                    height: 20px;
+                }
+
+                .btn-remove {
+                    font-size: 11px;
+                }
+
+                .item-subtotal {
+                    font-size: 13px;
+                    position: static;
+                    margin-top: 8px;
+                }
+
+                .summary-title {
+                    font-size: 16px;
+                }
+
+                .summary-row {
+                    font-size: 12px;
+                    margin-bottom: 10px;
+                }
+
+                .summary-row.total {
+                    font-size: 15px;
+                }
+
+                .btn-checkout {
+                    font-size: 13px;
+                    padding: 11px;
+                }
+
+                .btn-continue {
+                    font-size: 12px;
+                    padding: 9px;
+                }
+
+                .checkout-title {
+                    font-size: 18px;
+                }
+
+                .cart-item {
+                    padding: 15px;
+                    gap: 12px;
+                }
+
+                .item-details {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
                 }
             }
                 .checkout-modal-content { padding: 20px 15px; }

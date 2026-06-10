@@ -108,9 +108,9 @@
         .header-icons { display: flex; gap: 20px; align-items: center; }
         .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 3px; position: relative; }
         .icon-btn { background: none; border: none; cursor: pointer; color: #2c2c2c; transition: transform 0.2s; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
-        .icon-btn svg { width: 26px; height: 26px; stroke: #2c2c2c; fill: none; stroke-width: 2; }
-        .icon-label { font-size: 10px; color: #4a4a4a; font-weight: 600; }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: #d32f2f; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .icon-btn svg { width: 22px; height: 22px; stroke: #2c2c2c; fill: none; stroke-width: 2; }
+        .icon-label { font-size: 9px; color: #4a4a4a; font-weight: 600; }
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: #d32f2f; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
 
         /* Main */
         .riwayat-container {

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Promo - Toko Kue Kharisma</title>
+    @include('partials.skeleton-loader')
     <style>
         /* --- CSS TETAP SAMA SEPERTI SEBELUMNYA --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -84,13 +85,13 @@
         .header-icons { display: flex; gap: 20px; align-items: center; }
         .icon-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; }
         .icon-btn { background: none; border: none; cursor: pointer; transition: transform 0.2s; }
-        .icon-btn svg { width: 26px; height: 26px; stroke: #2c2c2c; fill: none; stroke-width: 2; }
+        .icon-btn svg { width: 22px; height: 22px; stroke: #2c2c2c; fill: none; stroke-width: 2; }
         .cart-badge { 
             position: absolute; top: -5px; right: -5px; background: #d32f2f; color: white; 
             border-radius: 50%; width: 18px; height: 18px; font-size: 11px; 
             display: flex; align-items: center; justify-content: center; font-weight: bold;
         }
-        .icon-label { font-size: 10px; font-weight: 600; color: #4a4a4a; }
+        .icon-label { font-size: 9px; font-weight: 600; color: #4a4a4a; }
         .promo-packages { padding: 50px; max-width: 1400px; margin: 0 auto; }
         .section-title { 
             text-align: center; font-size: 28px; color: #8b7355; margin-bottom: 10px; 
@@ -325,7 +326,7 @@
                     <span class="original-price">Rp 25.000</span>
                     <span class="discount-price">Rp 20.000</span>
                 </div>
-               <button class="btn-buy-package" onclick="addToCart(901, 20000, 'Paketan Hemat A')">
+               <button class="btn-buy-package" onclick="addToCart(this, 901, 20000, 'Paketan Hemat A')">
     <span>MASUKKAN KE KERANJANG</span>
 </button>
             </div>
@@ -341,7 +342,7 @@
                     <span class="original-price">Rp 25.000</span>
                     <span class="discount-price">Rp 20.000</span>
                 </div>
-                <button class="btn-buy-package" onclick="addToCart(902, 20000, 'Paketan Hemat B')">
+                <button class="btn-buy-package" onclick="addToCart(this, 902, 20000, 'Paketan Hemat B')">
     <span>MASUKKAN KE KERANJANG</span>
 </button>
             </div>
@@ -357,7 +358,7 @@
                     <span class="original-price">Rp 25.000</span>
                     <span class="discount-price">Rp 20.000</span>
                 </div>
-                <button class="btn-buy-package" onclick="addToCart(903, 20000, 'Paketan Hemat C')">
+                <button class="btn-buy-package" onclick="addToCart(this, 903, 20000, 'Paketan Hemat C')">
     <span>MASUKKAN KE KERANJANG</span>
 </button>
             </div>
@@ -365,8 +366,11 @@
     </section>
 
     <script>
-        // 1. Fungsi Tambah ke Keranjang
-        function addToCart(productId, promoPrice, packageName) {
+        // 1. Fungsi Tambah ke Keranjang dengan Loading State
+        function addToCart(btn, productId, promoPrice, packageName) {
+            // Prevent double-click
+            if (btn.classList.contains('btn-loading')) return;
+            
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             
             if (!csrfToken) {
@@ -374,6 +378,12 @@
                 showNotification('Gagal: Token keamanan tidak ditemukan', 'error');
                 return;
             }
+
+            // Add loading state
+            btn.classList.add('btn-loading');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="btn-text">Menambahkan...</span>';
 
             fetch("/cart/add", {
                 method: "POST",
@@ -409,14 +419,39 @@
             .then(data => {
                 if (data) {
                     if (data.success) {
+                        // Update cart badge with pulse
+                        const badge = document.getElementById('cartBadge');
+                        if (badge) {
+                            updateCartBadge();
+                            badge.classList.add('pulse');
+                            setTimeout(() => badge.classList.remove('pulse'), 500);
+                        }
+                        
+                        // Show success state
+                        btn.innerHTML = '<span class="success-checkmark"></span><span class="btn-text">Ditambahkan!</span>';
+                        btn.style.background = '#4caf50';
+                        
+                        // Reset after 2 seconds
+                        setTimeout(() => {
+                            btn.innerHTML = originalHTML;
+                            btn.style.background = '';
+                            btn.classList.remove('btn-loading');
+                            btn.disabled = false;
+                        }, 2000);
+                        
                         showNotification(data.message || 'Berhasil ditambah ke keranjang', 'success');
-                        updateCartBadge();
                     } else {
+                        btn.classList.remove('btn-loading');
+                        btn.innerHTML = originalHTML;
+                        btn.disabled = false;
                         showNotification(data.message || 'Gagal menambahkan ke keranjang', 'error');
                     }
                 }
             })
             .catch(error => {
+                btn.classList.remove('btn-loading');
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
                 showNotification('Terjadi kesalahan: ' + error.message, 'error');
             });
         }
@@ -485,6 +520,14 @@
 
         // Load awal
         document.addEventListener('DOMContentLoaded', function() {
+            // Hide page loader
+            const pageLoader = document.getElementById('pageLoader');
+            if (pageLoader) {
+                setTimeout(() => {
+                    pageLoader.classList.add('hidden');
+                }, 300);
+            }
+            
             updateCartBadge();
 
             // Hamburger menu
