@@ -168,20 +168,10 @@ html {
     }
 }
 
-/* 12. PROFESSIONAL PRICE TAG */
-.product-price {
-    position: relative;
-    display: inline-block;
-    padding: 6px 14px;
-    background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%);
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    font-weight: 600;
-}
-
+/* 12. PROFESSIONAL PRICE TAG - Enhanced hover */
 .product-card:hover .product-price {
-    transform: scale(1.03);
-    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.15);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(224, 123, 57, 0.15);
 }
 
 /* 13. TEXT HIGHLIGHT ANIMATION */
@@ -413,6 +403,20 @@ document.addEventListener('DOMContentLoaded', function() {
     if (cartIcon) cartIcon.parentElement.setAttribute('data-tooltip', 'Keranjang Belanja');
     if (profileIcon) profileIcon.parentElement.setAttribute('data-tooltip', 'Profil Saya');
     if (notifIcon) notifIcon.parentElement.setAttribute('data-tooltip', 'Notifikasi');
+    
+    // 7. Scroll Reveal Animation
+    const revealElements = document.querySelectorAll('.reveal');
+    if (revealElements.length > 0 && 'IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        revealElements.forEach(el => revealObserver.observe(el));
+    }
     
     console.log('All enhanced interactions ready');
 });

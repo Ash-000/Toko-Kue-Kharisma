@@ -18,17 +18,50 @@
         .hero { position: relative; height: 420px; overflow: hidden; cursor: pointer; width: 100%; }
         .hero-images { display: flex; height: 100%; width: 100%; transition: transform 0.8s ease-in-out; }
         .hero-image { min-width: 100%; width: 100%; height: 100%; background-size: cover; background-position: center; flex-shrink: 0; }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%);
+            z-index: 3; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 40px 20px;
+        }
+        .hero-title {
+            font-family: 'Lora', serif; font-size: clamp(32px, 6vw, 52px); color: white;
+            font-weight: 700; font-style: italic; margin-bottom: 12px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        .hero-subtitle {
+            font-size: clamp(14px, 2.5vw, 18px); color: rgba(255,255,255,0.9);
+            margin-bottom: 28px; max-width: 500px; line-height: 1.6;
+        }
+        .hero-cta {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, var(--color-accent), var(--color-accent-soft));
+            color: white; padding: 14px 32px; border-radius: 50px;
+            font-size: 16px; font-weight: 700; text-decoration: none;
+            box-shadow: var(--shadow-accent); transition: all 0.3s ease;
+        }
+        .hero-cta:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 32px rgba(224,123,57,0.35); }
+        .hero-cta svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
         .slider-nav { position: absolute; top: 0; height: 100%; width: 20%; z-index: 5; cursor: pointer; transition: background 0.3s; }
         .slider-nav:hover { background: rgba(0, 0, 0, 0.1); }
         .slider-nav-left { left: 0; }
         .slider-nav-right { right: 0; }
         .slider-indicators { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 11; }
-        .indicator { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); cursor: pointer; transition: all 0.3s; }
-        .indicator.active { background: white; width: 30px; border-radius: 5px; }
+        .indicator { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.4); cursor: pointer; transition: all 0.3s; }
+        .indicator.active { background: var(--color-accent); width: 30px; border-radius: 5px; }
 
         /* Best Sellers Section */
-        .best-sellers { padding: 50px 20px; max-width: 1400px; margin: 0 auto; text-align: center; }
-        .section-divider { width: 200px; height: 2px; background: var(--color-brown); margin: 0 auto 40px; }
+        .best-sellers { padding: 60px 20px; text-align: center; background: var(--color-surface); }
+        .best-sellers-inner { max-width: 1400px; margin: 0 auto; }
+        .section-title-accent {
+            display: inline-block; position: relative; padding-bottom: 12px;
+        }
+        .section-title-accent::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 4px; border-radius: 2px;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-accent-soft));
+        }
+        .section-divider { width: 200px; height: 2px; margin: 0 auto 40px; background: linear-gradient(90deg, transparent 0%, var(--color-accent-soft) 30%, var(--color-brown) 50%, var(--color-accent-soft) 70%, transparent 100%); }
 
 
         /* About Section */
@@ -135,8 +168,26 @@
         .about-deco-2 { bottom: -10px; left: 20px; width: 60px; height: 60px; }
 
         /* Reviews Section */
-        .reviews-section { background: linear-gradient(135deg, var(--color-header) 0%, var(--color-header-end) 100%); padding: 50px; }
-        .reviews-header { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 30px; }
+        .reviews-section {
+            background: linear-gradient(135deg, var(--color-header) 0%, var(--color-header-end) 100%);
+            padding: 60px 50px;
+            position: relative;
+        }
+        .reviews-section::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none;
+        }
+        .reviews-header { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 30px; position: relative; z-index: 1; }
+        .reviews-title {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .reviews-count {
+            background: var(--color-accent); color: white; font-size: 13px;
+            padding: 3px 10px; border-radius: var(--radius-full); font-weight: 700;
+        }
         .add-review-btn {
             background: var(--color-text); color: white; border: none; border-radius: 50%;
             width: 50px; height: 50px; font-size: 24px; cursor: pointer; display: flex;
@@ -146,13 +197,27 @@
         .add-review-text { font-size: 14px; font-weight: 700; color: var(--color-text); margin-left: 15px; }
         .add-review-wrapper { display: flex; align-items: center; }
         
-        .reviews-container { max-width: 1200px; margin: 0 auto; display: grid; gap: 20px; }
-        .review-card { background: #fafafa; border-radius: 20px; padding: 25px 30px; box-shadow: var(--shadow-sm); }
+        .reviews-container { max-width: 1200px; margin: 0 auto; display: grid; gap: 20px; position: relative; z-index: 1; }
+        .review-card {
+            background: rgba(255,255,255,0.95); border-radius: 20px; padding: 25px 30px;
+            box-shadow: var(--shadow-sm); transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        .review-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .review-card::before {
+            content: '\201C'; position: absolute; top: 10px; right: 20px;
+            font-size: 80px; color: rgba(224,123,57,0.08); font-family: 'Lora', serif;
+            line-height: 1; pointer-events: none;
+        }
         .review-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .review-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--color-text); display: flex; align-items: center; justify-content: center; }
+        .review-avatar {
+            width: 50px; height: 50px; border-radius: 50%; background: var(--color-text);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 0 3px rgba(224,123,57,0.2);
+        }
         .review-avatar svg { width: 30px; height: 30px; stroke: white; fill: none; stroke-width: 2; }
         .review-info { flex: 1; }
-        .review-stars { color: #ffd700; font-size: 16px; margin-bottom: 5px; }
+        .review-stars { color: #f59e0b; font-size: 17px; margin-bottom: 5px; letter-spacing: 2px; }
         .review-name { font-size: 16px; font-weight: 700; color: var(--color-text); }
         .review-text { color: var(--color-brown); font-size: 14px; line-height: 1.6; }
 
@@ -250,6 +315,16 @@
             <div class="hero-image" style="background-image: url('/images/products/dadar-gulung.jpg')"></div>
         </div>
 
+        <!-- Hero Text Overlay -->
+        <div class="hero-overlay">
+            <h1 class="hero-title">Toko Kue Kharisma</h1>
+            <p class="hero-subtitle">Kue tradisional lezat dari Dramaga, Bogor — dibuat dengan cinta sejak 2009</p>
+            <a href="/menu" class="hero-cta">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Lihat Menu
+            </a>
+        </div>
+
         <div class="slider-indicators" id="sliderIndicators">
             <div class="indicator active" data-slide="0"></div>
             <div class="indicator" data-slide="1"></div>
@@ -260,9 +335,10 @@
     </section>
 
     <!-- Best Sellers Section -->
-    <section class="best-sellers">
-        <h2 class="section-title">Best Sellers</h2>
-        <div class="section-divider"></div>
+    <section class="best-sellers reveal">
+        <div class="best-sellers-inner">
+            <h2 class="section-title section-title-accent">Best Sellers</h2>
+            <div class="section-divider"></div>
 
         {{-- Products Grid --}}
         <div class="products-grid">
@@ -327,10 +403,11 @@
             </div>
             @endforelse
         </div>
+        </div>
     </section>
 
     <!-- About Section -->
-    <section class="about-section">
+    <section class="about-section reveal">
         <div class="about-container">
             <div class="about-content">
                 <div class="about-badge">
@@ -372,7 +449,10 @@
     <!-- Reviews Section -->
     <section class="reviews-section">
         <div class="reviews-header">
-            <h2 class="reviews-title">Customer reviews</h2>
+            <h2 class="reviews-title">
+                Customer Reviews
+                <span class="reviews-count">{{ $reviews->total() }}</span>
+            </h2>
         </div>
 
         <div class="reviews-container">

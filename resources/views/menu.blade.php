@@ -22,25 +22,66 @@
         }
 
         .menu-header { text-align: center; margin-bottom: 40px; }
-        .menu-title { font-size: 38px; position: relative; display: inline-block; padding-bottom: 10px; color: var(--color-brown); font-weight: 700; }
+        .menu-title {
+            font-size: 38px; position: relative; display: inline-block; padding-bottom: 12px;
+            color: var(--color-brown); font-weight: 700;
+        }
+        .menu-title::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 4px; border-radius: 2px;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-accent-soft));
+        }
         .menu-subtitle { margin-top: 15px; font-style: italic; opacity: 0.8; color: var(--color-brown); }
 
         /* Category Filter */
-        .category-filter { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
-        .category-btn { background: white; border: 2px solid var(--color-brown); padding: 10px 25px; border-radius: 25px; font-size: 14px; font-weight: 700; color: var(--color-brown); cursor: pointer; transition: all 0.3s; }
-        .category-btn:hover, .category-btn.active { background: var(--color-brown); color: white; }
+        .category-filter { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
+        .category-btn {
+            background: var(--color-white); border: 2px solid rgba(212, 184, 150, 0.3);
+            padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 700;
+            color: var(--color-brown); cursor: pointer; transition: all 0.3s;
+        }
+        .category-btn:hover {
+            border-color: var(--color-accent-soft); color: var(--color-accent);
+            box-shadow: 0 4px 12px rgba(224,123,57,0.1);
+        }
+        .category-btn.active {
+            background: linear-gradient(135deg, var(--color-accent), var(--color-accent-soft));
+            color: white; border-color: transparent;
+            box-shadow: 0 4px 12px rgba(224,123,57,0.2);
+        }
 
         /* Controls & Search */
         .table-controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 15px; margin-bottom: 25px; align-items: center; }
-        .search-input { width: 100%; max-width: 420px; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--color-header-end); font-size: 15px; outline: none; transition: all 0.3s ease; }
-        .search-input:focus { border-color: var(--color-brown); box-shadow: 0 0 0 4px rgba(139, 115, 85, 0.2); max-width: 450px; }
+        .search-wrapper { position: relative; width: 100%; max-width: 420px; }
+        .search-wrapper svg {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            width: 20px; height: 20px; stroke: var(--color-text-light); fill: none; stroke-width: 2;
+        }
+        .search-input {
+            width: 100%; padding: 14px 16px 14px 48px; border-radius: 50px;
+            border: 2px solid rgba(212, 184, 150, 0.3); font-size: 15px; outline: none;
+            transition: all 0.3s ease; background: var(--color-white);
+        }
+        .search-input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 4px rgba(224, 123, 57, 0.1);
+        }
+        .search-input:focus + svg, .search-wrapper:focus-within svg { stroke: var(--color-accent); }
         .pagination-info { color: var(--color-text-mid); font-weight: 700; font-size: 14px; }
 
         /* Pagination Buttons */
         .pagination-buttons { display: flex; gap: 12px; margin-top: 30px; justify-content: center; }
-        .pagination-buttons button { background: var(--color-brown); color: white; border: none; border-radius: 12px; padding: 12px 24px; cursor: pointer; font-weight: 700; transition: all 0.2s ease; }
-        .pagination-buttons button:hover:not(:disabled) { background: var(--color-brown-dark); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
-        .pagination-buttons button:disabled { background: #ccc; cursor: not-allowed; opacity: 0.5; }
+        .pagination-buttons button {
+            background: linear-gradient(135deg, var(--color-accent), var(--color-accent-soft));
+            color: white; border: none; border-radius: 50px; padding: 12px 28px;
+            cursor: pointer; font-weight: 700; transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(224,123,57,0.15);
+        }
+        .pagination-buttons button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-accent);
+        }
+        .pagination-buttons button:disabled { background: #e0e0e0; cursor: not-allowed; opacity: 0.5; box-shadow: none; }
 
         /* Modal Detail Produk */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px); align-items: center; justify-content: center; }
@@ -85,7 +126,10 @@
         </div>
 
         <div class="table-controls">
-            <input type="text" id="productSearch" class="search-input" placeholder="Cari produk..." autocomplete="off">
+            <div class="search-wrapper">
+                <input type="text" id="productSearch" class="search-input" placeholder="Cari kue favorit Anda..." autocomplete="off">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            </div>
             <div class="pagination-info" id="paginationInfo">Menampilkan 0 produk</div>
         </div>
 
