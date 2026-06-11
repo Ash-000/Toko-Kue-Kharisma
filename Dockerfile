@@ -40,13 +40,13 @@ WORKDIR /var/www/html
 
 # Copy composer files first for caching
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
 # Copy application files
 COPY . .
 
-# Run Filament upgrade to initialize panel components
-RUN php artisan filament:upgrade
+# Now run post-install scripts (artisan exists) and Filament upgrade
+RUN composer dump-autoload --optimize && php artisan filament:upgrade
 
 # Install and build frontend assets
 RUN npm ci && npm run build && rm -rf node_modules
