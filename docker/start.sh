@@ -5,6 +5,7 @@ cd /var/www/html
 
 echo "==> Running artisan commands..."
 php artisan package:discover --ansi || true
+php artisan filament:optimize || true
 php artisan config:cache || true
 php artisan route:cache || true
 php artisan view:cache || true

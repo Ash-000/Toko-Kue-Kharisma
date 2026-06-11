@@ -45,8 +45,14 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # Copy application files
 COPY . .
 
+# Regenerate autoloader with all packages and run Filament upgrade
+RUN composer dump-autoload --optimize && php artisan filament:upgrade
+
 # Install and build frontend assets
 RUN npm ci && npm run build && rm -rf node_modules
+
+# Publish Filament assets
+RUN php artisan filament:assets
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
