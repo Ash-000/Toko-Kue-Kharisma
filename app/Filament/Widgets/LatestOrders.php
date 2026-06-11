@@ -16,6 +16,12 @@ class LatestOrders extends BaseWidget
 
     protected static ?string $heading = 'Pesanan Terbaru';
 
+    // Tidak perlu polling untuk tabel — cukup refresh manual
+    protected static ?string $pollingInterval = null;
+
+    // Lazy load — widget ini dimuat setelah stats selesai render
+    protected static bool $isLazy = true;
+
     public function table(Table $table): Table
     {
         return $table

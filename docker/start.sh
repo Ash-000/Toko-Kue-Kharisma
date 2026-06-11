@@ -3,14 +3,23 @@ set -e
 
 cd /var/www/html
 
-echo "==> Running artisan commands..."
-php artisan package:discover --ansi || true
-php artisan filament:optimize || true
-php artisan config:cache || true
-php artisan route:cache || true
-php artisan view:cache || true
+echo "==> Clearing old caches..."
+php artisan config:clear 2>/dev/null || true
+php artisan route:clear 2>/dev/null || true
+php artisan view:clear 2>/dev/null || true
+php artisan cache:clear 2>/dev/null || true
+
+echo "==> Initializing packages..."
+php artisan package:discover --ansi
+
+echo "==> Running migrations..."
 php artisan migrate --force || true
-php artisan storage:link || true
+
+echo "==> Building caches..."
+php artisan filament:optimize
+php artisan config:cache
+php artisan view:cache
+php artisan storage:link 2>/dev/null || true
 
 echo "==> Starting PHP-FPM..."
 php-fpm -D

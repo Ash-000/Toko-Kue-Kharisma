@@ -68,6 +68,7 @@ public static function getNavigationBadgeColor(): ?string
     public static function table(Table $table): Table
     {
         return $table
+            ->query(Order::with('user'))
             ->columns([
                 TextColumn::make('order_number')
                     ->label('No. Pesanan')

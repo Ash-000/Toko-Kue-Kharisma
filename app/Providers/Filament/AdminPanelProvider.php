@@ -12,7 +12,6 @@ use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -66,21 +65,18 @@ class AdminPanelProvider extends PanelProvider
         // agar browser tidak tampilkan tooltip native, Filament yang handle validasi
         FilamentView::registerRenderHook(
             PanelsRenderHook::BODY_END,
-            fn (): string => Blade::render('
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        function addNoValidate() {
-                            document.querySelectorAll("form:not([novalidate])").forEach(function (form) {
-                                form.setAttribute("novalidate", "");
-                            });
-                        }
-                        addNoValidate();
-                        // Re-apply setelah Livewire update (navigasi antar halaman)
-                        document.addEventListener("livewire:navigated", addNoValidate);
-                        document.addEventListener("livewire:update", addNoValidate);
-                    });
-                </script>
-            '),
+            fn (): string => '<script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    function addNoValidate() {
+                        document.querySelectorAll("form:not([novalidate])").forEach(function (form) {
+                            form.setAttribute("novalidate", "");
+                        });
+                    }
+                    addNoValidate();
+                    document.addEventListener("livewire:navigated", addNoValidate);
+                    document.addEventListener("livewire:update", addNoValidate);
+                });
+            </script>',
         );
     }
 }

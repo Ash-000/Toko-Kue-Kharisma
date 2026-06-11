@@ -12,41 +12,41 @@ class StatsOverview extends BaseWidget
 {
     protected static ?int $sort = 1;
 
-    // Tambahkan ini supaya angka update otomatis tiap 15 detik tanpa refresh browser
-    protected static ?string $pollingInterval = '15s';
+    // Polling 30 detik (hemat resource, sebelumnya 15s)
+    protected static ?string $pollingInterval = '30s';
 
- protected function getStats(): array
+    protected function getStats(): array
     {
-        // 1. Pesanan yang statusnya 'in_progress' (Sudah bayar Midtrans & perlu dikirim)
-        $processingOrders = Order::where('status', 'in_progress')->count();
-        
-        $totalOrders = Order::count();
-        
-        // 2. Revenue hanya dihitung dari yang statusnya 'completed'
-        $totalRevenue = Order::where('status', 'completed')->sum('total');
-        
-        $totalProducts = Product::count();
+        // 1 query untuk semua statistik Order (sebelumnya 4 query terpisah)
+        $orderStats = Order::selectRaw("
+            COUNT(*) as total_orders,
+            SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as processing,
+            SUM(CASE WHEN status = 'completed' THEN total ELSE 0 END) as revenue,
+            SUM(CASE WHEN status IN ('shipping','completed') THEN 1 ELSE 0 END) as shipped
+        ")->first();
+
+        $totalProducts  = Product::count();
         $totalCustomers = User::where('role', 'user')->count();
+        $processing     = (int) ($orderStats->processing ?? 0);
 
         return [
-            Stat::make('Pesanan Masuk', $processingOrders)
-                ->description('Sedang Diproses') // Lebih spesifik buat penguji
+            Stat::make('Pesanan Masuk', $processing)
+                ->description('Sedang Diproses')
                 ->descriptionIcon('heroicon-m-arrow-path')
-                ->color($processingOrders > 0 ? 'warning' : 'gray')
+                ->color($processing > 0 ? 'warning' : 'gray')
                 ->icon('heroicon-o-shopping-cart'),
 
-            Stat::make('Total Pesanan', $totalOrders)
+            Stat::make('Total Pesanan', (int) $orderStats->total_orders)
                 ->description('Seluruh transaksi')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('primary')
                 ->icon('heroicon-o-clipboard-document-list'),
 
-            Stat::make('Total Revenue', 'Rp ' . number_format($totalRevenue, 0, ',', '.'))
+            Stat::make('Total Revenue', 'Rp ' . number_format((float) $orderStats->revenue, 0, ',', '.'))
                 ->description('Pesanan selesai')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('success')
                 ->icon('heroicon-o-currency-dollar'),
-
 
             Stat::make('Total Pelanggan', $totalCustomers)
                 ->description('User terdaftar')
@@ -59,11 +59,11 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success')
                 ->icon('heroicon-o-cake'),
-            
-            Stat::make('Pesanan Terkirim', Order::whereIn('status', ['shipping', 'completed'])->count())
-            ->description('Sudah dikirim & Selesai')
-            ->descriptionIcon('heroicon-m-truck')
-            ->color('success'),
+
+            Stat::make('Pesanan Terkirim', (int) $orderStats->shipped)
+                ->description('Sudah dikirim & Selesai')
+                ->descriptionIcon('heroicon-m-truck')
+                ->color('success'),
         ];
     }
 }
